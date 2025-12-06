@@ -1,0 +1,15 @@
+<!--pages/index/index.wxml-->
+<!-- <text>pages/index/index.wxml</text>
+ -->
+ <scroll-view class="scrollarea" scroll-y type="list">
+  <text class="title">index</text>
+  <view class="filter-container">
+    <view class="date-group">
+      <view class="date-item">
+        <text>入住日期</text>
+        <picker mode="date" value="{{checkInDate}}"></picker>
+      </view>
+    </view>
+  </view>
+
+ </scroll-view>

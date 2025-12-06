@@ -1,0 +1,10 @@
+<!--pages/login/login.wxml-->
+<view class="root-container">
+  <view class="title-container">
+    <image class="icon" src="/images/icon.png"></image>
+    <text class="name">漕盈路</text>
+  </view>
+  <text class="welcome">欢迎加入漕盈路</text>
+  <button class="btn-login" bindtap="login">登录</button>
+</view>
+

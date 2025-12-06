@@ -1,0 +1,6 @@
+<!--pages/mine/mine.wxml-->
+<!-- <text>pages/mine/mine.wxml</text> -->
+<view class="container">
+  <text class="title">欢迎来到漕盈路民宿</text>
+  <button class='btn-login' bindtap="goToLogin">登录</button>
+</view>

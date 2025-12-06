@@ -1,0 +1,30 @@
+/* pages/login/login.wxss */
+.root-container {
+  display: flex;          /* 开启Flex */
+  flex-direction: column; /* 竖直排列（核心） */
+  padding: 30rpx;         /* 内边距 */
+  gap: 40rpx;             /* 模块之间的间距（替代margin） */
+}
+.title-container{
+  display: flex;          /* 开启Flex */
+  flex-direction: row;    /* 水平排列（默认值，可省略） */
+  justify-content: center;
+  align-items: center;    /* 垂直居中 */
+  height: 120rpx;         /* 容器高度 */
+}
+.icon{
+  width: 60rpx;
+  height: 60rpx;
+}
+
+.welcome {
+  /* line-height: 60rpx;      */
+  text-align: center;     
+  /* color: #fff;
+  border-radius: 8rpx;
+  font-size: 24rpx; */
+}
+
+.btn-login{
+  border-radius: 100rpx;
+}

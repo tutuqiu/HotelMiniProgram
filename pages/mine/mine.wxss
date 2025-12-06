@@ -1,0 +1,11 @@
+/* pages/mine/mine.wxss */
+.container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.title{
+  font-size: 36rpx;
+  color: #333;
+}
