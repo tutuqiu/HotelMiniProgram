@@ -1,0 +1,36 @@
+<!--pages/profile-edit/profile-edit.wxml-->
+<!-- <text>pages/profile-edit/profile-edit.wxml</text> -->
+<view class="root-container">
+  <button class="choose-avatar" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+    <image src="{{avatarUrl}}"></image>
+  </button>
+  <view class="nickName-container">
+    <text class="label">昵称</text>
+    <!-- <text>{{nickName}}</text> -->
+    <input type="nickname" value="{{nickName}}" class="nickName-input" bindinput="onChangeNickName"/>
+  </view>
+  <view class="phoneNumber-container">
+    <text>手机号</text>
+    <text>{{phoneNumber}}</text>
+    <button class="btn-phoneChange" bindtap="showPhoneModal">修改</button>
+  </view>
+  <button class="btn-save" bindtap="onSave">保存</button>
+</view>
+
+<view class="modal-mask" wx:if="{{isModalShow}}" bindtap="hidePhoneModal">
+  <view class="modal-container" wx:if="{{isModalShow}}" catchtap="noop">
+    <view class="modal-header">
+      <text>修改手机号</text>
+      <!-- <button></button> -->
+      <image src="/images/close.png" bindtap="hidePhoneModal" class="close-icon"></image>
+    </view>
+    <view class="modal-content">
+      <input placeholder="请输入新手机号" type="number" bindinput="onPhoneInput"/>
+      <view class="sms-container">
+        <input placeholder="请输入验证码" bindinput="onSmsInput"/>
+        <button bindtap="onClickSms">获取验证码</button>
+      </view>
+      <button class="btn-smsCheck" bindtap="checkSms">确认</button>
+    </view>
+  </view>
+</view>

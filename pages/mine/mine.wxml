@@ -1,6 +1,15 @@
 <!--pages/mine/mine.wxml-->
-<!-- <text>pages/mine/mine.wxml</text> -->
-<view class="container">
-  <text class="title">欢迎来到漕盈路民宿</text>
-  <button class='btn-login' bindtap="goToLogin">登录</button>
+<view wx:if="{{!isLogin}}" class="root-container unlogin-container">
+  <view class="title-container">
+    <image class="icon" src="/images/icon.png"></image>
+    <text class="name">漕盈路</text>
+  </view>
+  <text class="welcome">欢迎加入漕盈路</text>
+  <button class="btn-login" bindtap="login">登录</button>
+</view>
+<view wx:else class="root-container login-container">
+  <view class="userInfo-container" bindtap="goToProfileEdit">
+    <image src="{{avatarUrl}}" class="avatar"></image>
+    <text>{{nickName}}</text>
+  </view>
 </view>

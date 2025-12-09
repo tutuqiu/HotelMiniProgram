@@ -1,11 +1,41 @@
-/* pages/mine/mine.wxss */
-.container {
-  height: 100vh;
+/* pages/login/mine.wxss */
+
+.userInfo-container{
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction:row;
+  padding: 30rpx;
+  gap: 40rpx;
 }
-.title{
-  font-size: 36rpx;
-  color: #333;
+.avatar{
+  width: 60rpx;
+  height: 60rpx;
+}
+.root-container {
+  display: flex;          /* 开启Flex */
+  flex-direction: column; /* 竖直排列（核心） */
+  padding: 30rpx;         /* 内边距 */
+  gap: 40rpx;             /* 模块之间的间距（替代margin） */
+}
+.title-container{
+  display: flex;          /* 开启Flex */
+  flex-direction: row;    /* 水平排列（默认值，可省略） */
+  justify-content: center;
+  align-items: center;    /* 垂直居中 */
+  height: 300rpx;         /* 容器高度 */
+}
+.icon{
+  width: 60rpx;
+  height: 60rpx;
+}
+
+.welcome {
+  /* line-height: 60rpx;      */
+  text-align: center;     
+  /* color: #fff;
+  border-radius: 8rpx;
+  font-size: 24rpx; */
+}
+
+.btn-login{
+  border-radius: 100rpx;
 }

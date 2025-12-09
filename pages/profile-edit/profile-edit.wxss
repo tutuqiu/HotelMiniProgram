@@ -1,0 +1,80 @@
+/* pages/profile-edit/profile-edit.wxss */
+.modal-mask{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色 */
+  z-index: 998; /* 低于弹窗主体，高于页面内容 */
+}
+.modal-container{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 85%; /* 适配不同屏幕宽度 */
+  max-width: 600rpx; /* 限制最大宽度 */
+  background-color: #fff;
+  border-radius: 16rpx; /* 圆角 */
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.15); /* 阴影提升质感 */
+  z-index: 999;
+  overflow: hidden;
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 30rpx;
+  border-bottom: 1rpx solid #f0f0f0; /* 分割线 */
+}
+.close-icon {
+  width: 32rpx;
+  height: 32rpx;
+}
+.phoneNumber-container{
+  display:flex;
+  padding: 10rpx 20rpx; /* 内边距，避免内容贴边 */
+  gap: 10rpx; /* 子元素之间的间距（替代 margin，更简洁） */
+  /* 可选：添加底部边框，适配信息页样式 */
+  border-bottom: 1px solid #f0f0f0;
+}
+.sms-container{
+  display:flex;
+  padding: 10rpx 20rpx; /* 内边距，避免内容贴边 */
+  gap: 10rpx; /* 子元素之间的间距（替代 margin，更简洁） */
+  /* 可选：添加底部边框，适配信息页样式 */
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.btn-phoneChange{
+  /* flex: 1; 占满剩余宽度（核心，避免按钮挤压手机号） */
+  font-size: 28rpx;
+  color: #666;
+  /* 可选：手机号过长时省略显示 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.choose-avatar{
+  /* width: 120rpx;
+  height: 120rpx; */
+}
+.nickName-container{
+  display:flex;
+  /* direction:column */
+  padding: 10rpx;
+  border-bottom: 1px solid #eee;
+}
+.label{
+  width: 100rpx; /* 固定标签宽度 */
+  font-size: 28rpx;
+}
+.nickName-input{
+  flex: 1; /* 输入框占剩余宽度 */
+  height: 60rpx; /* 必须设高度，否则默认高度太矮 */
+  font-size: 28rpx;
+  /* 去掉默认样式（可选） */
+  border: none;
+  outline: none;
+}

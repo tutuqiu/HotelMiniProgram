@@ -1,26 +1,22 @@
 const baseUrl="http://47.114.86.161:8080/api";
+// app=getApp();
 
-function loginPost(code){
-  const url="/public/auth/wx/login"
 
+function HTTPRequest(method,router,data,header){
   return new Promise((resolve,reject)=>{
-    wx.showLoading({ title: '登录中...' });
+    wx.showLoading({ title: '请求中...' });
     
     wx.request({
-      url:baseUrl+url,
-      method:'POST',
-      data:{
-        "code":code,
-      },
-      header: {
-        'content-type': 'application/json',
-      },
+      url:baseUrl+router,
+      method:method,
+      data:data,
+      header: header,
       success:(res)=>{
-        console.log('POST请求成功:', res); // 调试用：打印完整返回结果
-        resolve(res.data); // 把后端返回的核心数据（res.data）传递给Promise的resolve
+        console.log(`${method}请求成功：${res}`)// 调试用：打印完整返回结果
+        resolve(res); 
       },
       fail:(err)=>{
-        console.error('POST请求失败：', err); // 调试用：打印错误信息
+        console.log(`${method}请求失败：${res}`); // 调试用：打印错误信息
         wx.showToast({ title: '请求失败', icon: 'none' }); // 给用户提示失败
         reject(err); // 把错误信息传递给Promise的reject
       },
@@ -32,5 +28,4 @@ function loginPost(code){
   });
 }
 
-
-export {loginPost};
+export {HTTPRequest};
