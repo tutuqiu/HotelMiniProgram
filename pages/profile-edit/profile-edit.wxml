@@ -15,6 +15,7 @@
     <button class="btn-phoneChange" bindtap="showPhoneModal">修改</button>
   </view>
   <button class="btn-save" bindtap="onSave">保存</button>
+  <button class="btn-logout" bindtap="onLogout">退出登录</button>
 </view>
 
 <view class="modal-mask" wx:if="{{isModalShow}}" bindtap="hidePhoneModal">

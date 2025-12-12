@@ -180,19 +180,14 @@ Page({
     }
   },
 
-  onSave(){
-    app.globalData.userInfo.avatarUrl=this.data.avatarUrl;
-    app.globalData.userInfo.nickName=this.data.nickName;
-    app.globalData.userInfo.phoneNumber=this.data.phoneNumber;
-    token=app.globalData.userInfo.token
-    
+  async onSave(){
     const data ={
       nickname:this.data.nickName,
       avatarUrl:this.data.avatarUrl
     }
     const header ={
       'content-type': 'application/json',
-        'Authorization':'Bearer ' + token
+      'Authorization':'Bearer ' + app.globalData.userInfo.token
     }
     try{
       const res = await HTTPRequest('POST','/public/wx/profile',data,header)
@@ -201,6 +196,48 @@ Page({
       if(res.statusCode==200){
         console.log('已修改信息')
         wx.showToast({ title: '成功修改信息' })
+
+        app.globalData.userInfo.avatarUrl=this.data.avatarUrl;
+        app.globalData.userInfo.nickName=this.data.nickName;
+        app.globalData.userInfo.phoneNumber=this.data.phoneNumber;
+
+        console.log('app:',app.globalData)
+
+        wx.navigateBack()
+      }else{
+        wx.showToast({
+          title:res.data.message || `修改失败（code:${res.statusCode}）`,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    }catch(err){
+      console.error('请求异常:', err);
+      wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
+    }
+  },
+
+  async onLogout(){
+    const refreshTokenId = wx.getStorageSync('refreshTokenId')
+    wx.removeStorageSync('refreshTokenId')
+    wx.removeStorageSync('token')
+    wx.removeStorageSync('expireTime')
+    console.log('delete token?:',wx.getStorageSync('token'))
+
+    const data ={
+      'refreshTokenId':refreshTokenId
+    }
+    const header ={
+      'content-type': 'application/json',
+    }
+    try{
+      const res = await HTTPRequest('POST','/public/auth/logout',data,header)
+      console.log(res)
+
+      if(res.statusCode==204){
+        console.log('已退出登录')
+        wx.showToast({ title: '已退出登录' })
+        app.globalData.isLogin=false
         wx.navigateBack()
       }else{
         wx.showToast({
@@ -233,7 +270,14 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    this.setData({
+      avatarUrl:app.globalData.userInfo.avatarUrl,
+      nickName:app.globalData.userInfo.nickName,
+      phoneNumber:app.globalData.userInfo.phoneNumber,
+      newPhoneNumber:"",
+      isModalShow:false,
+      sms:""
+    })
   },
 
   /**

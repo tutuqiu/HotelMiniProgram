@@ -1,5 +1,6 @@
 const baseUrl="http://47.114.86.161:8080/api";
-// app=getApp();
+
+const app=getApp();
 
 
 function HTTPRequest(method,router,data,header){
@@ -27,5 +28,35 @@ function HTTPRequest(method,router,data,header){
     })
   });
 }
+
+// async function getUserInfo(token){
+//   try{
+//     const data = {}
+//     const header={
+//       'Authorization':'Bearer ' + token
+//     }
+//     const res = await HTTPRequest('GET','/me',data,header)
+//     console.log(res)
+
+//     if(res.statusCode==200){
+//       const info = res.data
+//       console.log('获取信息成功:',info)
+
+//       app.globalData.userInfo.avatarUrl=info.avatarUrl
+//       app.globalData.userInfo.nickName=info.name 
+//       app.globalData.userInfo.phont=info.phone
+
+//     }else{
+//       wx.showToast({
+//         title:res.data.message || `获取信息失败（code:${res.statusCode}）`,
+//         icon: 'none',
+//         duration: 2000
+//       })
+//     }
+//   }catch(err){
+//     console.error('验证异常:', err);
+//     wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
+//   }
+// }
 
 export {HTTPRequest};

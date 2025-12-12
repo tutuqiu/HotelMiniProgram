@@ -1,5 +1,5 @@
 // pages/login/login.js
-import {HTTPRequest} from '../../utils/request.js';
+import {HTTPRequest, getUserInfo} from '../../utils/request.js';
 
 const app=getApp()
 
@@ -9,7 +9,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    isLogin:false,
+    isLogin:"",
     avatarUrl:"",
     nickName:""
   },
@@ -17,10 +17,15 @@ Page({
    * 生命周期函数--监听页面加载
    */
    onLoad(options) {
+    console.log('app:',app.globalData)
     this.setData({
+      isLogin:app.globalData.isLogin,
       avatarUrl:app.globalData.userInfo.avatarUrl,
       nickName:app.globalData.userInfo.nickName
     })
+    console.log('mine data',this.data)
+    
+
    },
 
   login(){
@@ -29,6 +34,7 @@ Page({
         console.log(res)
         if(res.code){
           console.log('获取code成功! ',res.code);
+
           try{
             const data={
               code:res.code
@@ -43,12 +49,21 @@ Page({
               wx.showToast({ title: '登录成功' });
               app.globalData.isLogin=true;
 
-              token=loginResult.data.accessToken
-              expiresInSeconds=loginResult.data.expiresInSeconds
+              const token=loginResult.data.accessToken
+              const expiresInSeconds=loginResult.data.expiresInSeconds
+              const refreshTokenId=loginResult.data.refreshTokenId
 
+              console.log('login token:',token)
+              console.log('login expiresInSeconds:',expiresInSeconds)
+              console.log('login refreshTokenId:',refreshTokenId)
+                
               const expiresTime = new Date(Date.now() + expiresInSeconds * 1000)//有效时间转化为毫秒级别
+
               wx.setStorageSync('expireTime',expiresTime.getTime())
               wx.setStorageSync('token',token)
+              wx.setStorageSync('refreshTokenId',refreshTokenId)
+
+              app.getUserInfo(token)
 
               app.globalData.userInfo.token=token
               this.setData({
@@ -98,9 +113,11 @@ Page({
    */
   onShow() {
     this.setData({
+      isLogin:app.globalData.isLogin,
       avatarUrl:app.globalData.userInfo.avatarUrl,
       nickName:app.globalData.userInfo.nickName
     })
+    console.log('mine data',this.data)
   },
 
   /**
