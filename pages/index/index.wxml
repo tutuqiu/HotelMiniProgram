@@ -1,59 +1,56 @@
 <!--pages/index/index.wxml-->
 <!-- <text>pages/index/index.wxml</text>
  -->
- <view style="padding: 50rpx; background: #fff;">
-  <!-- 先测试原生 slider 双滑块（优先级最高） -->
-  <text>原生双滑块：${{minPrice}} - ${{maxPrice}}</text>
-  <slider
-    min="0"
-    max="1500"
-    step="10"
-    range
-    value="{{[minPrice, maxPrice]}}"
-    activeColor="#f40"
-    backgroundColor="#eee"
-    style="width: 100%; height: 40rpx; margin: 20rpx 0;"
-  />
 
-  <!-- 再测试 weui-slider（可选） -->
-  <text style="margin-top: 40rpx; display: block;">WeUI 双滑块：${{minPrice}} - ${{maxPrice}}</text>
-  <weui-slider
-    min="0"
-    max="1500"
-    step="10"
-    range
-    value="{{[minPrice, maxPrice]}}"
-    activeColor="#f40"
-    backgroundColor="#eee"
-    style="width: 100%; height: 40rpx; margin: 20rpx 0;"
-  />
-</view>
 
 <scroll-view class="scrollarea" scroll-y type="list">
-  <text class="title">index</text>
 
   <view class="dateFilter-container">
-    <view>
-      <text>入住</text>
+    <view class="checkInDateFilter">
+      <text>入住:     </text>
       <picker mode="date" value="{{checkInDate}}" start="{{today}}" end="{{end_day}}" bindchange="onCheckInDateChange">
         <view>{{checkInDate}}</view>
       </picker>
     </view>
     <text>共{{dayCount}}晚</text>
-    <view>
-      <text>离店</text>
+    <view class="checkOutDateFilter">
+      <text>离店:     </text>
       <picker mode="date" value="{{checkOutDate}}" start="{{checkInDate}}" end="{{end_day}}" bindchange="onCheckOutDateChange">
         <view>{{checkOutDate}}</view>
       </picker>
     </view>
     
   </view>
-
+  <view class="headCountFilter-container">
+    <text>入住人数</text>
+    <view class="headCount-btns">
+      <button class="btn-minus" disabled="{{headCount <= 1}}" bindtap="onMinus">-</button>
+      <text>{{headCount}}</text>
+      <button class="btn-add" bindtap="onAdd">+</button>
+    </view>
+    
+  </view>
   <view class="priceFilter-container">
     <text>价格 ${{minPrice}}-{{maxPrice}}</text>
-    <weui-slider min="0" max="1500" step="10" range value="{{[minPrice, maxPrice]}}" activeColor="#f40"  backgroundColor="#eee" bindchange="onPriceRangeChange"></weui-slider>
-    <!-- <slider min="0" max="1500" step="10" value="{{minPrice}}" activeColor="#ccc" backgroundColor="#eee" bindchange="onMinPriceChange"></slider>
-    <slider min="0" max="1500" step="10" value="{{maxPrice}}" activeColor="#f40" backgroundColor="#eee" bindchange="onMaxPriceChange"></slider> -->
+    <view class="zy-slider">
+      <zy-slider minValue="{{minPrice}}" maxValue="{{maxPrice}}" min="0" max="1500" bind:lowValueChange="lowValueChangeAction"
+                bind:heighValueChange="highValueChangeAction" />
+    </view>
   </view>
+  <view class="roomTypeFilter-container">
+    <text>房型选择</text>
+    <view class="room-btn-group">
+      <view 
+        class="room-btn {{item.isSelected ? 'selected' : 'unselected'}}"
+        wx:for="{{roomTypeList}}"
+        wx:key="name"
+        bindtap="toggleRoom"
+        data-id="{{item.id}}"
+      >{{item.name}}
+      </view>
+    </view>
+  </view>
+  
+  <button bindtap="onSearch">查询</button>
 
 </scroll-view>

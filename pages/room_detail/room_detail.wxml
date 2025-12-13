@@ -1,0 +1,92 @@
+<!--pages/room_detail/room_detail.wxml-->
+<!-- <text>pages/room_detail/room_detail.wxml</text> -->
+<!-- pages/room_detail/room_detail.wxml -->
+<view class="detail-container">
+  <!-- 顶部多图滑动区域（替换原封面图） -->
+  <view class="swiper-wrap">
+    <swiper 
+      class="room-swiper" 
+      indicator-dots="{{true}}" 
+      indicator-color="#fff" 
+      indicator-active-color="#ff7a45"
+      autoplay="{{false}}"
+      circular="{{true}}"
+    >
+      <!-- 循环渲染所有图片 -->
+      <swiper-item wx:for="{{roomDetail.images}}" wx:key="index">
+        <image 
+          class="swiper-img" 
+          src="{{item}}" 
+          mode="widthFix"
+          bindtap="previewImage"  
+        ></image>
+      </swiper-item>
+    </swiper>
+
+    <!-- 收藏按钮（悬浮在swiper上） -->
+    <view class="collect-btn" catchtap="onCollectTap">
+      <image 
+        src="{{roomDetail.isCollected ? '/images/collected.png' : '/images/uncollected.png'}}" 
+        mode="widthFix"
+      ></image>
+    </view>
+  </view>
+
+  <!-- 评分 + 标题区域（不变） -->
+  <view class="title-wrap">
+    <!-- <view class="score-tag">4.9 好评如潮</view> -->
+    <view class="room-title">{{roomDetail.name}}</view>
+    <view class="tags-wrap">
+      <view class="tag-item" wx:for="{{roomDetail.tags}}" wx:key="index">{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 地址区域 -->
+  <view class="address-wrap">
+    <text class="address-text">{{roomDetail.address}}</text> <!-- 渲染address字段 -->
+    <view class="distance-wrap">
+      <icon type="location" size="14" color="#999"></icon>
+      <text class="distance-text">距您直线{{roomDetail.distance}}公里</text>
+    </view>
+    <!-- <button class="map-btn">地图</button> -->
+  </view>
+
+  <!-- 日期选择区域（不变） -->
+  <view class="date-wrap">
+    <text>12月16日 后天</text>
+    <text class="stay-night">2晚</text>
+    <text>12月18日 周四</text>
+    <text class="low-price">看低价</text>
+    <!-- <button class="calendar-btn">日历</button> -->
+  </view>
+
+  <!-- 房型信息区域（不变） -->
+  <!-- <view class="room-type-wrap">
+    <image class="type-img" src="{{roomDetail.images[0]}}" mode="widthFix"></image>
+    <view class="type-info">
+      <view class="type-title">整套出租·{{roomDetail.bed}}张床房</view>
+      <view class="type-desc">
+        整套{{roomDetail.area}}㎡·{{roomDetail.bedroom}}室{{roomDetail.livingdining}}厅·{{roomDetail.bed}}床·可住{{roomDetail.capacity}}人
+      </view>
+      <view class="cancel-tip">12月15日14点前可免费取消</view>
+    </view>
+    <view class="price-wrap">
+      <view class="price-desc">2晚共¥{{roomDetail.price*2}}</view>
+      <view class="price-night">¥{{roomDetail.price}}/晚</view>
+      <view class="discount-tip">已优惠50</view>
+    </view>
+    <button class="book-btn">订</button>
+  </view> -->
+
+  <!-- 底部预订栏（不变） -->
+  <view class="bottom-bar">
+    <view class="stay-date">
+      <text>住 12-16</text>
+      <text>离 12-18</text>
+    </view>
+    <button class="book-btn-large">
+      立即预订
+      <text class="total-price">2晚共¥{{roomDetail.price*2}}</text>
+    </button>
+  </view>
+</view>

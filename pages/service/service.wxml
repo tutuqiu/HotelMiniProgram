@@ -1,4 +1,57 @@
 <!--pages/service/service.wxml-->
-<scroll-view class="scrollarea" scroll-y type="list">
-  <text class="title">service</text>
-</scroll-view>
+<view wx:if="{{isLogin}}"class="page-container">
+  <!-- 消息列表区域 -->
+  <scroll-view 
+    class="msg-list" 
+    scroll-y 
+    scroll-into-view="msg-{{msgList.length - 1}}"
+    style="height: 60vh;"
+  >
+    <!-- 空消息提示 -->
+    <view wx:if="{{msgList.length === 0}}" class="empty-tip">
+      暂无消息，连接成功后可发送
+    </view>
+    <!-- 消息项 -->
+    <block wx:for="{{msgList}}" wx:key="index" wx:for-item="msg">
+      <view id="msg-{{index}}" class="msg-item">
+        <!-- 对方消息（左头像 + 右内容） -->
+        <view wx:if="{{!msg.isSelf}}" class="msg-wrap other-msg-wrap">
+          <image class="msg-avatar" src="{{msg.avatar}}" mode="aspectFill"></image>
+          <view class="msg-content-wrap">
+            <text class="msg-time">{{msg.time}}</text>
+            <text class="msg-content">{{msg.content}}</text>
+          </view>
+        </view>
+        <!-- 自己消息（右头像 + 左内容） -->
+        <view wx:else class="msg-wrap self-msg-wrap">
+          <view class="msg-content-wrap">
+            <text class="msg-time">{{msg.time}}</text>
+            <text class="msg-content">{{msg.content}}</text>
+          </view>
+          <image class="msg-avatar" src="{{msg.avatar}}" mode="aspectFill"></image>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
+
+  <!-- 输入和发送区域 -->
+  <view class="input-area">
+    <input
+      class="msg-input"
+      placeholder="请输入消息..."
+      value="{{inputMsg}}"
+      bindinput="onInputChange"
+      disabled="{{!socketOpen}}"
+    />
+    <!-- 发送按钮 -->
+    <button
+      class="send-btn"
+      disabled="{{!socketOpen}}"
+      bindtap="handleSendMsg"
+    >发送</button>
+  </view>
+</view>
+<view wx:else="" class="unlogin-container">
+  <text class="welcome">享受更多内容 请先登录~</text>
+  <button class="btn-login" bindtap="login">登录</button>
+</view>

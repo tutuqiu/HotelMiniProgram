@@ -5,7 +5,12 @@
     "pages/mine/mine",
     "pages/service/service",
     "pages/login/login",
-    "pages/profile-edit/profile-edit"
+    "pages/profile-edit/profile-edit",
+    "pages/test/test",
+    "component/zyslider/zyslider",
+    "pages/room_result/room_result",
+    "pages/reservation/reservation",
+    "pages/room_detail/room_detail"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -42,7 +47,7 @@
   "componentFramework": "glass-easel",
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents",
-  "useExtendedLib":{
-    "weui":true
+  "useExtendedLib": {
+    "weui": true
   }
 }

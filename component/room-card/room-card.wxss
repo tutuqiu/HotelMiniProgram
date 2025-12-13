@@ -1,0 +1,94 @@
+/* component/room-card/room-card.wxss */
+/* component/room-card/room-card.wxss */
+/* 关键：卡片改为flex布局，图片左、信息右 */
+.room-card {
+  position: relative; /* 收藏按钮定位需要 */
+  width: 100%;
+  padding: 16rpx;
+  border-bottom: 1px solid #f5f5f5;
+  box-sizing: border-box;
+  display: flex; /* 核心：横向排列 */
+  gap: 16rpx; /* 图片和信息之间的间距 */
+  align-items: flex-start; /* 顶部对齐 */
+}
+
+/* 收藏按钮：绝对定位在图片右上角（相对于room-card） */
+.collect-btn {
+  position: absolute;
+  top: 24rpx; 
+  left: calc(200rpx - 30rpx); /* 定位到图片右上角（图片宽度200rpx - 按钮一半宽度） */
+  width: 60rpx;
+  height: 60rpx;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99;
+}
+.collect-img {
+  width: 30rpx;
+  height: 30rpx;
+}
+
+/* 房间图片：固定宽度，占左侧 */
+.room-img {
+  width: 200rpx; /* 固定宽度，适配flex布局 */
+  height: 200rpx;
+  border-radius: 8rpx;
+  flex-shrink: 0; /* 防止图片被挤压变形 */
+}
+
+/* 房间信息区域：占右侧剩余宽度 */
+.room-info {
+  flex: 1; /* 核心：占满右侧所有空间 */
+  margin-top: 0; /* 取消之前的负边距 */
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 信息垂直分布均匀 */
+  height: 200rpx; /* 和图片高度一致 */
+}
+
+.room-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 4rpx;
+  line-height: 1.2; /* 防止文字换行溢出 */
+}
+
+.room-distance {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 4rpx;
+}
+
+.room-type {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 4rpx;
+  line-height: 1.2;
+}
+
+.room-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  margin-bottom: 0; /* 取消底部间距 */
+}
+
+.tag-item {
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  background: #f0f8ff;
+  color: #409eff;
+  border-radius: 4rpx;
+}
+
+/* 价格区域：放在信息区底部 */
+.room-price {
+  font-size: 30rpx;
+  color: #f56c6c;
+  font-weight: bold;
+  margin-top: auto; /* 自动顶到底部 */
+}

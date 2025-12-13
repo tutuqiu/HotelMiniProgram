@@ -8,12 +8,22 @@ Page({
    * 页面的初始数据
    */
   data: {
-    avatarUrl:app.globalData.userInfo.avatarUrl,
-    nickName:app.globalData.userInfo.nickName,
-    phoneNumber:app.globalData.userInfo.phoneNumber,
+    avatarUrl:"",
+    nickName:"",
+    phoneNumber:"",
     newPhoneNumber:"",
     isModalShow:false,
     sms:""
+  },
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad(options) {
+    this.setData({
+      avatarUrl:app.globalData.userInfo.avatarUrl,
+      nickName:app.globalData.userInfo.nickName,
+      phoneNumber:app.globalData.userInfo.phoneNumber,
+    })
   },
   showPhoneModal(){
     this.setData({
@@ -29,15 +39,10 @@ Page({
     })
   },
   onChooseAvatar(e){
-    // console.log('e:',e)
     const {avatarUrl} = e.detail
-    // console.log('profile-edit before avatarUrl:',this.data.avatarUrl)
-    // console.log('profile-edit now1 avatarUrl:',avatarUrl)
-    // app.globalData.userInfo.avatarUrl=avatarUrl
     this.setData({
       avatarUrl,
     })
-    // console.log('app avatarUrl:',app.globalData.userInfo.avatarUrl)
     console.log('profile-edit now avatarUrl:',this.data.avatarUrl)
   },
   onChangeNickName(e){
@@ -252,12 +257,7 @@ Page({
     }
   },
   
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
-  },
+  
 
   /**
    * 生命周期函数--监听页面初次渲染完成

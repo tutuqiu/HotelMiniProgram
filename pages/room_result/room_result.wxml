@@ -1,0 +1,11 @@
+<!-- room-result页面：房间列表 -->
+<view class="hotel-result-page">
+  <!-- 循环渲染每个房间卡片 -->
+  <room-card 
+    wx:for="{{roomList}}" 
+    wx:key="id" 
+    roomData="{{item}}"
+    bind:collect="onRoomCollect"
+    bind:cardTap="onCardTap"
+    ></room-card>
+</view>

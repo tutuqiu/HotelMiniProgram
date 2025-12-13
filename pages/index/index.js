@@ -1,6 +1,9 @@
 // pages/index/index.js
 Page({
+  // prices:{
+  //   "2025-12-11":130,
 
+  // }
   /**
    * 页面的初始数据
    */
@@ -10,8 +13,113 @@ Page({
     checkInDate:'',
     checkOutDate:'',
     dayCount:1,
+    headCount:2,
     minPrice:0,
-    maxPrice:1500
+    maxPrice:1500,
+    roomTypeList:[
+      {id:'TWIN',name:'双床房',isSelected:true},
+      {id:'QUEEN',name:'大床房',isSelected:true},
+      {id:'FAMILY',name:'家庭房',isSelected:true},
+      {id:'BUSINESS_SUITE',name:'商务套房',isSelected:true},
+    ],
+    selectedRooms:['TWIN','QUEEN','FAMILY','BUSINESS_SUITE']
+  },
+  onSearch(){
+    // TODO 
+    // bedroom[{
+    //   id:1
+    //   beds:[{
+    //     id:1
+    //     bedsize:1.5
+    //   }]
+    // }]
+    const searchResult = [{
+      id:1,
+      images: ["../../images/icon.png","/images/collected.png"],
+      name: "111111",
+      address:"上海市曹安公路4800号同济大学",
+      // location:{
+      //   ""
+      // },
+      distance: 2,
+      area: 10,
+      bedroom: 2,
+      livingdining: 1,
+      bed: 2,
+      capacity: 4,
+      price: 200,
+      tags: ["洗衣机","麻将桌"],
+      isCollected: false
+    },{
+      id:2,
+      images: ["/images/collected.png","../../images/icon.png"],
+      name: "222222",
+      address:"上海市曹安公路4801号同济大学",
+      distance: 2,
+      area: 10,
+      bedroom: 2,
+      livingdining: 1,
+      bed: 2,
+      capacity: 4,
+      price: 200,
+      tags: ["洗衣机","麻将桌"],
+      isCollected: false
+    }]
+    const cacheKey = `room_search_result_${Date.now()}`;
+    wx.setStorageSync(cacheKey, searchResult);
+    wx.navigateTo({
+      url: `/pages/room_result/room_result?cacheKey=${cacheKey}`
+    });
+    
+    
+    // console.log('in onSearch')
+    // wx.navigateTo({
+    //   url: '/pages/test/test'
+    // })
+  },
+
+  toggleRoom(e) {
+    // 获取点击的房型id（来自 data-id="{{item.id}}"）
+    const roomId = e.currentTarget.dataset.id; 
+    // 切换选中状态
+    const newRoomTypeList = this.data.roomTypeList.map(item => {
+      if (item.id === roomId) { // 匹配点击的房型
+        return { ...item, isSelected: !item.isSelected };
+      }
+      return item;
+    });
+    // 更新数据 页面重新渲染（按钮样式随之变化）
+    this.setData({ roomTypeList: newRoomTypeList });
+
+    const selectedRooms = newRoomTypeList
+      .filter(item => item.isSelected)
+      .map(item => item.id);
+    this.setData({
+      selectedRooms:selectedRooms
+    })
+    console.log('selectedRooms:',this.data.selectedRooms)
+  },
+  onMinus(){
+    this.setData({
+      headCount:this.data.headCount-1
+    })
+    console.log('headCount:',this.data.headCount)
+  },
+  onAdd(){
+    this.setData({
+      headCount:this.data.headCount+1
+    })
+    console.log('headCount:',this.data.headCount)
+  },
+  lowValueChangeAction(e){
+    this.setData({
+      minPrice:e.detail.lowValue
+    })
+  },
+  highValueChangeAction(e){
+    this.setData({
+      maxPrice:e.detail.heighValue
+    })
   },
   onCheckInDateChange(e){
     console.log("choose date:",e.detail.value)
@@ -64,30 +172,7 @@ Page({
     this.setDayCount()
   },
 
-  onPriceRangeChange(e){
-    const [min,max]=e.detail.value
-    this.setData({
-      minPrice:min,
-      maxPrice:max
-    })
-
-    console.log('price range:',this.data.minPrice,'-',this.data.maxPrice)
-  },
-
-  onMinPriceChange(e){
-    const min = e.detail.value
-    this.setData({
-      minPrice:min
-    })
-    console.log('minPrice:',this.data.minPrice)
-  },
-  onMaxPriceChange(e){
-    const max = e.detail.value
-    this.setData({
-      maxPrice:max
-    })
-    console.log('maxPrice:',this.data.maxPrice)
-  },
+  
   /**
    * 生命周期函数--监听页面加载
    */

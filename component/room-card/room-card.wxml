@@ -1,0 +1,48 @@
+<!--component/room-card/room-card.wxml-->
+<!-- <text>component/room-card/room-card.wxml</text> -->
+<!-- 单个房间卡片 -->
+<view class="room-card" bindtap="onCardTap">
+  <!-- 房间图片 -->
+  <image class="room-img" src="{{roomData.images[0]}}" mode="widthFix"></image>
+  
+  <!-- 收藏按钮 -->
+  <view class="collect-btn" catchtap="onCollectTap">
+    <!-- <icon type="heart" size="20" color="{{roomData.isCollected ? 'red' : '#ccc'}}"></icon> -->
+    <image class="collect-img" 
+    src="{{roomData.isCollected ? '../../images/collected.png' : '/images/uncollected.png'}}"
+    mode="widthFix"></image>
+  </view>
+
+  <!-- 房间信息区域 -->
+  <view class="room-info">
+    <!-- 房间名称 -->
+    <view class="room-name">{{roomData.name}}</view>
+    
+    <!-- 距离 -->
+    <view class="room-distance">
+      <icon type="location" size="14" color="#999"></icon>
+      <text>距您直线{{roomData.distance}}公里</text>
+    </view>
+    
+    <!-- 评分 -->
+    <!-- <view class="room-score">
+      <text class="score-num">{{roomData.score}}</text>
+      <text class="score-desc">{{roomData.scoreDesc}}</text>
+      <text class="comment-count">({{roomData.commentCount}}条点评)</text>
+    </view> -->
+    
+    <!-- 房型/面积 -->
+    <view class="room-type">{{roomData.area}}㎡·{{roomData.bedroom}}室·{{roomData.livingdining}}厅·{{roomData.bed}}床·可住{{roomData.capacity}}人</view>
+    
+    <!-- 标签（如“近地铁”“24小时热水”） -->
+    <view class="room-tags">
+      <view class="tag-item" wx:for="{{roomData.tags}}" wx:key="index">{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 价格区域 -->
+  <view class="room-price">
+    <text class="price">¥{{roomData.price}}</text>
+    <!-- <text class="discount" wx:if="{{roomData.discount}}">已优惠{{roomData.discount}}</text> -->
+  </view>
+</view>

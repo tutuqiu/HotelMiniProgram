@@ -6,8 +6,7 @@
   </button>
   <view class="nickName-container">
     <text class="label">昵称</text>
-    <!-- <text>{{nickName}}</text> -->
-    <input type="nickname" value="{{nickName}}" class="nickName-input" bindinput="onChangeNickName"/>
+    <input type="nickname" value="{{nickName}}" class="nickName-input" bindinput="onChangeNickName" bindchange="onChangeNickName"/>
   </view>
   <view class="phoneNumber-container">
     <text>手机号</text>
