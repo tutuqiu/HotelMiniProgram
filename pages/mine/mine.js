@@ -99,6 +99,12 @@ Page({
       url: '/pages/profile-edit/profile-edit',
     })
   },
+
+  goToCollectedRoom(){
+    wx.navigateTo({
+      url: '/pages/room_collected/room_collected',
+    })
+  },
  
 
   /**

@@ -11,6 +11,9 @@ Component({
     defaultCheckOutDate:{
       type:String
     },
+    needPrice:{
+      type:Boolean
+    }
   },
 
   /**
@@ -21,7 +24,8 @@ Component({
     checkIn:'',
     checkOut:'',
     today:'',
-    calendarList:[]
+    calendarList:[],
+    needPrice:''
   },
 
   /**
@@ -33,7 +37,8 @@ Component({
       this.setData({
         checkIn:this.properties.defaultCheckInDate,
         checkOut:this.properties.defaultCheckOutDate,
-        isReady:true
+        isReady:true,
+        needPrice:this.properties.needPrice
       })
     },
     generateCalendarList(){
@@ -51,7 +56,7 @@ Component({
       console.log('currentYear:',currentYear)
       let currentMonth = now.getMonth() + 1;
 
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < 12; i++) {
         const monthStr = currentMonth.toString().padStart(2, '0')
         console.log(`${currentYear.toString()}-${monthStr}`)
         calendarList.push({
@@ -89,6 +94,16 @@ Component({
         checkInDate:checkInDate,
         checkOutDate:checkOutDate
       })
+    },
+    updateCalendar(e){
+      const {checkInDate,checkOutDate}=e.detail
+      for(let i=1;i<=12;i++){
+        console.log(i)
+        const key=`#calendar-${i}`
+        const calendar=this.selectComponent(key)
+        if(calendar)
+          calendar.updateDate(checkInDate,checkOutDate)
+      }
     },
     onHideModal(){
       this.triggerEvent('hide')

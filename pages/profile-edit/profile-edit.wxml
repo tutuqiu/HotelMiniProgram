@@ -2,7 +2,7 @@
 <!-- <text>pages/profile-edit/profile-edit.wxml</text> -->
 <view class="root-container">
   <button class="choose-avatar" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-    <image src="{{avatarUrl}}"></image>
+    <image src="{{avatarUrl}}" class="img-avatar"></image>
   </button>
   <view class="nickName-container">
     <text class="label">昵称</text>

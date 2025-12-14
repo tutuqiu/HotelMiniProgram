@@ -1,4 +1,5 @@
 {
+  "navigationBarTitleText":"房屋",
   "usingComponents": {
     "room-card":"/component/room-card/room-card"
   }

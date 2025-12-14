@@ -1,25 +1,24 @@
 <!--pages/index/index.wxml-->
 <!-- <text>pages/index/index.wxml</text>
  -->
-
- <date-selector wx:if="{{showDateSelector}}" defaultCheckInDate="{{checkInDate}}" defaultCheckOutDate="{{checkOutDate}}" bind:confirm="confirmDate"></date-selector>
 <scroll-view class="scrollarea" scroll-y type="list">
   <view class="dateFilter-container" bindtap="onShowModal">
     <view class="checkInDateFilter">
       <text>入住:     </text>
       <text>{{checkInDate}}</text>
-      <!-- <picker mode="date" value="{{checkInDate}}" start="{{today}}" end="{{end_day}}" bindchange="onCheckInDateChange">
-        <view>{{checkInDate}}</view>
-      </picker> -->
     </view>
     <text>共{{dayCount}}晚</text>
     <view class="checkOutDateFilter">
       <text>离店:     </text>
       <text>{{checkOutDate}}</text>
-      <!-- <picker mode="date" value="{{checkOutDate}}" start="{{checkInDate}}" end="{{end_day}}" bindchange="onCheckOutDateChange">
-        <view>{{checkOutDate}}</view>
-      </picker> -->
     </view>
+    <date-selector 
+      wx:if="{{showDateSelector}}" 
+      defaultCheckInDate="{{checkInDate}}" 
+      defaultCheckOutDate="{{checkOutDate}}" 
+      needPrice="{{false}}" 
+      bind:confirm="confirmDate" 
+      bind:hide="onHideModal"></date-selector>
   </view>
 
   <view class="headCountFilter-container">

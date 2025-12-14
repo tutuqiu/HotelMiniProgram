@@ -1,3 +1,6 @@
 {
-  "usingComponents": {}
+  "navigationBarTitleText":"房屋详情",
+  "usingComponents": {
+    "date-selector":"/component/date-selector/date-selector"
+  }
 }

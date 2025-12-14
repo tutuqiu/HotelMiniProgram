@@ -11,12 +11,59 @@ Page({
     // end_day:'',
     checkInDate:'',
     checkOutDate:'',
-    roomDetail: {}
+    dayCount:'',
+    roomDetail: {},
+    showDateSelector:false
   },
   onCollectTap(e){
     
   },
 
+  onHideModal(){
+    this.setData({
+      showDateSelector:false
+    })
+  },
+  
+  onShowModal(){
+    console.log('onShowModal')
+    this.setData({
+      showDateSelector:true
+    })
+    console.log('showDateSelector:',this.data.showDateSelector)
+  },
+  confirmDate(e){
+    const {checkInDate,checkOutDate}=e.detail
+    console.log('index checkInDate:',checkInDate)
+    console.log('index checkOutDate:',checkOutDate)
+
+    this.setData({
+      checkInDate:checkInDate,
+      checkOutDate:checkOutDate
+    })
+    app.globalData.checkInDate=checkInDate
+    app.globalData.checkOutDate=checkOutDate
+    
+    this.setDayCount()
+    this.onHideModal()
+  },
+
+  setDayCount(){
+    const start=new Date(this.data.checkInDate)
+    const end =new Date(this.data.checkOutDate)
+
+    start.setHours(0,0,0,0)
+    end.setHours(0,0,0,0)
+
+    const msCount=end.getTime()-start.getTime()
+    const dayCount=Math.floor(msCount/(24*60*60*1000))
+
+    this.setData({
+      dayCount:dayCount
+    })
+
+    console.log('dayCount:',this.data.dayCount)
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -26,6 +73,7 @@ Page({
       checkOutDate:app.globalData.checkOutDate,
       today:app.globalData.today
     })
+    this.setDayCount()
     
     const cacheKey = options.cacheKey; // 父页面的cacheKey
     const id = options.id;     // 卡片的ID

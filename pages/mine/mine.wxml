@@ -7,9 +7,33 @@
   <text class="welcome">欢迎加入漕盈路</text>
   <button class="btn-login" bindtap="login">登录</button>
 </view>
-<view wx:else class="root-container login-container">
+<view wx:else class="login-container">
   <view class="userInfo-container" bindtap="goToProfileEdit">
     <image src="{{avatarUrl}}" class="avatar"></image>
-    <text>{{nickName}}</text>
+    <text class="nickname-text">{{nickName}}</text>
+  </view>
+  <view class="orders-container">
+    <view class="orders-header">
+      <text>酒店订单</text>
+      <text>全部</text>
+    </view>
+    <view class="orders-content">
+      <view class="pending-payment">
+        <image src="http://cdn.xtuctuy.top/images/pending-payment.png"></image>
+        <text>待支付</text>
+      </view>
+      <view class="pending-checkin">
+        <image src="http://cdn.xtuctuy.top/images/pending-checkin.png"></image>
+        <text>待入住</text>
+      </view>
+      <view class="pending-review">
+        <image src="http://cdn.xtuctuy.top/images/pending-review.png"></image>
+        <text>待评价</text>
+      </view>
+    </view>
+  </view>
+  <view class="collect-container" bindtap="goToCollectedRoom">
+    <image src="http://cdn.xtuctuy.top/images/collect-b.png"></image>
+    <text>我收藏的</text>
   </view>
 </view>

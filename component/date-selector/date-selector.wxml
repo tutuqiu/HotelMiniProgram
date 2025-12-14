@@ -4,7 +4,7 @@
   <view class="modal" catchtap="noop">
     <view class="header">
       <text class="title">选择日期</text>
-      <img class="close" src="http://cdn.xtuctuy.top/images/close.png" bindtap="onHideModal"></img>
+      <image class="close" src="http://cdn.xtuctuy.top/images/close.png" bindtap="onHideModal"></image>
     </view>
     <view class="week-wrap">
       <view class="week-item">日</view>
@@ -16,9 +16,9 @@
       <view class="week-item">六</view>
     </view>
 
-    <scroll-view class="calendar-container" scroll-y type="list">
+    <scroll-view class="calendar-container" scroll-y>
       <view class="calendar" wx:if="{{isReady}}">
-        <month-calendar wx:for="{{calendarList}}" wx:key="id" year="{{item.year}}" month="{{item.month}}" defaultCheckInDate="{{checkIn}}" defaultCheckOutDate="{{checkOut}}" bind:confirm="confirmDate"></month-calendar>
+        <month-calendar wx:for="{{calendarList}}" wx:key="id" id="calendar-{{item.id}}" year="{{item.year}}" month="{{item.month}}" defaultCheckInDate="{{checkIn}}" defaultCheckOutDate="{{checkOut}}" needPrice="{{needPrice}}" bind:confirm="confirmDate" bind:update="updateCalendar"></month-calendar>
       </view>
     </scroll-view>
   </view>

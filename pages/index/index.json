@@ -1,4 +1,5 @@
 {
+  "navigationBarTitleText":"首页",
   "usingComponents": {
     "zy-slider": "../../component/zyslider/zyslider",
     "date-selector":"/component/date-selector/date-selector"

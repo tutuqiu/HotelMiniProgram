@@ -132,30 +132,6 @@ Page({
       maxPrice:e.detail.heighValue
     })
   },
-  onCheckInDateChange(e){
-    console.log("choose date:",e.detail.value)
-    this.setData({
-      checkInDate:e.detail.value
-    })
-    app.globalData.checkInDate=e.detail.value
-
-    console.log('checkInDate:',this.data.checkInDate)
-
-    const checkInTime=new Date(this.data.checkInDate).getTime()
-    const checkOutTime=new Date(this.data.checkOutDate).getTime()
-
-    if(checkInTime>=checkOutTime){
-      const nextDay=new Date(checkInTime + 24*60*60*1000)
-      const nextDaystr= nextDay.toISOString().split('T')[0]
-      this.setData({
-        checkOutDate:nextDaystr
-      })
-      app.globalData.checkOutDate=nextDaystr
-      console.log('checkOutDate:',this.data.checkOutDate)
-    }
-    this.setDayCount()
-
-  },
 
   setDayCount(){
     const start=new Date(this.data.checkInDate)
@@ -176,16 +152,6 @@ Page({
     
   },
 
-  onCheckOutDateChange(e){
-    console.log("choose date:",e.detail.value)
-    this.setData({
-      checkOutDate:e.detail.value
-    })
-    app.globalData.checkOutDate=e.detail.value
-    console.log('checkOutDate:',this.data.checkOutDate)
-
-    this.setDayCount()
-  },
 
   onHideModal(){
     this.setData({
@@ -211,7 +177,9 @@ Page({
     app.globalData.checkInDate=checkInDate
     app.globalData.checkOutDate=checkOutDate
     
-    this.onHideModal
+    this.setDayCount()
+
+    this.onHideModal()
     
   },
 

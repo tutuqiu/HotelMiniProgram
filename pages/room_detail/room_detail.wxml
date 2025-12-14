@@ -86,13 +86,21 @@
 
   <!-- 底部预订栏（不变） -->
   <view class="bottom-bar">
-    <view class="stay-date">
-      <text>住 12-16</text>
-      <text>离 12-18</text>
+    <view class="stay-date" bindtap="onShowModal">
+      <text>住 {{checkInDate}}</text>
+      <text>离 {{checkOutDate}}</text>
+      
+      <date-selector 
+        wx:if="{{showDateSelector}}" 
+        defaultCheckInDate="{{checkInDate}}" 
+        defaultCheckOutDate="{{checkOutDate}}" 
+        needPrice="{{true}}" 
+        bind:confirm="confirmDate" 
+        bind:hide="onHideModal"></date-selector>
     </view>
     <button class="book-btn-large">
       立即预订
-      <text class="total-price">2晚共¥{{roomDetail.price*2}}</text>
+      <text class="total-price">{{dayCount}}晚共¥{{roomDetail.price*2}}</text>
     </button>
   </view>
 </view>

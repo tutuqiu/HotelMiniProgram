@@ -10,7 +10,9 @@
     "component/zyslider/zyslider",
     "pages/room_result/room_result",
     "pages/reservation/reservation",
-    "pages/room_detail/room_detail"
+    "pages/room_detail/room_detail",
+    "pages/orders/orders",
+    "pages/room_collected/room_collected"
   ],
   "window": {
     "navigationBarTextStyle": "black",

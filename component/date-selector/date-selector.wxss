@@ -1,4 +1,22 @@
 /* component/date-selector/date-selector.wxss */
+/* 页面 WXSS */
+.calendar-container {
+  height: 80vh; /* 固定高度（如占屏幕70%），scroll-y必须 */
+  width: 100%;
+  overflow: hidden; /* 隐藏溢出 */
+}
+/* 日历容器纵向排列 */
+.calendar {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx; /* 月份之间的间距 */
+  padding: 10rpx;
+}
+month-calendar {
+  display: block; /* 关键：默认组件可能是 inline，导致排列异常 */
+  width: 100%;
+  box-sizing: border-box;
+}
 .modal-mask{
   position: fixed;
   top: 0;
@@ -31,8 +49,8 @@
   color: #333;
 }
 .close {
-  font-size: 36rpx;
-  color: #999;
+  width: 50rpx;
+  height:50rpx;
 }
 .week-wrap {
   display: flex;
