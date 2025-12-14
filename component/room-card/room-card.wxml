@@ -9,7 +9,7 @@
   <view class="collect-btn" catchtap="onCollectTap">
     <!-- <icon type="heart" size="20" color="{{roomData.isCollected ? 'red' : '#ccc'}}"></icon> -->
     <image class="collect-img" 
-    src="{{roomData.isCollected ? '../../images/collected.png' : '/images/uncollected.png'}}"
+    src="{{roomData.isCollected ? 'http://cdn.xtuctuy.top/images/collected.png' : 'http://cdn.xtuctuy.top/images/uncollected.png'}}"
     mode="widthFix"></image>
   </view>
 

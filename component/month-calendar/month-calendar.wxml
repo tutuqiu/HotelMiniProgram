@@ -1,0 +1,19 @@
+<!--component/month-calendar/month-calendar.wxml-->
+<!-- <text>component/month-calendar/month-calendar.wxml</text> -->
+<view class="calendar" wx:if="{{isReady}}">
+  <text class="title">{{properties.year}}年{{properties.month}}月</text>
+  <view class="date-grid">
+    <!-- 补全当月第一天前的空白 -->
+    <view class="date-item empty" wx:for="{{emptyDays}}" wx:key="index"></view>
+
+    <!-- 日期项 -->
+    <view class="date-item {{isDisabled(item.date)?'disabled':''}} {{item.date==checkIn?'check-in':''}} {{item.date==checkOut?'check-out':''}} {{isBetween(item.date)?'between':''}}"
+      wx:for="{{days}}"
+      wx:key="date"
+      bindtap="selectDate"
+      data-date="{{item.date}}"
+    >
+      <view class="date-num">{{item.day}}</view>
+    </view>
+  </view>
+</view>

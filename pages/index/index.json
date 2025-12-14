@@ -1,5 +1,6 @@
 {
   "usingComponents": {
-    "zy-slider": "../../component/zyslider/zyslider"
+    "zy-slider": "../../component/zyslider/zyslider",
+    "date-selector":"/component/date-selector/date-selector"
   }
 }

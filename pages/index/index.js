@@ -1,4 +1,6 @@
 // pages/index/index.js
+const app=getApp()
+
 Page({
   // prices:{
   //   "2025-12-11":130,
@@ -8,6 +10,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    showDateSelector:false,
     today:'',
     end_day:'',
     checkInDate:'',
@@ -24,7 +27,10 @@ Page({
     ],
     selectedRooms:['TWIN','QUEEN','FAMILY','BUSINESS_SUITE']
   },
+
   onSearch(){
+    // const checkInDate = this.data.checkInDate
+    // const checkOutDate = this.data.checkOutDate
     // TODO 
     // bedroom[{
     //   id:1
@@ -35,9 +41,10 @@ Page({
     // }]
     const searchResult = [{
       id:1,
-      images: ["../../images/icon.png","/images/collected.png"],
+      images: ["http://cdn.xtuctuy.top/images/icon.png","http://cdn.xtuctuy.top/images/collected.png"],
       name: "111111",
       address:"上海市曹安公路4800号同济大学",
+      description:"本店位于嘉定区曹安公路4800号同济大学，大学专业提供专属学习氛围",
       // location:{
       //   ""
       // },
@@ -49,12 +56,16 @@ Page({
       capacity: 4,
       price: 200,
       tags: ["洗衣机","麻将桌"],
-      isCollected: false
+      isCollected: true
     },{
       id:2,
-      images: ["/images/collected.png","../../images/icon.png"],
+      images: ["http://cdn.xtuctuy.top/images/collected.png","http://cdn.xtuctuy.top/images/icon.png"],
       name: "222222",
       address:"上海市曹安公路4801号同济大学",
+      description:"本店位于嘉定区曹安公路4800号同济大学，大学专业提供专属学习氛围",
+      // location:{
+      //   ""
+      // },
       distance: 2,
       area: 10,
       bedroom: 2,
@@ -63,7 +74,7 @@ Page({
       capacity: 4,
       price: 200,
       tags: ["洗衣机","麻将桌"],
-      isCollected: false
+      isCollected: true
     }]
     const cacheKey = `room_search_result_${Date.now()}`;
     wx.setStorageSync(cacheKey, searchResult);
@@ -126,6 +137,8 @@ Page({
     this.setData({
       checkInDate:e.detail.value
     })
+    app.globalData.checkInDate=e.detail.value
+
     console.log('checkInDate:',this.data.checkInDate)
 
     const checkInTime=new Date(this.data.checkInDate).getTime()
@@ -137,6 +150,7 @@ Page({
       this.setData({
         checkOutDate:nextDaystr
       })
+      app.globalData.checkOutDate=nextDaystr
       console.log('checkOutDate:',this.data.checkOutDate)
     }
     this.setDayCount()
@@ -167,9 +181,38 @@ Page({
     this.setData({
       checkOutDate:e.detail.value
     })
+    app.globalData.checkOutDate=e.detail.value
     console.log('checkOutDate:',this.data.checkOutDate)
 
     this.setDayCount()
+  },
+
+  onHideModal(){
+    this.setData({
+      showDateSelector:false
+    })
+  },
+  
+  onShowModal(){
+    this.setData({
+      showDateSelector:true
+    })
+  },
+
+  confirmDate(e){
+    const {checkInDate,checkOutDate}=e.detail
+    console.log('index checkInDate:',checkInDate)
+    console.log('index checkOutDate:',checkOutDate)
+
+    this.setData({
+      checkInDate:checkInDate,
+      checkOutDate:checkOutDate
+    })
+    app.globalData.checkInDate=checkInDate
+    app.globalData.checkOutDate=checkOutDate
+    
+    this.onHideModal
+    
   },
 
   
@@ -177,31 +220,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    const now = new Date();
-    const year1 = now.getFullYear();
-    const month1 = (now.getMonth() + 1).toString().padStart(2,'0');
-    const day1 = now.getDate().toString().padStart(2,'0');
-
-    const tomorrow=new Date(now)
-    tomorrow.setDate(tomorrow.getDate()+1)
-    const year2=tomorrow.getFullYear()
-    const month2=(tomorrow.getMonth()+1).toString().padStart(2,'0')
-    const day2=tomorrow.getDate().toString().padStart(2,'0')
-
     this.setData({
-      today:`${year1}-${month1}-${day1}`,
-      checkInDate:`${year1}-${month1}-${day1}`,
-      checkOutDate:`${year2}-${month2}-${day2}`
-    });
-
-    const sys = wx.getSystemInfoSync();
-    console.log('当前基础库版本：', sys.SDKVersion); 
-    // 手动判断是否支持 range 双滑块（≥2.14.0 才支持）
-    const supportRange = (v) => {
-      const [major, minor] = v.split('.').map(Number);
-      return (major > 2) || (major === 2 && minor >= 14);
-    };
-    console.log('是否支持双滑块：', supportRange(sys.SDKVersion)); 
+      today:app.globalData.today,
+      checkInDate:app.globalData.checkInDate,
+      checkOutDate:app.globalData.checkOutDate
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

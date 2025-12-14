@@ -22,7 +22,7 @@
     <view class="modal-header">
       <text>修改手机号</text>
       <!-- <button></button> -->
-      <image src="/images/close.png" bindtap="hidePhoneModal" class="close-icon"></image>
+      <image src="http://cdn.xtuctuy.top/images/close.png" bindtap="hidePhoneModal" class="close-icon"></image>
     </view>
     <view class="modal-content">
       <input placeholder="请输入新手机号" type="number" bindinput="onPhoneInput"/>

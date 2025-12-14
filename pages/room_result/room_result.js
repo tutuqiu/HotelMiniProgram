@@ -1,17 +1,29 @@
 // pages/room_result/room_result.js
+const app=getApp()
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    roomList:[]
+    roomList:[],
+    today:'',
+    // end_day:'',
+    checkInDate:'',
+    checkOutDate:'',
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    this.setData({
+      checkInDate:app.globalData.checkInDate,
+      checkOutDate:app.globalData.checkOutDate,
+      today:app.globalData.today
+    })
+    
     const {cacheKey}=options
     const searchResult = wx.getStorageSync(cacheKey)
     console.log('onLoad room_result')

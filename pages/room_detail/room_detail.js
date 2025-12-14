@@ -1,10 +1,16 @@
 // pages/room_detail/room_detail.js
+const app=getApp()
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    today:'',
+    // end_day:'',
+    checkInDate:'',
+    checkOutDate:'',
     roomDetail: {}
   },
   onCollectTap(e){
@@ -15,6 +21,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    this.setData({
+      checkInDate:app.globalData.checkInDate,
+      checkOutDate:app.globalData.checkOutDate,
+      today:app.globalData.today
+    })
+    
     const cacheKey = options.cacheKey; // 父页面的cacheKey
     const id = options.id;     // 卡片的ID
 

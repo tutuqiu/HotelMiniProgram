@@ -6,6 +6,22 @@ const defaultNickName = '1'
 
 App({
   onLaunch() {
+    // 初始化日期
+    const now = new Date();
+    const year1 = now.getFullYear();
+    const month1 = (now.getMonth() + 1).toString().padStart(2,'0');
+    const day1 = now.getDate().toString().padStart(2,'0');
+
+    const tomorrow=new Date(now)
+    tomorrow.setDate(tomorrow.getDate()+1)
+    const year2=tomorrow.getFullYear()
+    const month2=(tomorrow.getMonth()+1).toString().padStart(2,'0')
+    const day2=tomorrow.getDate().toString().padStart(2,'0')
+    
+    this.globalData.today=`${year1}-${month1}-${day1}`
+    this.globalData.checkInDate=`${year1}-${month1}-${day1}`
+    this.globalData.checkOutDate=`${year2}-${month2}-${day2}`
+
     // 展示本地存储能力
     const logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
@@ -33,6 +49,7 @@ App({
       
     }
   },
+
   async refresh(refreshTokenId){
     try{
       const data = {
@@ -113,6 +130,9 @@ App({
   },
   globalData: {
     isLogin:false,
+    today:'',
+    checkInDate:'',
+    checkOutDate:'',
     userInfo: {
       avatarUrl:"",
       nickName:"",

@@ -26,7 +26,7 @@
     <!-- 收藏按钮（悬浮在swiper上） -->
     <view class="collect-btn" catchtap="onCollectTap">
       <image 
-        src="{{roomDetail.isCollected ? '/images/collected.png' : '/images/uncollected.png'}}" 
+        src="{{roomDetail.isCollected ? 'http://cdn.xtuctuy.top/images/collected.png' : 'http://cdn.xtuctuy.top/images/uncollected.png'}}" 
         mode="widthFix"
       ></image>
     </view>
@@ -56,9 +56,15 @@
     <text>12月16日 后天</text>
     <text class="stay-night">2晚</text>
     <text>12月18日 周四</text>
-    <text class="low-price">看低价</text>
     <!-- <button class="calendar-btn">日历</button> -->
   </view>
+
+  <view class="description-container">
+    <text>房源介绍</text>
+    <text>{{roomDetail.description}}</text>
+    <!-- TODO:卧室配套床 -->
+  </view>
+
 
   <!-- 房型信息区域（不变） -->
   <!-- <view class="room-type-wrap">

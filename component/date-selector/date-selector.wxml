@@ -1,0 +1,25 @@
+<!--component/date-selector/date-selector.wxml-->
+<!-- <text>component/date-selector/date-selector.wxml</text> -->
+<view class="modal-mask" bindtap="onHideModal">
+  <view class="modal" catchtap="noop">
+    <view class="header">
+      <text class="title">选择日期</text>
+      <img class="close" src="http://cdn.xtuctuy.top/images/close.png" bindtap="onHideModal"></img>
+    </view>
+    <view class="week-wrap">
+      <view class="week-item">日</view>
+      <view class="week-item">一</view>
+      <view class="week-item">二</view>
+      <view class="week-item">三</view>
+      <view class="week-item">四</view>
+      <view class="week-item">五</view>
+      <view class="week-item">六</view>
+    </view>
+
+    <scroll-view class="calendar-container" scroll-y type="list">
+      <view class="calendar" wx:if="{{isReady}}">
+        <month-calendar wx:for="{{calendarList}}" wx:key="id" year="{{item.year}}" month="{{item.month}}" defaultCheckInDate="{{checkIn}}" defaultCheckOutDate="{{checkOut}}" bind:confirm="confirmDate"></month-calendar>
+      </view>
+    </scroll-view>
+  </view>
+</view>

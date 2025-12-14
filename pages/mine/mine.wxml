@@ -1,7 +1,7 @@
 <!--pages/mine/mine.wxml-->
 <view wx:if="{{!isLogin}}" class="root-container unlogin-container">
   <view class="title-container">
-    <image class="icon" src="/images/icon.png"></image>
+    <image class="icon" src="http://cdn.xtuctuy.top/images/icon.png"></image>
     <text class="name">漕盈路</text>
   </view>
   <text class="welcome">欢迎加入漕盈路</text>
