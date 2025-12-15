@@ -1,15 +1,13 @@
 <!--component/room-card/room-card.wxml-->
-<!-- <text>component/room-card/room-card.wxml</text> -->
 <!-- 单个房间卡片 -->
 <view class="room-card" bindtap="onCardTap">
   <!-- 房间图片 -->
-  <image class="room-img" src="{{roomData.images[0]}}" mode="widthFix"></image>
+  <image class="room-img" src="{{imgPrefix+roomData.images[0]}}" mode="widthFix"></image>
   
   <!-- 收藏按钮 -->
   <view class="collect-btn" catchtap="onCollectTap">
-    <!-- <icon type="heart" size="20" color="{{roomData.isCollected ? 'red' : '#ccc'}}"></icon> -->
     <image class="collect-img" 
-    src="{{roomData.isCollected ? 'http://cdn.xtuctuy.top/images/collected.png' : 'http://cdn.xtuctuy.top/images/uncollected.png'}}"
+    src="{{isCollected? 'http://cdn.xtuctuy.top/images/collected.png' : 'http://cdn.xtuctuy.top/images/uncollected.png'}}"
     mode="widthFix"></image>
   </view>
 
@@ -19,10 +17,10 @@
     <view class="room-name">{{roomData.name}}</view>
     
     <!-- 距离 -->
-    <view class="room-distance">
+    <!-- <view class="room-distance">
       <icon type="location" size="14" color="#999"></icon>
       <text>距您直线{{roomData.distance}}公里</text>
-    </view>
+    </view> -->
     
     <!-- 评分 -->
     <!-- <view class="room-score">
@@ -32,7 +30,7 @@
     </view> -->
     
     <!-- 房型/面积 -->
-    <view class="room-type">{{roomData.area}}㎡·{{roomData.bedroom}}室·{{roomData.livingdining}}厅·{{roomData.bed}}床·可住{{roomData.capacity}}人</view>
+    <view class="room-type">{{roomData.area}}㎡·{{roomData.bedroomCount}}室·{{roomData.livingDiningCount}}厅·{{roomData.totalBed}}床·可住{{roomData.capacity}}人</view>
     
     <!-- 标签（如“近地铁”“24小时热水”） -->
     <view class="room-tags">

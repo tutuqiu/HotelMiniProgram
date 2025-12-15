@@ -1,4 +1,5 @@
 // pages/room_result/room_result.js
+import {HTTPRequest} from '../../utils/request.js';
 const app=getApp()
 
 Page({
@@ -8,10 +9,12 @@ Page({
    */
   data: {
     roomList:[],
+    collectedList:[],
     today:'',
     // end_day:'',
     checkInDate:'',
     checkOutDate:'',
+    imgPrefix:''
   },
 
   /**
@@ -21,7 +24,9 @@ Page({
     this.setData({
       checkInDate:app.globalData.checkInDate,
       checkOutDate:app.globalData.checkOutDate,
-      today:app.globalData.today
+      today:app.globalData.today,
+      imgPrefix:app.globalData.imgPrefix,
+      collectedList:app.globalData.userInfo.collectedList
     })
     
     const {cacheKey}=options
@@ -37,21 +42,81 @@ Page({
       wx.navigateBack();
     }
   },
-  onRoomCollect(e){
-    const id = e.detail.id
-    console.log('id:',id)
 
-    const newRoomList = this.data.roomList.map(room => {
-      if (room.id === id) {
-        // 切换收藏状态（true变false，false变true）
-        room.isCollected = !room.isCollected;
-      }
-      return room;
-    });
-    this.setData({ roomList: newRoomList });
-    console.log('roomList:',this.data.roomList)
-    // todo 更新后端
+  onRoomCollect(e){
+    const token = wx.getStorageSync('token') || ""
+    if(!token){
+      wx.showModal({
+        title: '您还未登录',
+        content: '为了给您提供更好服务，请您先登录',
+        showCancel: true,
+        cancelText: '暂不登录', // 取消按钮文字
+        cancelColor: '#666', // 取消按钮颜色
+        confirmText: '立即登录', // 确认按钮文字
+        confirmColor: '#ff4400', // 确认按钮颜色
+        complete: (res) => {
+          if (res.confirm) {
+            wx.navigateTo({
+              url:'/pages/login/login'
+            })
+          }
+        }
+      })
+    }
+    else{
+      const targetId = e.detail.id
+      console.log('id:',targetId)
+      // 更新后端 +app +this
+      this.updateCollectedList(targetId)
+      
+    }
   },
+
+  updateRoomCard(id){
+    console.log('room_result:updateRoomCard')
+    const key=`#roomCard-${id}`
+    const roomCard=this.selectComponent(key)
+    if(roomCard){
+      console.log('find roomCard')
+      console.log(this.data.collectedList)
+      roomCard.updateCollectedList(this.data.collectedList)
+    }
+      
+  },
+
+  async updateCollectedList(id){
+    const data ={}
+    const header={
+      'Authorization':'Bearer ' + app.globalData.userInfo.token
+    }
+    try{
+      const res = await HTTPRequest('POST',`/rooms/${id}/favorite`,data,header)
+      console.log('update collected res:',res)
+
+      if(res.statusCode==200){
+        const collectedList = res.data.favoriteRooms
+        console.log('collectedList:',collectedList)
+
+        app.globalData.userInfo.collectedList=collectedList
+        this.setData({
+          collectedList:collectedList
+        })
+        console.log('11111')
+        this.updateRoomCard(id)
+      }else{
+        wx.showToast({
+          title:res.data.message || `更新收藏房间失败（code:${res.statusCode}）`,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    }catch(err){
+      console.error('更新收藏房间异常:', err);
+      wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
+    }
+
+  },
+
   onCardTap(e){
     const id = e.detail.id
     const { cacheKey } = this.options;

@@ -6,6 +6,8 @@ const defaultNickName = '1'
 
 App({
   onLaunch() {
+    this.getImgPrefix();
+
     // 初始化日期
     const now = new Date();
     const year1 = now.getFullYear();
@@ -82,11 +84,6 @@ App({
         console.log('isLogin:',this.globalData.isLogin)
   
       }else{
-        // wx.showToast({
-        //   title:res.data.message || `获取信息失败（code:${res.statusCode}）`,
-        //   icon: 'none',
-        //   duration: 2000
-        // })
         console.log('refreshTokenId过期')
       }
     }catch(err){
@@ -112,6 +109,7 @@ App({
         this.globalData.userInfo.nickName=info.name 
         this.globalData.userInfo.phoneNumber=info.phone
         this.globalData.isLogin=true
+        this.globalData.collectedList=info.favorite_rooms
         
         console.log('userInfo:',this.globalData.userInfo)
         console.log('isLogin:',this.globalData.isLogin)
@@ -128,17 +126,38 @@ App({
       wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
     }
   },
+
+  async getImgPrefix(){
+    try{
+      const res = await req.HTTPRequest('GET','/cdn',{},{})
+      console.log(res)
+
+      if(res.statusCode==200){
+        this.globalData.imgPrefix=res.data.url
+        console.log('imgPrefix:',this.globalData.imgPrefix)
+      }else{
+        console.log('getImgPrefix失败:',res.data.message)
+        this.globalData.imgPrefix="http://cdn.xtuctuy.top"
+      }
+    }catch(err){
+      console.error('请求异常:', err);
+      this.globalData.imgPrefix="http://cdn.xtuctuy.top"
+    }
+  },
+
   globalData: {
     isLogin:false,
     today:'',
     checkInDate:'',
     checkOutDate:'',
+    imgPrefix:'',
     userInfo: {
       avatarUrl:"",
       nickName:"",
       // phoneNumber:"15259261379",
       phoneNumber:"",
-      token:""
+      token:"",
+      collectedList:[]
     }
   }
 })

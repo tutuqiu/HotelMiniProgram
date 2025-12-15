@@ -4,7 +4,10 @@
   <room-card 
     wx:for="{{roomList}}" 
     wx:key="id" 
+    id="roomCard-{{item.id}}"
     roomData="{{item}}"
+    imgPrefix="{{imgPrefix}}"
+    collectedList="{{collectedList}}"
     bind:collect="onRoomCollect"
     bind:cardTap="onCardTap"
     ></room-card>

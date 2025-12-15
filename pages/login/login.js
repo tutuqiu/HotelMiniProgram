@@ -1,4 +1,7 @@
 // pages/login/login.js
+import {HTTPRequest} from '../../utils/request.js';
+const app=getApp()
+
 Page({
 
   /**
@@ -7,7 +10,70 @@ Page({
   data: {
 
   },
+  login(){
+    wx.login({
+      success: async (res)=>{
+        console.log(res)
+        if(res.code){
+          console.log('获取code成功! ',res.code);
 
+          try{
+            const data={
+              code:res.code
+            }
+            const header={
+              'content-type': 'application/json',
+            }
+            const loginResult = await HTTPRequest('POST','/public/wx/login',data,header);
+            console.log('loginResult:',loginResult)
+            if (loginResult.statusCode === 200){
+              console.log('登录成功');
+              wx.showToast({ title: '登录成功' });
+              app.globalData.isLogin=true;
+
+              const token=loginResult.data.accessToken
+              const expiresInSeconds=loginResult.data.expiresInSeconds
+              const refreshTokenId=loginResult.data.refreshTokenId
+
+              console.log('login token:',token)
+              console.log('login expiresInSeconds:',expiresInSeconds)
+              console.log('login refreshTokenId:',refreshTokenId)
+                
+              const expiresTime = new Date(Date.now() + expiresInSeconds * 1000)//有效时间转化为毫秒级别
+
+              wx.setStorageSync('expireTime',expiresTime.getTime())
+              wx.setStorageSync('token',token)
+              wx.setStorageSync('refreshTokenId',refreshTokenId)
+
+              app.getUserInfo(token)
+
+              app.globalData.userInfo.token=token
+              
+              wx.navigateBack()
+            }else{
+              wx.showToast({
+                title: loginResult.message || `登录失败（code: ${loginResult.statusCode}）`,
+                icon: 'none',
+                duration: 2000
+              });
+            }
+          }catch(err){
+            console.error('登录异常:', err);
+            wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
+          }
+        }else{
+          console.error('获取code失败:', res.errMsg);
+        }
+      },
+      fail:(err)=>{
+        console.error('wx.login调用失败:', err);
+        wx.showToast({
+          title: '登录失败，请重试',
+          icon: 'none'
+        });
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */

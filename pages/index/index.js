@@ -1,4 +1,5 @@
 // pages/index/index.js
+import {HTTPRequest} from '../../utils/request.js';
 const app=getApp()
 
 Page({
@@ -15,10 +16,10 @@ Page({
     end_day:'',
     checkInDate:'',
     checkOutDate:'',
-    dayCount:1,
-    headCount:2,
-    minPrice:0,
-    maxPrice:1500,
+    dayCount:'',
+    headCount:'',
+    minPrice:'',
+    maxPrice:'',
     roomTypeList:[
       {id:'TWIN',name:'双床房',isSelected:true},
       {id:'QUEEN',name:'大床房',isSelected:true},
@@ -28,67 +29,84 @@ Page({
     selectedRooms:['TWIN','QUEEN','FAMILY','BUSINESS_SUITE']
   },
 
-  onSearch(){
-    // const checkInDate = this.data.checkInDate
-    // const checkOutDate = this.data.checkOutDate
-    // TODO 
-    // bedroom[{
-    //   id:1
-    //   beds:[{
-    //     id:1
-    //     bedsize:1.5
-    //   }]
-    // }]
-    const searchResult = [{
-      id:1,
-      images: ["http://cdn.xtuctuy.top/images/icon.png","http://cdn.xtuctuy.top/images/collected.png"],
-      name: "111111",
-      address:"上海市曹安公路4800号同济大学",
-      description:"本店位于嘉定区曹安公路4800号同济大学，大学专业提供专属学习氛围",
-      // location:{
-      //   ""
-      // },
-      distance: 2,
-      area: 10,
-      bedroom: 2,
-      livingdining: 1,
-      bed: 2,
-      capacity: 4,
-      price: 200,
-      tags: ["洗衣机","麻将桌"],
-      isCollected: true
-    },{
-      id:2,
-      images: ["http://cdn.xtuctuy.top/images/collected.png","http://cdn.xtuctuy.top/images/icon.png"],
-      name: "222222",
-      address:"上海市曹安公路4801号同济大学",
-      description:"本店位于嘉定区曹安公路4800号同济大学，大学专业提供专属学习氛围",
-      // location:{
-      //   ""
-      // },
-      distance: 2,
-      area: 10,
-      bedroom: 2,
-      livingdining: 1,
-      bed: 2,
-      capacity: 4,
-      price: 200,
-      tags: ["洗衣机","麻将桌"],
-      isCollected: true
-    }]
-    const cacheKey = `room_search_result_${Date.now()}`;
-    wx.setStorageSync(cacheKey, searchResult);
-    wx.navigateTo({
-      url: `/pages/room_result/room_result?cacheKey=${cacheKey}`
-    });
-    
-    
-    // console.log('in onSearch')
-    // wx.navigateTo({
-    //   url: '/pages/test/test'
-    // })
-  },
+  async onSearch(){
+    const data={
+      in:this.data.checkInDate,
+      out:this.data.checkOutDate,
+      people:this.data.headCount,
+      minPrice:this.data.minPrice,
+      maxPrice:this.data.maxPrice
+    }
+    const header={
+      'content-type': 'application/json'
+    }
+    try{
+      const res=await HTTPRequest('GET','/rooms/search',data,header)
+      console.log('onSearch res:',res)
 
+      if(res.statusCode==200){
+        console.log('成功获取房间列表')
+        const searchResult=res.data
+        const cacheKey = `room_search_result_${Date.now()}`;
+        wx.setStorageSync(cacheKey, searchResult);
+        wx.navigateTo({
+          url: `/pages/room_result/room_result?cacheKey=${cacheKey}`
+    });
+      }else{
+        wx.showToast({
+          title:res.data.message || `搜索失败（code:${res.statusCode}）`,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    }catch(err){
+      console.error('请求异常:', err);
+      wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
+    }
+    
+    // const searchResult = [{
+    //   id:1,
+    //   images: ["http://cdn.xtuctuy.top/images/icon.png","http://cdn.xtuctuy.top/images/collected.png"],
+    //   name: "111111",
+    //   address:"上海市曹安公路4800号同济大学",
+    //   description:"本店位于嘉定区曹安公路4800号同济大学，大学专业提供专属学习氛围",
+    //   // location:{
+    //   //   ""
+    //   // },
+    //   distance: 2,
+    //   area: 10,
+    //   bedroomCount: 2,
+    //   livingdining: 1,
+    //   bed: 2,
+    //   capacity: 4,
+    //   price: 200,
+    //   tags: ["洗衣机","麻将桌"],
+    //   isCollected: true
+    // },{
+    //   id:2,
+    //   images: ["http://cdn.xtuctuy.top/images/collected.png","http://cdn.xtuctuy.top/images/icon.png"],
+    //   name: "222222",
+    //   address:"上海市曹安公路4801号同济大学",
+    //   description:"本店位于嘉定区曹安公路4800号同济大学，大学专业提供专属学习氛围",
+    //   // location:{
+    //   //   ""
+    //   // },
+    //   distance: 2,
+    //   area: 10,
+    //   bedroom: 2,
+    //   livingdining: 1,
+    //   bed: 2,
+    //   capacity: 4,
+    //   price: 200,
+    //   tags: ["洗衣机","麻将桌"],
+    //   isCollected: true
+    // }]
+    // const cacheKey = `room_search_result_${Date.now()}`;
+    // wx.setStorageSync(cacheKey, searchResult);
+    // wx.navigateTo({
+    //   url: `/pages/room_result/room_result?cacheKey=${cacheKey}`
+    // });
+  },
   toggleRoom(e) {
     // 获取点击的房型id（来自 data-id="{{item.id}}"）
     const roomId = e.currentTarget.dataset.id; 
@@ -152,7 +170,6 @@ Page({
     
   },
 
-
   onHideModal(){
     this.setData({
       showDateSelector:false
@@ -191,8 +208,12 @@ Page({
     this.setData({
       today:app.globalData.today,
       checkInDate:app.globalData.checkInDate,
-      checkOutDate:app.globalData.checkOutDate
+      checkOutDate:app.globalData.checkOutDate,
+      headCount:2,
+      minPrice:0,
+      maxPrice:1500,
     })
+    this.setDayCount()
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

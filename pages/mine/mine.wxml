@@ -5,7 +5,7 @@
     <text class="name">漕盈路</text>
   </view>
   <text class="welcome">欢迎加入漕盈路</text>
-  <button class="btn-login" bindtap="login">登录</button>
+  <button class="btn-login" bindtap="onLogin">登录</button>
 </view>
 <view wx:else class="login-container">
   <view class="userInfo-container" bindtap="goToProfileEdit">

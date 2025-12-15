@@ -24,10 +24,13 @@ Page({
       nickName:app.globalData.userInfo.nickName
     })
     console.log('mine data',this.data)
-    
-
    },
 
+   onLogin(){
+    wx.navigateTo({
+      url:'/pages/login/login'
+    })
+   },
   login(){
     wx.login({
       success: async (res)=>{

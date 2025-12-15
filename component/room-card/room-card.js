@@ -4,81 +4,56 @@ Component({
     roomData:{
       type:Object
     },
-    // image:{
-    //   type:String
-    // },
-    // name:{
-    //   type:String
-    // },
-
-    // // location:{
-    // //   type:Object
-    // // },
-    // // address:{
-    // //   type:String
-    // // },
-    // distance:{
-    //   type:Number
-    // },
-    // // comment:{
-    // //   type:String
-    // // },
-    // area:{
-    //   type:Number
-    // },
-
-    // bedroom:{
-    //   type:Number
-    // },
-    // livingdining:{
-    //   type:Number
-    // },
-    // bed:{
-    //   type:Number
-    // },
-    // capacity:{
-    //   type:Number
-    // },
-
-    // price:{
-    //   type:Number
-    // },
-
-    // tags:{
-    //   type:Array[String]
-    // },
-
-    // isCollected:{
-    //   type:bool
-    // },
-    
+    imgPrefix:{
+      type:String
+    },
+    collectedList:{
+      type:Array
+    }
   },
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    isCollected:false
   },
 
   methods:{
     onCollectTap(e){
       // 触发父页面的“收藏事件”（传递房间ID）
-      this.triggerEvent('collect', { id: this.data.roomData.id });
+      this.triggerEvent('collect', { id: this.properties.roomData.id });
     },
     onCardTap(){
       // 触发父页面的「卡片点击」事件，传递当前房间ID
       this.triggerEvent('cardTap', { 
         id: this.data.roomData.id 
       });
+    },
+    updateCollectedList(collectedList){
+      console.log('room-card:updateCollectedList')
+      this.setData({
+        collectedList:collectedList
+      })
+      this.setCollected()
+      // console.log('room-card',this.data.roomData.id)
+      // console.log('room-card collectedList:',this.data.collectedList)
+    },
+    setCollected(){
+      const status=this.data.collectedList.includes(this.data.roomData.id)
+      console.log(`room ${this.data.roomData.id} collected?:${status}`)
+      this.setData({
+        isCollected:status
+      })
     }
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
+  
   onLoad(options) {
-
+    this.setCollected()
   },
 
   /**
