@@ -8,6 +8,8 @@
     roomData="{{item}}"
     imgPrefix="{{imgPrefix}}"
     collectedList="{{collectedList}}"
+    checkInDate="{{checkInDate}}"
+    checkOutDate="{{checkOutDate}}"
     bind:collect="onRoomCollect"
     bind:cardTap="onCardTap"
     ></room-card>

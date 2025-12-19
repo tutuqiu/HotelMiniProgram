@@ -30,6 +30,9 @@ Page({
   },
 
   async onSearch(){
+    console.log("checkInDate:",this.data.checkInDate)
+    console.log('checkOutDate,',this.data.checkOutDate)
+
     const data={
       in:this.data.checkInDate,
       out:this.data.checkOutDate,
@@ -63,49 +66,6 @@ Page({
       console.error('请求异常:', err);
       wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
     }
-    
-    // const searchResult = [{
-    //   id:1,
-    //   images: ["http://cdn.xtuctuy.top/images/icon.png","http://cdn.xtuctuy.top/images/collected.png"],
-    //   name: "111111",
-    //   address:"上海市曹安公路4800号同济大学",
-    //   description:"本店位于嘉定区曹安公路4800号同济大学，大学专业提供专属学习氛围",
-    //   // location:{
-    //   //   ""
-    //   // },
-    //   distance: 2,
-    //   area: 10,
-    //   bedroomCount: 2,
-    //   livingdining: 1,
-    //   bed: 2,
-    //   capacity: 4,
-    //   price: 200,
-    //   tags: ["洗衣机","麻将桌"],
-    //   isCollected: true
-    // },{
-    //   id:2,
-    //   images: ["http://cdn.xtuctuy.top/images/collected.png","http://cdn.xtuctuy.top/images/icon.png"],
-    //   name: "222222",
-    //   address:"上海市曹安公路4801号同济大学",
-    //   description:"本店位于嘉定区曹安公路4800号同济大学，大学专业提供专属学习氛围",
-    //   // location:{
-    //   //   ""
-    //   // },
-    //   distance: 2,
-    //   area: 10,
-    //   bedroom: 2,
-    //   livingdining: 1,
-    //   bed: 2,
-    //   capacity: 4,
-    //   price: 200,
-    //   tags: ["洗衣机","麻将桌"],
-    //   isCollected: true
-    // }]
-    // const cacheKey = `room_search_result_${Date.now()}`;
-    // wx.setStorageSync(cacheKey, searchResult);
-    // wx.navigateTo({
-    //   url: `/pages/room_result/room_result?cacheKey=${cacheKey}`
-    // });
   },
   toggleRoom(e) {
     // 获取点击的房型id（来自 data-id="{{item.id}}"）
@@ -226,23 +186,11 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-    const now = new Date();
-    const year1 = now.getFullYear();
-    const month1 = (now.getMonth() + 1).toString().padStart(2,'0');
-    const day1 = now.getDate().toString().padStart(2,'0');
-
-    const tomorrow=new Date(now)
-    tomorrow.setDate(tomorrow.getDate()+1)
-    const year2=tomorrow.getFullYear()
-    const month2=(tomorrow.getMonth()+1).toString().padStart(2,'0')
-    const day2=tomorrow.getDate().toString().padStart(2,'0')
-
     this.setData({
-      today:`${year1}-${month1}-${day1}`,
-      checkInDate:`${year1}-${month1}-${day1}`,
-      checkOutDate:`${year2}-${month2}-${day2}`
-    });
-    console.log(this.data)
+      checkInDate:app.globalData.checkInDate,
+      checkOutDate:app.globalData.checkOutDate,
+    })
+    this.setDayCount()
   },
 
   /**

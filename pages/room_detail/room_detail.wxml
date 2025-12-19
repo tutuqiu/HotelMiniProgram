@@ -16,7 +16,7 @@
       <swiper-item wx:for="{{roomDetail.images}}" wx:key="index">
         <image 
           class="swiper-img" 
-          src="{{item}}" 
+          src="{{imgPrefix+item}}" 
           mode="widthFix"
           bindtap="previewImage"  
         ></image>
@@ -26,7 +26,7 @@
     <!-- 收藏按钮（悬浮在swiper上） -->
     <view class="collect-btn" catchtap="onCollectTap">
       <image 
-        src="{{roomDetail.isCollected ? 'http://cdn.xtuctuy.top/images/collected.png' : 'http://cdn.xtuctuy.top/images/uncollected.png'}}" 
+        src="{{isCollected ? 'http://cdn.xtuctuy.top/images/collected.png' : 'http://cdn.xtuctuy.top/images/uncollected.png'}}" 
         mode="widthFix"
       ></image>
     </view>
@@ -46,18 +46,18 @@
     <text class="address-text">{{roomDetail.address}}</text> <!-- 渲染address字段 -->
     <view class="distance-wrap">
       <icon type="location" size="14" color="#999"></icon>
-      <text class="distance-text">距您直线{{roomDetail.distance}}公里</text>
+      <!-- <text class="distance-text">距您直线{{roomDetail.distance}}公里</text> -->
     </view>
     <!-- <button class="map-btn">地图</button> -->
   </view>
 
   <!-- 日期选择区域（不变） -->
-  <view class="date-wrap">
+  <!-- <view class="date-wrap">
     <text>12月16日 后天</text>
     <text class="stay-night">2晚</text>
     <text>12月18日 周四</text>
-    <!-- <button class="calendar-btn">日历</button> -->
-  </view>
+    <button class="calendar-btn">日历</button>
+  </view> -->
 
   <view class="description-container">
     <text>房源介绍</text>
@@ -98,9 +98,9 @@
         bind:confirm="confirmDate" 
         bind:hide="onHideModal"></date-selector>
     </view>
-    <button class="book-btn-large">
+    <button class="book-btn-large" bindtap="onBook" disabled="{{!canReserve}}">
       立即预订
-      <text class="total-price">{{dayCount}}晚共¥{{roomDetail.price*2}}</text>
+      <text class="total-price">{{dayCount}}晚共¥{{roomDetail.totalPrice}}</text>
     </button>
   </view>
 </view>

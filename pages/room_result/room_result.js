@@ -1,5 +1,6 @@
 // pages/room_result/room_result.js
-import {HTTPRequest} from '../../utils/request.js';
+// import {HTTPRequest} from '../../utils/request.js';
+import {updateCollectedList} from '../../services/collected'
 const app=getApp()
 
 Page({
@@ -11,7 +12,6 @@ Page({
     roomList:[],
     collectedList:[],
     today:'',
-    // end_day:'',
     checkInDate:'',
     checkOutDate:'',
     imgPrefix:''
@@ -26,7 +26,7 @@ Page({
       checkOutDate:app.globalData.checkOutDate,
       today:app.globalData.today,
       imgPrefix:app.globalData.imgPrefix,
-      collectedList:app.globalData.userInfo.collectedList
+      collectedList:app.globalData.userInfo.collectedList,
     })
     
     const {cacheKey}=options
@@ -43,7 +43,7 @@ Page({
     }
   },
 
-  onRoomCollect(e){
+  async onRoomCollect(e){
     const token = wx.getStorageSync('token') || ""
     if(!token){
       wx.showModal({
@@ -66,9 +66,12 @@ Page({
     else{
       const targetId = e.detail.id
       console.log('id:',targetId)
-      // 更新后端 +app +this
-      this.updateCollectedList(targetId)
-      
+      // 更新后端 + app +this
+      await updateCollectedList(targetId)
+      this.setData({
+        collectedList:app.globalData.userInfo.collectedList
+      })
+      this.updateRoomCard(targetId)
     }
   },
 
@@ -82,39 +85,6 @@ Page({
       roomCard.updateCollectedList(this.data.collectedList)
     }
       
-  },
-
-  async updateCollectedList(id){
-    const data ={}
-    const header={
-      'Authorization':'Bearer ' + app.globalData.userInfo.token
-    }
-    try{
-      const res = await HTTPRequest('POST',`/rooms/${id}/favorite`,data,header)
-      console.log('update collected res:',res)
-
-      if(res.statusCode==200){
-        const collectedList = res.data.favoriteRooms
-        console.log('collectedList:',collectedList)
-
-        app.globalData.userInfo.collectedList=collectedList
-        this.setData({
-          collectedList:collectedList
-        })
-        console.log('11111')
-        this.updateRoomCard(id)
-      }else{
-        wx.showToast({
-          title:res.data.message || `更新收藏房间失败（code:${res.statusCode}）`,
-          icon: 'none',
-          duration: 2000
-        })
-      }
-    }catch(err){
-      console.error('更新收藏房间异常:', err);
-      wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
-    }
-
   },
 
   onCardTap(e){
@@ -131,14 +101,22 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady() {
-
+    
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    this.setData({
+      checkInDate:app.globalData.checkInDate,
+      checkOutDate:app.globalData.checkOutDate,
+      collectedList:app.globalData.userInfo.collectedList,
+    })
+    // 更新卡片收藏状态
+    const roomList = this.data.roomList
+    for(const room of roomList)
+      this.updateRoomCard(room.id)
   },
 
   /**

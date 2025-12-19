@@ -1,4 +1,6 @@
 // component/room-card/room-card.js
+import {calDayCount} from '../../utils/util'
+
 Component({
   properties:{
     roomData:{
@@ -9,6 +11,12 @@ Component({
     },
     collectedList:{
       type:Array
+    },
+    checkInDate:{
+      type:String
+    },
+    checkOutDate:{
+      type:String
     }
   },
 
@@ -16,7 +24,8 @@ Component({
    * 页面的初始数据
    */
   data: {
-    isCollected:false
+    isCollected:false,
+    avgPrice:0,
   },
 
   methods:{
@@ -45,63 +54,19 @@ Component({
       this.setData({
         isCollected:status
       })
-    }
+    },
+    setAvgPrice(){
+      // console.log(this.properties.roomData.totalPrice)
+      this.setData({
+        avgPrice:this.properties.roomData.totalPrice/calDayCount(this.properties.checkInDate,this.properties.checkOutDate)
+      })
+    },
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
   
-  onLoad(options) {
+  attached(){
+    console.log("collectedList:",this.properties.collectedList)
     this.setCollected()
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
+    this.setAvgPrice()
+    
   }
 })

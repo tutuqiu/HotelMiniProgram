@@ -40,7 +40,7 @@
 
   <!-- 价格区域 -->
   <view class="room-price">
-    <text class="price">¥{{roomData.price}}</text>
+    <text class="price">¥{{avgPrice}}/晚</text>
     <!-- <text class="discount" wx:if="{{roomData.discount}}">已优惠{{roomData.discount}}</text> -->
   </view>
 </view>

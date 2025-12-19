@@ -1,4 +1,8 @@
 // pages/room_detail/room_detail.js
+import {updateCollectedList} from '../../services/collected'
+import {searchRoomById} from '../../services/rooms'
+import {calDayCount} from '../../utils/util'
+
 const app=getApp()
 
 Page({
@@ -7,16 +11,84 @@ Page({
    * 页面的初始数据
    */
   data: {
+    id:'',
     today:'',
-    // end_day:'',
+    imgPrefix:'',
+    cacheKey:'',
     checkInDate:'',
     checkOutDate:'',
     dayCount:'',
     roomDetail: {},
-    showDateSelector:false
+    collectedList:[],
+    isCollected:false,
+    showDateSelector:false,
+    canReserve:true
   },
-  onCollectTap(e){
-    
+  onBook(){
+    console.log('onBook')
+    console.log('id:',this.data.id)
+    console.log('old:',this.data.roomDetail.totalPrice)
+    wx.navigateTo({
+      url:`/pages/reservation/reservation?id=${this.data.id}&oldTotalPrice=${this.data.roomDetail.totalPrice}`
+    })
+  },
+  async onCollectTap(){
+    const token = wx.getStorageSync('token') || ""
+    if(!token){
+      wx.showModal({
+        title: '您还未登录',
+        content: '为了给您提供更好服务，请您先登录',
+        showCancel: true,
+        cancelText: '暂不登录', // 取消按钮文字
+        cancelColor: '#666', // 取消按钮颜色
+        confirmText: '立即登录', // 确认按钮文字
+        confirmColor: '#ff4400', // 确认按钮颜色
+        complete: (res) => {
+          if (res.confirm) {
+            wx.navigateTo({
+              url:'/pages/login/login'
+            })
+          }
+        }
+      })
+    }else{
+      const id=this.data.roomDetail.id
+      await updateCollectedList(id)
+      this.setData({
+        collectedList:app.globalData.userInfo.collectedList
+      })
+      this.setCollected()
+    }
+  },
+
+  async searchRoom(){
+    const result = await searchRoomById(this.data.id)
+    if(result){
+      if(result.status=="VACANT"){
+        console.log('result:',result)
+        this.setData({
+          roomDetail:result
+        })
+        return "OK"
+      }else{
+        this.setData({
+          roomDetail:result,
+          canReserve:false
+        })
+        return "NOT VACANT"
+      }
+    }else{
+      return "ERROR"
+    } 
+  },
+
+  async updateStatus(){
+    const status = await this.searchRoom()
+    if(status=="NOT VACANT"){
+      wx.showToast({ title: "您来晚啦~该时间段已售罄", icon: "none" });
+    }else if(status=="ERROR"){
+      wx.navigateBack(); // 返回上一页
+    }
   },
 
   onHideModal(){
@@ -32,6 +104,7 @@ Page({
     })
     console.log('showDateSelector:',this.data.showDateSelector)
   },
+
   confirmDate(e){
     const {checkInDate,checkOutDate}=e.detail
     console.log('index checkInDate:',checkInDate)
@@ -44,67 +117,56 @@ Page({
     app.globalData.checkInDate=checkInDate
     app.globalData.checkOutDate=checkOutDate
     
+    this.searchRoom()
     this.setDayCount()
     this.onHideModal()
   },
 
   setDayCount(){
-    const start=new Date(this.data.checkInDate)
-    const end =new Date(this.data.checkOutDate)
-
-    start.setHours(0,0,0,0)
-    end.setHours(0,0,0,0)
-
-    const msCount=end.getTime()-start.getTime()
-    const dayCount=Math.floor(msCount/(24*60*60*1000))
-
     this.setData({
-      dayCount:dayCount
+      dayCount:calDayCount(app.globalData.checkInDate,app.globalData.checkOutDate)
     })
-
     console.log('dayCount:',this.data.dayCount)
+  },
+
+  setCollected(){
+    const status=this.data.collectedList.includes(this.data.roomDetail.id)
+    console.log(`room ${this.data.roomDetail.id} collected?:${status}`)
+    this.setData({
+      isCollected:status
+    })
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    const id = options.id;     // 卡片的ID
+    if (!id) {
+      wx.showToast({ title: "参数异常，无法加载房间详情", icon: "none" });
+      wx.navigateBack(); // 参数错误返回上一页
+    }
+
+    this.setData({
+      id:id
+    })
+    const status = this.searchRoom()
+    if(status=="NOT VACANT"){
+      wx.showToast({ title: "您来晚啦~该时间段已售罄", icon: "none" });
+    }else if(status=="ERROR"){
+      wx.navigateBack(); // 返回上一页
+    }
+    
+    //"OK":正常流程
     this.setData({
       checkInDate:app.globalData.checkInDate,
       checkOutDate:app.globalData.checkOutDate,
-      today:app.globalData.today
+      today:app.globalData.today,
+      imgPrefix:app.globalData.imgPrefix,
+      collectedList:app.globalData.userInfo.collectedList
     })
+    console.log('gotodaycount')
     this.setDayCount()
-    
-    const cacheKey = options.cacheKey; // 父页面的cacheKey
-    const id = options.id;     // 卡片的ID
-
-    if (!cacheKey || !id) {
-      wx.showToast({ title: "参数异常，无法加载房间详情", icon: "none" });
-      wx.navigateBack(); // 参数错误返回上一页
-      return;
-    }
-
-    const roomList = wx.getStorageSync(cacheKey)
-    if (!roomList || !Array.isArray(roomList)) {
-      wx.showToast({ title: "房间数据失效，请重新搜索", icon: "none" });
-      wx.navigateBack();
-      return;
-    }
-
-    const targetRoom = roomList.find(item => {
-      // 兼容：item.id可能是数字，roomId是字符串，转成同一类型再比较
-      return String(item.id) === String(id);
-    });
-
-    if (!targetRoom) {
-      wx.showToast({ title: "未找到该房间信息", icon: "none" });
-      wx.navigateBack();
-      return;
-    }
-
-    this.setData({
-      roomDetail:targetRoom
-    })
+    this.setCollected()
 
     console.log('roomDetail:',this.data.roomDetail)
   },
@@ -120,7 +182,10 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    this.setData({
+      collectedList:app.globalData.userInfo.collectedList
+    })
+    this.setCollected()
   },
 
   /**

@@ -10,7 +10,7 @@ Page({
   data: {
 
   },
-  login(){
+  async login(){
     wx.login({
       success: async (res)=>{
         console.log(res)
@@ -45,10 +45,12 @@ Page({
               wx.setStorageSync('token',token)
               wx.setStorageSync('refreshTokenId',refreshTokenId)
 
-              app.getUserInfo(token)
+              await app.getUserInfo(token)
 
               app.globalData.userInfo.token=token
+              // while(!app.globalData.userInfo.avatarUrl)
               
+              // if(app.globalData.userInfo.avatarUrl)
               wx.navigateBack()
             }else{
               wx.showToast({

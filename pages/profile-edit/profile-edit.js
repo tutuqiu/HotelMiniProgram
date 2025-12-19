@@ -222,39 +222,56 @@ Page({
     }
   },
 
-  async onLogout(){
-    const refreshTokenId = wx.getStorageSync('refreshTokenId')
-    wx.removeStorageSync('refreshTokenId')
-    wx.removeStorageSync('token')
-    wx.removeStorageSync('expireTime')
-    console.log('delete token?:',wx.getStorageSync('token'))
+  onLogout(){
+    wx.showModal({
+      content: '请问是否确认退出当前账号？',
+      showCancel: true,
+      cancelText: '取消', // 取消按钮文字
+      cancelColor: '#666', // 取消按钮颜色
+      confirmText: '确定', // 确认按钮文字
+      confirmColor: '#ff4400', // 确认按钮颜色
+      complete:async(res)=>{
+        if(res.confirm){
+          // logout
+          // 保存需要使失效的refreshTokenId
+          const refreshTokenId = wx.getStorageSync('refreshTokenId')
+          wx.removeStorageSync('refreshTokenId')
+          wx.removeStorageSync('token')
+          wx.removeStorageSync('expireTime')
+          console.log('delete token?:',wx.getStorageSync('token'))
 
-    const data ={
-      'refreshTokenId':refreshTokenId
-    }
-    const header ={
-      'content-type': 'application/json',
-    }
-    try{
-      const res = await HTTPRequest('POST','/public/auth/logout',data,header)
-      console.log(res)
+          const data ={
+            'refreshTokenId':refreshTokenId
+          }
+          const header ={
+            'content-type': 'application/json',
+          }
+          try{
+            // 撤销refresh token
+            const res = await HTTPRequest('POST','/public/auth/logout',data,header)
+            console.log(res)
+            if(res.statusCode==204){
+              console.log('已退出登录')
+              wx.showToast({ title: '已退出登录' })
 
-      if(res.statusCode==204){
-        console.log('已退出登录')
-        wx.showToast({ title: '已退出登录' })
-        app.globalData.isLogin=false
-        wx.navigateBack()
-      }else{
-        wx.showToast({
-          title:res.data.message || `修改失败（code:${res.statusCode}）`,
-          icon: 'none',
-          duration: 2000
-        })
+              app.globalData.isLogin=false
+              app.cleanUserInfo()
+
+              wx.navigateBack()
+            }else{
+              wx.showToast({
+                title:res.data.message || `退出登录失败（code:${res.statusCode}）`,
+                icon: 'none',
+                duration: 2000
+              })
+            }
+          }catch(err){
+            console.error('请求异常:', err);
+            wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
+          }
+        }
       }
-    }catch(err){
-      console.error('请求异常:', err);
-      wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
-    }
+    })
   },
   
   

@@ -34,8 +34,19 @@ const wxPromisify = fn => {
   }
 }
 
+const calDayCount=(checkInDate,checkOutDate)=>{
+  const start=new Date(checkInDate)
+  const end =new Date(checkOutDate)
 
+  start.setHours(0,0,0,0)
+  end.setHours(0,0,0,0)
 
-module.exports = {
-  formatTime,wxPromisify
+  const msCount=end.getTime()-start.getTime()
+  const dayCount=Math.floor(msCount/(24*60*60*1000))
+
+  return dayCount
+}
+
+export{
+  formatTime,wxPromisify,calDayCount
 }

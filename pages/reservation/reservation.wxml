@@ -1,2 +1,91 @@
 <!--pages/reservation/reservation.wxml-->
-<text>pages/reservation/reservation.wxml</text>
+<view class="page">
+  <view class="content">
+    <!-- 卡片：订单/房型信息 -->
+    <view class="card">
+      <view class="row row-top">
+        <view class="col">
+          <text class="strong">{{checkInDate}} → {{checkOutDate}} | {{dayCount}}晚</text>
+        </view>
+        <!-- <text class="link">房型详情</text> -->
+      </view>
+
+      <view class="row">
+        <text class="strong">{{roomDetail.name}}·无餐食·可入住{{roomDetail.capacity}}人</text>
+      </view>
+
+      <view class="row row-inline">
+        <view class="tag-ok">✓</view>
+        <text class="ok-text">入住日24:00前可免费取消</text>
+      </view>
+
+      <!-- <view class="row row-top">
+        <text class="muted">儿童入住必须提供身份证/户口本/出生证明。（…）</text>
+        <text class="link">订房必读</text>
+      </view> -->
+    </view>
+
+    <!-- 卡片：入住信息 -->
+    <view class="card">
+      <view class="row row-top">
+        <text class="section-title">入住信息</text>
+
+        <!-- <view class="stepper">
+          <view class="step-btn step-btn--disabled">－</view>
+          <text class="step-num">1间</text>
+          <view class="step-btn">＋</view>
+        </view> -->
+      </view>
+
+      <view class="divider"></view>
+
+      <view class="row row-between form-row">
+        <text class="label form-label">入住人</text>
+        <input value="{{guestName}}" class="value form-input" placeholder="请输入入住人姓名" bindinput="onChangeGuestName" />
+        <view class="mini-icon">👤</view>
+      </view>
+
+      <view class="divider"></view>
+
+      <view class="row row-between form-row">
+        <text class="label form-label">联系电话</text>
+        <input placeholder="请输入手机号" type="number" class="value form-input" bindinput="onChangePhone" />
+        <view class="mini-icon">📞</view>
+      </view>
+    </view>
+
+    <!-- 卡片：本单可享 -->
+    <!-- <view class="card">
+      <view class="row row-top row-between">
+        <text class="section-title">本单可享</text>
+        <text class="orange">共优惠 ¥20</text>
+      </view>
+
+      <view class="row row-between">
+        <text class="label">促销优惠</text>
+        <view class="row-inline">
+          <text class="orange">-¥20</text>
+          <text class="arrow">›</text>
+        </view>
+      </view>
+    </view> -->
+  </view>
+
+  <!-- 底部支付栏（固定） -->
+  <view class="paybar">
+    <view class="pay-left">
+      <text class="muted">在线支付</text>
+      <text class="pay-price">¥{{roomDetail.totalPrice}}</text>
+    </view>
+
+    <view class="pay-mid">
+      <text class="muted">明细</text>
+      <text class="arrow up">^</text>
+    </view>
+
+    <button class="pay-btn">提交订单</button>
+  </view>
+
+  <!-- 给内容区留出底部空间，避免被 paybar 遮挡 -->
+  <view class="bottom-spacer"></view>
+</view>

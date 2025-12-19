@@ -109,7 +109,7 @@ App({
         this.globalData.userInfo.nickName=info.name 
         this.globalData.userInfo.phoneNumber=info.phone
         this.globalData.isLogin=true
-        this.globalData.collectedList=info.favorite_rooms
+        this.globalData.userInfo.collectedList=info.favorite_rooms
         
         console.log('userInfo:',this.globalData.userInfo)
         console.log('isLogin:',this.globalData.isLogin)
@@ -145,6 +145,13 @@ App({
     }
   },
 
+  cleanUserInfo(){
+    this.globalData.userInfo.avatarUrl=""
+    this.globalData.userInfo.nickName=""
+    this.globalData.userInfo.phoneNumber=""
+    this.globalData.userInfo.token=""
+    this.globalData.userInfo.collectedList=[]
+  },
   globalData: {
     isLogin:false,
     today:'',
@@ -154,7 +161,6 @@ App({
     userInfo: {
       avatarUrl:"",
       nickName:"",
-      // phoneNumber:"15259261379",
       phoneNumber:"",
       token:"",
       collectedList:[]
