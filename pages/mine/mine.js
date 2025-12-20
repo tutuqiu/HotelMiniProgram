@@ -108,6 +108,14 @@ Page({
       url: '/pages/room_collected/room_collected',
     })
   },
+
+  goToOrders(e){
+    const status =e.currentTarget.dataset.status
+    console.log('mine status:',status)
+    wx.navigateTo({
+      url:`/pages/orders/orders?status=${status}`
+    })
+  },
  
 
   /**

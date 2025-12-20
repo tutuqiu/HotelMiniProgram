@@ -28,29 +28,38 @@ Page({
     console.log('onBook')
     console.log('id:',this.data.id)
     console.log('old:',this.data.roomDetail.totalPrice)
-    wx.navigateTo({
-      url:`/pages/reservation/reservation?id=${this.data.id}&oldTotalPrice=${this.data.roomDetail.totalPrice}`
+    const token = wx.getStorageSync('token') || ""
+    if(!token){
+      this.showLoginModal()
+    }else{
+      wx.navigateTo({
+        url:`/pages/reservation/reservation?id=${this.data.id}&oldTotalPrice=${this.data.roomDetail.totalPrice}`
+      })
+    }
+    
+  },
+  showLoginModal(){
+    wx.showModal({
+      title: '您还未登录',
+      content: '为了给您提供更好服务，请您先登录',
+      showCancel: true,
+      cancelText: '暂不登录', // 取消按钮文字
+      cancelColor: '#666', // 取消按钮颜色
+      confirmText: '立即登录', // 确认按钮文字
+      confirmColor: '#ff4400', // 确认按钮颜色
+      complete: (res) => {
+        if (res.confirm) {
+          wx.navigateTo({
+            url:'/pages/login/login'
+          })
+        }
+      }
     })
   },
   async onCollectTap(){
     const token = wx.getStorageSync('token') || ""
     if(!token){
-      wx.showModal({
-        title: '您还未登录',
-        content: '为了给您提供更好服务，请您先登录',
-        showCancel: true,
-        cancelText: '暂不登录', // 取消按钮文字
-        cancelColor: '#666', // 取消按钮颜色
-        confirmText: '立即登录', // 确认按钮文字
-        confirmColor: '#ff4400', // 确认按钮颜色
-        complete: (res) => {
-          if (res.confirm) {
-            wx.navigateTo({
-              url:'/pages/login/login'
-            })
-          }
-        }
-      })
+      this.showLoginModal()
     }else{
       const id=this.data.roomDetail.id
       await updateCollectedList(id)

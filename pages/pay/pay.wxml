@@ -1,0 +1,8 @@
+<!--pages/pay/pay.wxml-->
+<view class="container">
+  <image src="http://cdn.xtuctuy.top/images/paying.png"></image>
+  <text>模拟支付</text>
+  <text>￥{{totalPrice}}</text>
+  <button bindtap="onPay">支付</button>
+  <button bindtap="goToOrderDetail">取消支付</button>
+</view>

@@ -1,5 +1,6 @@
 // pages/profile-edit/profile-edit.js
 import {HTTPRequest} from '../../utils/request.js';
+import {validatePhone} from '../../utils/util.js'
 const app=getApp()
 
 Page({
@@ -66,39 +67,17 @@ Page({
   onClickSms(){
     const oldPhone=this.data.phoneNumber
     const newPhone=this.data.newPhoneNumber
-    // console.log(this.data.newPhoneNumber)
-    // console.log(newPhone)
-    // 1. 校验：是否为空
-    if (!newPhone) {
+    const re_validation=validatePhone(newPhone)
+    console.log("validate result:",re_validation)
+    if(re_validation){
       wx.showToast({
-        title: "请输入新手机号",
+        title: re_validation,
         icon: "none",
         duration: 2000
       });
       return;
     }
-
-    // 2. 校验：是否以1开头
-    if (!/^1/.test(newPhone)) {
-      wx.showToast({
-        title: "手机号必须以1开头",
-        icon: "none",
-        duration: 2000
-      });
-      return;
-    }
-
-    // 3. 补充校验：是否为11位数字（手机号基础规则）
-    if (newPhone.length !== 11) {
-      wx.showToast({
-        title: "请输入11位有效手机号",
-        icon: "none",
-        duration: 2000
-      });
-      return;
-    }
-
-    // 4. 校验：是否与旧手机号一致
+    // 补充校验：是否与旧手机号一致
     if (newPhone === oldPhone) {
       wx.showToast({
         title: "新手机号不能与原手机号相同",
@@ -109,7 +88,6 @@ Page({
     }
     console.log('profile-edit safe newPhoneNumber:',this.data.newPhoneNumber)
     this.sendSms()
-
   },
 
   async sendSms(){
@@ -147,7 +125,29 @@ Page({
 
   async checkSms(){
     const phone=this.data.newPhoneNumber
+
+    //检查手机号
+    const result=validatePhone(phone)
+    console.log("validate result:",result)
+    if(result){
+      wx.showToast({
+        title: result,
+        icon: "none",
+        duration: 2000
+      });
+      return;
+    }
+    //检查sms
     const sms = this.data.sms
+    if(!sms){
+      wx.showToast({
+        title: "请输入验证码",
+        icon: "none",
+        duration: 2000
+      });
+      return;
+    }
+    
     const token=app.globalData.userInfo.token
 
     try{

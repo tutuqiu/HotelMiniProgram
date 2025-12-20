@@ -1,2 +1,29 @@
 <!--pages/orders/orders.wxml-->
-<text>pages/orders/orders.wxml</text>
+<view class="page">
+  <!-- 顶部 Tab 导航 -->
+  <view class="tabs">
+    <view class="tab {{activeTab==='ALL' ? 'active' : ''}}" bindtap="onTab" data-status="ALL">全部</view>
+    <view class="tab {{activeTab==='HOLD' ? 'active' : ''}}" bindtap="onTab" data-status="HOLD">待支付</view>
+    <view class="tab {{activeTab==='CONFIRMED' ? 'active' : ''}}" bindtap="onTab" data-status="CONFIRMED">待入住</view>
+    <view class="tab {{activeTab==='CHECKED_IN' ? 'active' : ''}}" bindtap="onTab" data-status="CHECKED_IN">已入住</view>
+    <view class="tab {{activeTab==='ACCOMPLISHED' ? 'active' : ''}}" bindtap="onTab" data-status="ACCOMPLISHED">已完成</view>
+    <view class="tab {{activeTab==='CANCELLED' ? 'active' : ''}}" bindtap="onTab" data-status="CANCELLED">已取消</view>
+  </view>
+
+  <!-- 可滚动容器：你把 order-card 放这里 -->
+  <scroll-view class="list" scroll-y="true" enable-back-to-top="true">
+    <order-card
+      wx:for="{{orderList}}"
+      wx:key="id"
+      id="order-{{item.id}}"
+      data-id="{{item.id}}"
+      orderDetail="{{item}}"
+      bindtap="gotoDetail"
+      bind:cancel="onCancel"
+    ></order-card>
+    <view wx:if="{{isEmpty}}" class="container-noOrder">
+      <image src="http://cdn.xtuctuy.top/images/noOrder.png" class="img-noOrder"></image>
+      <text class="text-noOrder">暂无订单信息</text>
+    </view>
+  </scroll-view>
+</view>

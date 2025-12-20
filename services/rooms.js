@@ -5,12 +5,12 @@ const app=getApp();
 
 export async function searchRoomById(id){
     const data ={
-        id: id,
-        checkInDate: app.globalData.checkInDate,
-        checkOutDate: app.globalData.checkOutDate
+      id: id,
+      checkInDate: app.globalData.checkInDate,
+      checkOutDate: app.globalData.checkOutDate
     }
     const header={
-        'content-type':'application/json'
+      'content-type':'application/json'
     }
 
     try{
@@ -22,7 +22,6 @@ export async function searchRoomById(id){
         console.log('成功获取房间详情:', result)
 
         return result
-
     }else{
         wx.showToast({
         title:res.data.message || `获取房间详情失败（code:${res.statusCode}）`,

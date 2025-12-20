@@ -1,0 +1,175 @@
+/* pages/order-detail/order-detail.wxss */
+
+/* 滚动区：灰底 + 给底部预留空间 */
+.container{
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 24rpx;
+  padding-bottom: 140rpx; /* 预留给底部固定按钮区域 */
+  background: #f6f6f6;
+}
+
+/* 顶部标题 */
+.title{
+  display: block;
+  margin-top: 16rpx;
+  margin-bottom: 24rpx;
+  font-size: 54rpx;
+  font-weight: 800;
+  color: #111;          /* 灰底上用黑色更清晰 */
+  line-height: 1.15;
+}
+
+/* 通用卡片 */
+.price-card,
+.room-card,
+.reservation-info{
+  background: #ffffff;
+  border-radius: 18rpx;
+  padding: 26rpx;
+  box-shadow: 0 10rpx 26rpx rgba(0,0,0,0.06);
+}
+
+/* 金额卡片：左右布局 */
+.price-card{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.price-card text{
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 600;
+}
+
+.price{
+  font-size: 46rpx;
+  font-weight: 900;
+  color: #ff6a00;
+  line-height: 1;
+}
+
+/* 酒店信息卡片：左文字 + 右图片 */
+.room-card{
+  margin-top: 22rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.room-text{
+  flex: 1;
+  min-width: 0;
+}
+
+.room-name{
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #111;
+  line-height: 1.25;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.room-address{
+  margin-top: 10rpx;
+  font-size: 26rpx;
+  color: #777;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.room-image{
+  width: 170rpx;
+  height: 170rpx;
+  border-radius: 16rpx;
+  background: #f1f1f1;
+}
+
+.navigation{
+  width: 30rpx;
+  height: 30rpx;
+}
+
+/* 预订信息卡片 */
+.reservation-info{
+  margin-top: 22rpx;
+}
+
+.reservation-time{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+  padding-bottom: 18rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.in,
+.out{
+  font-size: 32rpx;
+  font-weight: 800;
+  color: #111;
+}
+
+.day-count{
+  padding: 8rpx 18rpx;
+  border-radius: 999rpx;
+  background: #f4f5f7;
+  font-size: 24rpx;
+  color: #666;
+  font-weight: 700;
+}
+
+.reservation-guest{
+  margin-top: 18rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.guestName{
+  font-size: 30rpx;
+  font-weight: 800;
+  color: #111;
+}
+
+.guestPhont{
+  font-size: 26rpx;
+  color: #777;
+}
+
+/* 底部固定区域 */
+.bottom{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffffff;
+  padding: 14rpx 24rpx calc(14rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -10rpx 26rpx rgba(0,0,0,0.06);
+  z-index: 99;
+}
+
+/* 底部按钮：更矮 + 文字居中 */
+.btn-reserveAgain{
+  width: 100%;
+  height: 76rpx;        /* 变矮 */
+  border-radius: 16rpx;
+  background: #0aa35a;
+  color: #ffffff;
+  font-size: 32rpx;     /* 字稍微小一点更像原图 */
+  font-weight: 800;
+  border: none;
+}
+
+/* 去掉 button 默认边框高亮
+button::after{
+  border: none;
+} */

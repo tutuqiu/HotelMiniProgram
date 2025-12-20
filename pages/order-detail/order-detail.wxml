@@ -1,0 +1,30 @@
+<!--pages/order-detail/order-detail.wxml-->
+<scroll-view scroll-y class="container">
+  <text class="title">{{title}}</text>
+  <view class="price-card">
+    <text>本单总额</text>
+    <text class="price">￥{{orderDetail.priceTotal}}</text>
+  </view>
+  <view class="room-card" bindtap="goToRoomDetail">
+    <view class="room-text">
+      <view class="room-name">{{orderDetail.roomName}}</view>
+      <view class="room-address">{{orderDetail.address}}</view>
+    </view>
+    <image class="navigation" src="http://cdn.xtuctuy.top/images/navigation.png"></image>
+    <image class="room-image" src="{{imgPrefix+orderDetail.coverUrl}}"></image>
+  </view>
+  <view class="reservation-info">
+    <view class="reservation-time">
+      <view class="in">{{orderDetail.checkInDate}}</view>
+      <view class="day-count">{{dayCount}}晚</view>
+      <view class="out">{{orderDetail.checkOutDate}}</view>
+    </view>
+    <view class="reservation-guest">
+      <view class="guestName">{{orderDetail.guestName}}</view>
+      <view class="guestPhont">联系电话 {{orderDetail.guestPhone}}</view>
+    </view>
+  </view>
+</scroll-view>
+<view class="bottom">
+  <button class="btn-reserveAgain">再次预定</button>
+</view>

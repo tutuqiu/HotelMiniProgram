@@ -1,0 +1,39 @@
+/* pages/pay/pay.wxss */
+/* pages/pay/pay.wxss */
+.container{
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* 水平居中 */
+  justify-content: center;  /* 垂直居中 */
+  gap: 18rpx;
+  background: #f6f6f6;
+}
+
+.container image{
+  width: 260rpx;
+  height: 260rpx;
+}
+
+.container text{
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #111;
+}
+
+.container button{
+  margin-top: 10rpx;
+  width: 320rpx;
+  height: 84rpx;
+  /* line-height: 84rpx; */
+  border-radius: 16rpx;
+  background: #0aa35a;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 700;
+  border: none;
+}
+
+button::after{
+  border: none;
+}

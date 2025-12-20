@@ -1,18 +1,144 @@
 // pages/orders/orders.js
+import {HTTPRequest} from '../../utils/request.js';
+
+const app=getApp()
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    orderList:[],
+    activeTab: '',
+    isEmpty:true
   },
 
+  
+  gotoDetail(e){
+    const id = e.currentTarget.id
+    //TODO FIND ORDER
+    const orders=this.data.orderList
+    console.log("orders:",orders)
+    console.log("targetId:",id)
+    const orderDetail=orders.filter((order)=>order.id==id)[0]
+    console.log("order:",orderDetail)
+
+    console.log("gotoDetail")
+    wx.navigateTo({
+      url: '/pages/order-detail/order-detail',
+      success:(res)=>{
+        res.eventChannel.emit('init',orderDetail)
+      }
+    })
+  },
+
+  onTab(e) {
+    const status = e.currentTarget.dataset.status
+    this.setData({ activeTab: status });
+    this.searchOrders()
+  },
+
+  onCancel(e){
+    const id = e.currentTarget.dataset.id
+    wx.showModal({
+      content: '您确定要取消订单吗？',
+      showCancel: true,
+      cancelText: '再想想', // 取消按钮文字
+      cancelColor: '#666', // 取消按钮颜色
+      confirmText: '确定', // 确认按钮文字
+      confirmColor: '#ff4400', // 确认按钮颜色
+      complete:async(res)=>{
+        if(res.confirm){
+          const data ={}
+          const header ={
+            'content-type': 'application/json',
+            'Authorization':'Bearer ' + app.getToken()
+          }
+          try{
+            const res = await HTTPRequest('POST',`/reservations/${id}/cancel`,data,header)
+            
+            console.log(res)
+            if(res.statusCode==200){
+              console.log('已取消订单')
+              wx.showToast({ title: '已取消订单' })
+              //更新card状态
+              const key=`#order-${id}`
+              const order=this.selectComponent(key)
+              console.log(this.data.orderList)
+              console.log("id:",id)
+              console.log("key",key)
+              console.log("order:",order)
+
+              if(order){
+                console.log('find order:',id)
+                order.updateStatus("CANCELLED")
+              }
+            }else{
+              wx.showToast({
+                title:res.data.message || `取消订单失败（code:${res.statusCode}）`,
+                icon: 'none',
+                duration: 2000
+              })
+            }
+          }catch(err){
+            console.error('请求异常:', err);
+            wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
+          }
+        }
+      }
+    })
+  },
+
+  async searchOrders(){
+    const status=this.data.activeTab
+    let data={"status": []}
+    if(status=="CANCELLED"){
+      data={status:["CANCELLED","EXPIRED"]}
+    }else if(status!="ALL"){
+      data={status:[status]}
+    }
+    console.log("REQ data:",data)
+    const header={
+      'content-type': 'application/json',
+      'Authorization':'Bearer ' + app.globalData.userInfo.token
+    }
+    console.log("header:",header)
+    try{
+      const res = await HTTPRequest('POST','/orders',data,header)
+
+      console.log(res)
+      if(res.statusCode==200){
+        this.setData({
+          orderList:res.data.items,
+          isEmpty:res.data.items.length===0?true:false
+        })
+        console.log("list:",res.data.items)
+        console.log("isEmpty:",this.data.isEmpty)
+      }else{
+        wx.showToast({
+          title:res.data.message || `请求失败（code:${res.statusCode}）`,
+          icon: 'none',
+          duration: 2000
+        })
+        // wx.navigateBack()
+      }
+    }catch(err){
+      console.error('请求订单列表异常:', err);
+      wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
+    }
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    const status=options.status
+    console.log('staus:',status)
+    this.setData({
+      activeTab:status
+    })
 
+    this.searchOrders()
   },
 
   /**

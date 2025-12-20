@@ -52,6 +52,9 @@ App({
     }
   },
 
+  getToken(){
+    return this.globalData.userInfo.token
+  },
   async refresh(refreshTokenId){
     try{
       const data = {

@@ -14,21 +14,25 @@
   </view>
   <view class="orders-container">
     <view class="orders-header">
-      <text>酒店订单</text>
-      <text>全部</text>
+      <text>订单</text>
+      <text data-status="ALL" bindtap="goToOrders">全部</text>
     </view>
     <view class="orders-content">
-      <view class="pending-payment">
+      <view class="pending-payment" data-status="HOLD" bindtap="goToOrders">
         <image src="http://cdn.xtuctuy.top/images/pending-payment.png"></image>
-        <text>待支付</text>
+        <text >待支付</text>
       </view>
-      <view class="pending-checkin">
+      <view class="pending-checkin" data-status="CONFIRMED" bindtap="goToOrders">
         <image src="http://cdn.xtuctuy.top/images/pending-checkin.png"></image>
         <text>待入住</text>
       </view>
-      <view class="pending-review">
-        <image src="http://cdn.xtuctuy.top/images/pending-review.png"></image>
-        <text>待评价</text>
+      <view class="checkedIn" data-status="CHECKED_IN" bindtap="goToOrders">
+        <image src="http://cdn.xtuctuy.top/images/checkedIn.png"></image>
+        <text>已入住</text>
+      </view>
+      <view class="pending-review" data-status="ACCOMPLISHED" bindtap="goToOrders">
+        <image src="http://cdn.xtuctuy.top/images/ACCOMPLISHED.png"></image>
+        <text>已完成</text>
       </view>
     </view>
   </view>

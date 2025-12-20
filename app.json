@@ -12,7 +12,9 @@
     "pages/reservation/reservation",
     "pages/room_detail/room_detail",
     "pages/orders/orders",
-    "pages/room_collected/room_collected"
+    "pages/room_collected/room_collected",
+    "pages/order-detail/order-detail",
+    "pages/pay/pay"
   ],
   "window": {
     "navigationBarTextStyle": "black",

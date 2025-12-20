@@ -83,7 +83,7 @@
       <text class="arrow up">^</text>
     </view>
 
-    <button class="pay-btn">提交订单</button>
+    <button class="pay-btn" bindtap="onPay">立即支付</button>
   </view>
 
   <!-- 给内容区留出底部空间，避免被 paybar 遮挡 -->

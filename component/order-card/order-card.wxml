@@ -1,0 +1,33 @@
+<!--component/order-card/order-card.wxml-->
+<view class="card">
+  <view class="header">
+    <image src="http://cdn.xtuctuy.top/images/icon.png" class="icon"></image>
+    <text class="status">{{statusText}} |</text>
+    <image src="http://cdn.xtuctuy.top/images/delete.png" class="delete"></image>
+  </view>
+  <view class="content">
+    <text class="name">{{orderDetail.roomName}}</text>
+    <text class="time">{{orderDetail.checkInDate}}·入住-{{orderDetail.checkOutDate}}·离店 {{dayCount}}晚</text>
+    <view class="price-container">
+      <text wx:if="{{orderDetail.status=='HOLD'}}" class="waiting-pay">剩余支付时间：...</text>
+      <text class="price">￥{{orderDetail.priceTotal}}</text>
+    </view>
+  </view>
+  <view class="bottom" catchtap="noop">
+    <button 
+      class="btn-consult" 
+      bindtap="onConsult">在线咨询</button>
+    <button 
+      wx:if="{{orderDetail.status=='HOLD'||orderDetail.status=='CONFIRMED'}}" 
+      class="btn-cancel" 
+      bindtap="onCancel">取消订单</button>
+    <button 
+      wx:if="{{orderDetail.status=='HOLD'}}" 
+      class="btn-pay" 
+      bindtap="onPay">去支付</button>
+    <button 
+      wx:if="{{orderDetail.status!='HOLD'}}" 
+      class="btn-reserverAgain" 
+      bindtap="onReserveAgain">再次预定</button>
+  </view>
+</view>
