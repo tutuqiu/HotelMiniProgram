@@ -139,8 +139,10 @@ Page({
   },
 
   setCollected(){
-    const status=this.data.collectedList.includes(this.data.roomDetail.id)
-    console.log(`room ${this.data.roomDetail.id} collected?:${status}`)
+    console.log("collectedList:",this.data.collectedList)
+    console.log("id:",this.data.id)
+    const status=this.data.collectedList.includes(Number(this.data.id))
+    console.log(`room ${this.data.id} collected?:${status}`)
     this.setData({
       isCollected:status
     })
@@ -149,6 +151,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    console.log("room id:",options.id)
     const id = options.id;     // 卡片的ID
     if (!id) {
       wx.showToast({ title: "参数异常，无法加载房间详情", icon: "none" });

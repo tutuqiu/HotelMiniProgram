@@ -16,7 +16,7 @@ Page({
 
   
   gotoDetail(e){
-    const id = e.currentTarget.id
+    const id = e.currentTarget.dataset.id
     //TODO FIND ORDER
     const orders=this.data.orderList
     console.log("orders:",orders)

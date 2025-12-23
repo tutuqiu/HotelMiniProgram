@@ -56,10 +56,19 @@ Component({
       })
     },
     setAvgPrice(){
-      // console.log(this.properties.roomData.totalPrice)
-      this.setData({
-        avgPrice:this.properties.roomData.totalPrice/calDayCount(this.properties.checkInDate,this.properties.checkOutDate)
-      })
+      console.log(this.properties.roomData)
+      //没传入住离店日期的话 应该是收藏页面 传进来的默认是一天的price 直接等于totalPrice即可 
+      if(!this.properties.checkInDate || !this.properties.checkOutDate)
+        
+        this.setData({
+          avgPrice:this.properties.roomData.price
+        })
+      else{
+        this.setData({
+          avgPrice:this.properties.roomData.totalPrice/calDayCount(this.properties.checkInDate,this.properties.checkOutDate)
+        })
+      }
+      
     },
   },
   

@@ -1,5 +1,5 @@
 // pages/room_result/room_result.js
-// import {HTTPRequest} from '../../utils/request.js';
+import {HTTPRequest} from '../../utils/request.js';
 import {updateCollectedList} from '../../services/collected'
 const app=getApp()
 
@@ -14,6 +14,9 @@ Page({
     today:'',
     checkInDate:'',
     checkOutDate:'',
+    minPrice:'',
+    maxPrice:'',
+    headCount:'',
     imgPrefix:''
   },
 
@@ -24,22 +27,49 @@ Page({
     this.setData({
       checkInDate:app.globalData.checkInDate,
       checkOutDate:app.globalData.checkOutDate,
+      minPrice:app.globalData.minPrice,
+      maxPrice:app.globalData.maxPrice,
+      headCount:app.globalData.headCount,
+
       today:app.globalData.today,
       imgPrefix:app.globalData.imgPrefix,
       collectedList:app.globalData.userInfo.collectedList,
     })
-    
-    const {cacheKey}=options
-    const searchResult = wx.getStorageSync(cacheKey)
-    console.log('onLoad room_result')
-    if(searchResult){
-      console.log('searchResult:',searchResult)
-      this.setData({
-        roomList:searchResult
-      })
-    }else{
-      wx.showToast({ title: "搜索结果失效，请重新搜索", icon: "none" });
-      wx.navigateBack();
+    this.onSearch()
+  },
+
+  async onSearch(){
+    const data={
+      in:this.data.checkInDate,
+      out:this.data.checkOutDate,
+      people:this.data.headCount,
+      minPrice:this.data.minPrice,
+      maxPrice:this.data.maxPrice,
+      status:"VACANT"
+    }
+    console.log("search parameter:",data)
+    const header={
+      'content-type': 'application/json'
+    }
+    try{
+      const res=await HTTPRequest('GET','/rooms/search',data,header)
+
+      if(res.statusCode==200){
+        console.log('成功获取房间列表')
+        this.setData({
+          roomList:res.data
+        })
+      }else{
+        wx.showToast({
+          title:res.data.message || `搜索失败（code:${res.statusCode}）`,
+          icon: 'none',
+          duration: 2000
+        })
+        wx.navigateBack()
+      }
+    }catch(err){
+      console.error('请求异常:', err);
+      wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
     }
   },
 
@@ -89,13 +119,9 @@ Page({
 
   onCardTap(e){
     const id = e.detail.id
-    const { cacheKey } = this.options;
     wx.navigateTo({
-      url: `/pages/room_detail/room_detail?cacheKey=${cacheKey}&id=${id}`
-      // 注意：参数需用encodeURIComponent处理特殊字符（可选，防止参数解析失败）
-      // url: `/pages/room_detail/room_detail?cacheKey=${encodeURIComponent(cacheKey)}&roomId=${roomId}`
+      url: `/pages/room_detail/room_detail?id=${id}`
     });
-
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -111,8 +137,16 @@ Page({
     this.setData({
       checkInDate:app.globalData.checkInDate,
       checkOutDate:app.globalData.checkOutDate,
+      minPrice:app.globalData.minPrice,
+      maxPrice:app.globalData.maxPrice,
+      headCount:app.globalData.headCount,
+
+      today:app.globalData.today,
+      imgPrefix:app.globalData.imgPrefix,
       collectedList:app.globalData.userInfo.collectedList,
     })
+    this.onSearch()
+
     // 更新卡片收藏状态
     const roomList = this.data.roomList
     for(const room of roomList)

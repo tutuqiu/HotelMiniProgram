@@ -1,17 +1,54 @@
 // pages/room_collected/room_collected.js
+import {searchRoomsByIds} from '../../services/rooms.js'
+const app=getApp()
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    roomList:[]
+    collectedList:[],
+    collectedRoomsDetail:[],
+    imgPrefix:'',
+    isEmpty:false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    this.setData({
+      collectedList:app.globalData.userInfo.collectedList,
+      imgPrefix:app.globalData.imgPrefix,
+    })
+    if(this.data.collectedList.length==0){
+      console.log("empty")
+      this.setData({
+        isEmpty:true
+      })
+    }
+    else{
+      this.seachRoomsDetail()
+    }
+  },
+  
+  async seachRoomsDetail(){
+    const res_results=await searchRoomsByIds(this.data.collectedList)
+    let collectedRoomsDetail=[]
+    for(const res of res_results){
+      collectedRoomsDetail.push(res.data)
+    }
+    // console.log("collectedRoomsDetail",collectedRoomsDetail)
+    this.setData({
+      collectedRoomsDetail:collectedRoomsDetail
+    })
+  },
+
+  onCardTap(e){
+    const id = e.detail.id
+    wx.navigateTo({
+      url: `/pages/room_detail/room_detail?id=${id}`
+    });
 
   },
 
@@ -26,7 +63,18 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    this.setData({
+      collectedList:app.globalData.userInfo.collectedList,
+      imgPrefix:app.globalData.imgPrefix,
+    })
+    if(this.data.collectedList.lenth==0){
+      this.setData({
+        isEmpty:true
+      })
+    }
+    else{
+      this.seachRoomsDetail()
+    }
   },
 
   /**

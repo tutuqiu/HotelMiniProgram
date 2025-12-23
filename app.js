@@ -160,6 +160,12 @@ App({
     today:'',
     checkInDate:'',
     checkOutDate:'',
+    minPrice:'',
+    maxPrice:'',
+    headCount:'',
+    bedCount:'',
+    bedroomCount:'',
+    // living_diningCount:'',
     imgPrefix:'',
     userInfo: {
       avatarUrl:"",

@@ -37,20 +37,6 @@
                 bind:heighValueChange="highValueChangeAction" />
     </view>
   </view>
-  <view class="roomTypeFilter-container">
-    <text>房型选择</text>
-    <view class="room-btn-group">
-      <view 
-        class="room-btn {{item.isSelected ? 'selected' : 'unselected'}}"
-        wx:for="{{roomTypeList}}"
-        wx:key="name"
-        bindtap="toggleRoom"
-        data-id="{{item.id}}"
-      >{{item.name}}
-      </view>
-    </view>
-  </view>
-  
   <button bindtap="onSearch">查询</button>
 
 </scroll-view>

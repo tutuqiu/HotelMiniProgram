@@ -1,1 +1,23 @@
 /* pages/room_collected/room_collected.wxss */
+/* ---- noCollected 空状态 ---- */
+.container-noCollected{
+  margin-top: 80rpx;
+  padding: 40rpx 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-noCollected{
+  width: 260rpx;
+  height: 260rpx;
+  opacity: 0.9;
+}
+
+.text-noCollected{
+  margin-top: 22rpx;
+  font-size: 28rpx;
+  color: #999;
+  font-weight: 600;
+}

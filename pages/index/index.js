@@ -20,73 +20,19 @@ Page({
     headCount:'',
     minPrice:'',
     maxPrice:'',
-    roomTypeList:[
-      {id:'TWIN',name:'双床房',isSelected:true},
-      {id:'QUEEN',name:'大床房',isSelected:true},
-      {id:'FAMILY',name:'家庭房',isSelected:true},
-      {id:'BUSINESS_SUITE',name:'商务套房',isSelected:true},
-    ],
-    selectedRooms:['TWIN','QUEEN','FAMILY','BUSINESS_SUITE']
   },
 
   async onSearch(){
-    console.log("checkInDate:",this.data.checkInDate)
-    console.log('checkOutDate,',this.data.checkOutDate)
+    //统一更新app的值 供room_result查询使用
+    app.globalData.checkInDate=this.data.checkInDate
+    app.globalData.checkOutDate=this.data.checkOutDate
+    app.globalData.headCount=this.data.headCount
+    app.globalData.minPrice=this.data.minPrice
+    app.globalData.maxPrice=this.data.maxPrice
 
-    const data={
-      in:this.data.checkInDate,
-      out:this.data.checkOutDate,
-      people:this.data.headCount,
-      minPrice:this.data.minPrice,
-      maxPrice:this.data.maxPrice
-    }
-    const header={
-      'content-type': 'application/json'
-    }
-    try{
-      const res=await HTTPRequest('GET','/rooms/search',data,header)
-      console.log('onSearch res:',res)
-
-      if(res.statusCode==200){
-        console.log('成功获取房间列表')
-        const searchResult=res.data
-        const cacheKey = `room_search_result_${Date.now()}`;
-        wx.setStorageSync(cacheKey, searchResult);
-        wx.navigateTo({
-          url: `/pages/room_result/room_result?cacheKey=${cacheKey}`
+    wx.navigateTo({
+      url: '/pages/room_result/room_result'
     });
-      }else{
-        wx.showToast({
-          title:res.data.message || `搜索失败（code:${res.statusCode}）`,
-          icon: 'none',
-          duration: 2000
-        })
-      }
-    }catch(err){
-      console.error('请求异常:', err);
-      wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
-    }
-  },
-  toggleRoom(e) {
-    // 获取点击的房型id（来自 data-id="{{item.id}}"）
-    const roomId = e.currentTarget.dataset.id; 
-    // 切换选中状态
-    const newRoomTypeList = this.data.roomTypeList.map(item => {
-      if (item.id === roomId) { // 匹配点击的房型
-        return { ...item, isSelected: !item.isSelected };
-      }
-      return item;
-    });
-    // 更新数据 页面重新渲染（按钮样式随之变化）
-    this.setData({ roomTypeList: newRoomTypeList });
-
-    const selectedRooms = newRoomTypeList
-      .filter(item => item.isSelected)
-      .map(item => item.id);
-    this.setData({
-      selectedRooms:selectedRooms
-    })
-    console.log('selectedRooms:',this.data.selectedRooms)
   },
   onMinus(){
     this.setData({
@@ -110,7 +56,6 @@ Page({
       maxPrice:e.detail.heighValue
     })
   },
-
   setDayCount(){
     const start=new Date(this.data.checkInDate)
     const end =new Date(this.data.checkOutDate)
@@ -151,13 +96,12 @@ Page({
       checkInDate:checkInDate,
       checkOutDate:checkOutDate
     })
-    app.globalData.checkInDate=checkInDate
-    app.globalData.checkOutDate=checkOutDate
+    // app.globalData.checkInDate=checkInDate
+    // app.globalData.checkOutDate=checkOutDate
     
     this.setDayCount()
 
     this.onHideModal()
-    
   },
 
   

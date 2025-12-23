@@ -1,2 +1,20 @@
 <!--pages/room_collected/room_collected.wxml-->
-<text>pages/room_collected/room_collected.wxml</text>
+<!-- room-result页面：房间列表 -->
+<view class="hotel-result-page">
+  <!-- 循环渲染每个房间卡片 -->
+  <room-card 
+    wx:for="{{collectedRoomsDetail}}" 
+    wx:key="id" 
+    id="roomCard-{{item.id}}"
+    roomData="{{item}}"
+    imgPrefix="{{imgPrefix}}"
+    collectedList="{{collectedList}}"
+    checkInDate=""
+    checkOutDate=""
+    bind:cardTap="onCardTap"
+    ></room-card>
+</view>
+<view wx:if="{{isEmpty}}" class="container-noCollected">
+  <image src="http://cdn.xtuctuy.top/images/noCollected.png" class="img-noCollected"></image>
+  <text class="text-noCollected">暂无收藏的房间，快去收藏吧~</text>
+</view>

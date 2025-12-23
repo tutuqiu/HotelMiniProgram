@@ -2,6 +2,26 @@ import {HTTPRequest} from '../utils/request.js'
 
 const app=getApp();
 
+export async function searchRoomsByIds(ids){
+  const promises=[]
+  for(const id of ids){
+    const data ={
+      id: id,
+    }
+    const header={
+      'content-type':'application/json'
+    }
+    promises.push(HTTPRequest('GET',`/rooms/${id}`,data,header))
+  }
+  try{
+    //res[]
+    const results =await Promise.all(promises)
+    return results
+  }catch(err){
+    wx.showToast({ title: '请求失败', icon: 'none' }); // 给用户提示失败
+    throw err; 
+  }
+}
 
 export async function searchRoomById(id){
     const data ={
