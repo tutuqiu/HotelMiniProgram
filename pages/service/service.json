@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText":"服务",
-  "usingComponents": {}
+  "usingComponents": {
+    "chat-card":"/component/chat-card/chat-card"
+  }
 }

@@ -9,6 +9,10 @@ Page({
    */
   data: {
     isLogin:false,
+    socketStatus:'',
+    chatRoomsDetails:[],
+    unreadByChatRoom: {},
+
     socketOpen:false,
     socketMsgQueue: [], // 待发送的消息队列（连接未打开时缓存）
     wsUrl:"ws://xtuctuy.top:8080/ws",
@@ -24,19 +28,34 @@ Page({
   onLoad(options) {
     this.setData({
       isLogin:app.globalData.isLogin,
+      socketStatus:app.globalData.socketStatus,
+    })
+    const unreadByChatRoom=app.globalData.unreadByChatRoom
+    const chatRoomsDetails=app.globalData.chatRoomsDetails.map(room=>{
+      const unreadMessage=unreadByChatRoom[room.id]
+      if(room.type=="PREBOOK")
+        room.name="客服"
+      return{
+        ...room,
+        unread:unreadMessage.length
+      }
     })
 
-    if(this.data.isLogin){
-      this.setData({
-        avatarUrl:app.globalData.userInfo.avatarUrl,
-        nickName:app.globalData.userInfo.nickName,
-      })
-      // console.log('avatarUrl:',this.data.avatarUrl)
-      console.log('nickName:',this.data.nickName)
-      this.connectWebSocket();
-    }
-      
+    this.setData({
+      chatRoomsDetails:chatRoomsDetails
+    })
+    console.log("service data:",this.data)
   },
+
+  goToChatRoom(e){
+    const id=e.currentTarget.dataset.id
+    wx.navigateTo({
+      url: `/pages/chat-room/chat-room?id=${id}`,
+    })
+  },
+
+
+
   formatTime(date) {
     const hour = date.getHours().toString().padStart(2, "0");
     const minute = date.getMinutes().toString().padStart(2, "0");
@@ -177,70 +196,9 @@ Page({
     })
 
   },
-
-  login(){
-    wx.login({
-      success: async (res)=>{
-        console.log(res)
-        if(res.code){
-          console.log('获取code成功! ',res.code);
-
-          try{
-            const data={
-              code:res.code
-            }
-            const header={
-              'content-type': 'application/json',
-            }
-            const loginResult = await HTTPRequest('POST','/public/wx/login',data,header);
-            console.log('loginResult:',loginResult)
-            if (loginResult.statusCode === 200){
-              console.log('登录成功');
-              wx.showToast({ title: '登录成功' });
-              app.globalData.isLogin=true;
-
-              const token=loginResult.data.accessToken
-              const expiresInSeconds=loginResult.data.expiresInSeconds
-              const refreshTokenId=loginResult.data.refreshTokenId
-
-              console.log('login token:',token)
-              console.log('login expiresInSeconds:',expiresInSeconds)
-              console.log('login refreshTokenId:',refreshTokenId)
-                
-              const expiresTime = new Date(Date.now() + expiresInSeconds * 1000)//有效时间转化为毫秒级别
-
-              wx.setStorageSync('expireTime',expiresTime.getTime())
-              wx.setStorageSync('token',token)
-              wx.setStorageSync('refreshTokenId',refreshTokenId)
-
-              app.getUserInfo(token)
-
-              app.globalData.userInfo.token=token
-              this.setData({
-                isLogin:true
-              })
-            }else{
-              wx.showToast({
-                title: loginResult.message || `登录失败（code: ${loginResult.statusCode}）`,
-                icon: 'none',
-                duration: 2000
-              });
-            }
-          }catch(err){
-            console.error('登录异常:', err);
-            wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
-          }
-        }else{
-          console.error('获取code失败:', res.errMsg);
-        }
-      },
-      fail:(err)=>{
-        console.error('wx.login调用失败:', err);
-        wx.showToast({
-          title: '登录失败，请重试',
-          icon: 'none'
-        });
-      }
+  goToLogin(){
+    wx.navigateTo({
+      url: '/pages/login/login',
     })
   },
 
@@ -257,15 +215,24 @@ Page({
   onShow() {
     this.setData({
       isLogin:app.globalData.isLogin,
+      socketStatus:app.globalData.socketStatus,
+    })
+    const unreadByChatRoom=app.globalData.unreadByChatRoom
+    const chatRoomsDetails=app.globalData.chatRoomsDetails.map(room=>{
+      const unreadMessage=unreadByChatRoom[room.id]
+      if(room.type=="PREBOOK")
+        room.name="客服"
+      return{
+        ...room,
+        unread:unreadMessage.length
+      }
     })
 
-    if(this.data.isLogin){
-      this.setData({
-        avatarUrl:app.globalData.userInfo.avatarUrl
-      })
-      this.connectWebSocket();
-    }
-      
+    this.setData({
+      chatRoomsDetails:chatRoomsDetails
+    })
+    console.log("service data:",this.data)
+
   },
 
   /**

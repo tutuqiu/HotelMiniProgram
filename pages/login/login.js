@@ -48,9 +48,10 @@ Page({
               await app.getUserInfo(token)
 
               app.globalData.userInfo.token=token
-              // while(!app.globalData.userInfo.avatarUrl)
+              //chat
+              await app.getChatRoomsDetails()
+              app.ensureSocketConnected()
               
-              // if(app.globalData.userInfo.avatarUrl)
               wx.navigateBack()
             }else{
               wx.showToast({

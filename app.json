@@ -14,7 +14,8 @@
     "pages/orders/orders",
     "pages/room_collected/room_collected",
     "pages/order-detail/order-detail",
-    "pages/pay/pay"
+    "pages/pay/pay",
+    "pages/chat-room/chat-room"
   ],
   "window": {
     "navigationBarTextStyle": "black",

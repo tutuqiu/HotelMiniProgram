@@ -1,0 +1,54 @@
+/* component/chat-card/chat-card.wxss */
+.container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 24rpx 28rpx;
+  margin: 16rpx 0;
+
+  background: #ffffff;
+  border-radius: 20rpx;
+  border: 1rpx solid #eeeeee;
+  box-shadow: 0 6rpx 18rpx rgba(0, 0, 0, 0.06);
+
+  position: relative;
+}
+
+.avatar{
+  width: 84rpx;
+  height: 84rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: #f5f5f5;
+}
+
+.chatRoom-name{
+  margin-left: 20rpx;
+
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #222222;
+
+  max-width: 520rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.unread-dot{
+  position: absolute;
+  top: 18rpx;
+  right: 18rpx;
+
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 50%;
+  background: #ff3b30;
+
+  border: 4rpx solid #ffffff;
+  box-sizing: content-box;
+}
