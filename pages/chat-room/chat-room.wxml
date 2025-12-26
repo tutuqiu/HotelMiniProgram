@@ -1,33 +1,45 @@
-<!--pages/service/service.wxml-->
+<!-- pages/service/service.wxml -->
 <view class="page-container">
-  <!-- 消息列表区域 -->
-  <scroll-view 
-    class="msg-list" 
-    scroll-y 
+  <!-- 顶部导航栏：固定 -->
+  <view class="chat-header">
+    <view class="header-left" bindtap="onBackTap">
+      <text class="icon-back"></text>
+    </view>
+    <view class="header-center">
+      <text class="chat-title">{{chatRoomDetails.name}}</text>
+      <text class="chat-subtitle">{{memberCount}}人</text>
+    </view>
+    <view class="header-right" bindtap="onMoreTap">
+      <text class="icon-more">···</text>
+    </view>
+  </view>
+
+  <!-- 中间消息滚动区域：scroll-view 只负责中间这块 -->
+  <scroll-view
+    class="msg-list"
+    scroll-y
+    scroll-with-animation
     scroll-into-view="msg-{{msgList.length - 1}}"
-    style="height: 60vh;"
   >
     <!-- 空消息提示 -->
     <view wx:if="{{msgList.length === 0}}" class="empty-tip">
-      暂无消息，连接成功后可发送
+      暂无消息
     </view>
+
     <!-- 消息项 -->
     <block wx:for="{{msgList}}" wx:key="index" wx:for-item="msg">
       <view id="msg-{{index}}" class="msg-item">
-        <!-- 对方消息（左头像 + 右内容） -->
-        <view wx:if="{{msg.senderId!=id}}" class="msg-wrap other-msg-wrap">
+        <!-- 对方消息 -->
+        <view wx:if="{{msg.senderId != id}}" class="msg-wrap other-msg-wrap">
           <image class="msg-avatar" src="{{msg.senderAvatarUrl}}" mode="aspectFill"></image>
           <view class="msg-content-wrap">
             <text class="msg-name">{{msg.senderName}}</text>
-            <!-- <text class="msg-time">{{msg.createdAt}}</text> -->
             <text class="msg-content">{{msg.content}}</text>
           </view>
         </view>
-        <!-- 自己消息（右头像 + 左内容） -->
+        <!-- 自己消息 -->
         <view wx:else class="msg-wrap self-msg-wrap">
           <view class="msg-content-wrap">
-            <!-- <text class="msg-name">{{msg.senderName}}</text> -->
-            <!-- <text class="msg-time">{{msg.createdAt}}</text> -->
             <text class="msg-content">{{msg.content}}</text>
           </view>
           <image class="msg-avatar" src="{{msg.senderAvatarUrl}}" mode="aspectFill"></image>
@@ -36,18 +48,26 @@
     </block>
   </scroll-view>
 
-  <!-- 输入和发送区域 -->
+  <!-- 底部输入栏：固定 -->
   <view class="input-area">
-    <input
-      class="msg-input"
-      placeholder="请输入消息..."
-      value="{{inputMsg}}"
-      bindinput="onInputChange"
-    />
+  <!-- 新增一层包裹，用来做 flex:1 -->
+    <view class="input-wrapper">
+      <input
+        class="msg-input"
+        placeholder="请输入消息..."
+        value="{{inputMsg}}"
+        bindinput="onInputChange"
+      />
+    </view>
+
     <!-- 发送按钮 -->
     <button
       class="send-btn"
       bindtap="sendMessage"
     >发送</button>
+
+    <!-- 加号按钮 -->
+    <button class="more-btn">+</button>
   </view>
+
 </view>

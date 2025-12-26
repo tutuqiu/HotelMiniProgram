@@ -7,7 +7,7 @@ chat-card{
 }
 
 /* 未登录容器 - 全屏居中 */
-.unlogin-container {
+.unlogin-container .unconnect-container{
   /* 全屏占满 */
   width: 100vw;
   height: 100vh;

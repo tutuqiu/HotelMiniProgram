@@ -16,6 +16,7 @@ Page({
     nickName:'',
     chatRoomDetails:{},
     inputMsg:"",
+    memberCount:'',
 
 
     isLogin:false,
@@ -59,6 +60,9 @@ Page({
 
     this.setData({
       chatRoomDetails:app.globalData.chatRoomsDetails.find(r=>r.id==chatRoomId)
+    })
+    this.setData({
+      memberCount:this.data.chatRoomDetails.members.length
     })
     console.log("chat-room data:",this.data)
     this.getMessage()

@@ -1,29 +1,98 @@
-/* pages/service/service.wxss */
-.page-container {
-  padding: 20rpx;
-  box-sizing: border-box;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: #f5f5f5;
+/* 让 page 充满屏幕 */
+page {
+  height: 100%;
 }
 
-/* 消息列表 */
+/* 整个页面容器 */
+.page-container {
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: #ffffff;  /* 整体背景色统一 */
+}
+
+/* ===== 顶部导航栏：固定在最上面 ===== */
+.chat-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 88rpx;
+  padding: 0 24rpx;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background-color: #ffffff;
+  color: #111;
+  z-index: 10;
+}
+
+.header-left,
+.header-right {
+  width: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.header-right {
+  justify-content: flex-end;
+}
+
+.header-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-title {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.chat-subtitle {
+  margin-top: 4rpx;
+  font-size: 22rpx;
+  color: #999;
+}
+
+.icon-back {
+  font-size: 40rpx;
+}
+
+.icon-more {
+  font-size: 40rpx;
+}
+
+/* ===== 中间消息滚动区域：顶部 / 底部留出头部和输入栏高度 ===== */
 .msg-list {
-  background-color: #fff;
-  border-radius: 10rpx;
-  padding: 10rpx;
-  margin-bottom: 20rpx;
+  position: absolute;
+  left: 0;
+  right: 0;
+  /* top 对应 header 高度，bottom 对应输入栏高度 */
+  top: 88rpx;
+  bottom: 100rpx;
+
+  padding: 16rpx 24rpx;
+  box-sizing: border-box;
+
+  background-color: #ffffff;   /* 和 page-container 同色，滚动时不突兀 */
 }
 
 .empty-tip {
   text-align: center;
-  color: #999;
+  color: #888;
   padding: 40rpx 0;
-  font-size: 28rpx;
+  font-size: 26rpx;
 }
 
+/* 单条消息 */
 .msg-item {
   margin: 20rpx 10rpx;
 }
@@ -45,134 +114,120 @@
   justify-content: flex-end;
 }
 
-/* 头像样式 */
+/* 头像 */
 .msg-avatar {
-  width: 80rpx;
-  height: 80rpx;
-  border-radius: 50%;
-  border: 1px solid #eee;
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 8rpx;
+  background-color: #333;
 }
 
-/* 消息内容容器 */
+/* 消息文字区域 */
 .msg-content-wrap {
+  max-width: 70%;
   display: flex;
   flex-direction: column;
-  max-width: 70%;
-}
-.msg-time {
-  font-size: 22rpx;
-  color: #999;
-  margin: 5rpx 0;
-  /* text-align: center; */
 }
 
-.msg-time {
+.msg-name {
   font-size: 22rpx;
-  color: #999;
-  margin: 5rpx 0;
-  text-align: center;
+  color: #888;
+  margin-bottom: 4rpx;
 }
 
 .msg-content {
-  padding: 15rpx 20rpx;
+  padding: 12rpx 18rpx;
   border-radius: 10rpx;
-  word-wrap: break-word;
   font-size: 28rpx;
+  word-break: break-word;
 }
 
+/* 对方消息气泡 */
 .other-msg-wrap .msg-content {
   background-color: #eee;
   color: #333;
   border-top-left-radius: 0;
 }
 
+/* 自己消息气泡 */
 .self-msg-wrap .msg-content {
   background-color: #07c160;
   color: #fff;
   border-top-right-radius: 0;
 }
 
-/* 输入区域 */
+/* ===== 底部输入栏：固定在最下方 ===== */
+/* ===== 底部输入栏：固定在最下方 ===== */
 .input-area {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 100rpx;
+  padding: 12rpx 16rpx;
+  box-sizing: border-box;
+
+  background-color: #ffffff;
+  border-top: 1px solid #e5e5e5;
+
   display: flex;
   align-items: center;
-  gap: 10rpx;
+  gap: 12rpx;
 }
 
-.msg-input {
+/* 这层负责拉伸，占据剩余空间 */
+.input-area .input-wrapper {
   flex: 1;
-  height: 80rpx;
+  min-width: 0;          /* 防止内容撑爆导致不收缩 */
+}
+
+/* input 自己只在 wrapper 内拉满 */
+.input-area .msg-input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 76rpx;
   padding: 0 20rpx;
   border: 1px solid #eee;
-  border-radius: 40rpx;
+  border-radius: 38rpx;
   font-size: 28rpx;
-  background-color: #fff;
-}
-
-.send-btn {
-  width: 160rpx;
-  height: 80rpx;
-  line-height: 80rpx;
-  padding: 0;
-  background-color: #07c160;
-  color: #fff;
-  border-radius: 40rpx;
-  font-size: 28rpx;
-}
-
-.send-btn[disabled] {
-  background-color: #ccc;
-  color: #999;
-}
-
-.reconnect-btn {
-  width: 160rpx;
-  height: 80rpx;
-  line-height: 80rpx;
-  padding: 0;
-  background-color: #1677ff;
-  color: #fff;
-  border-radius: 40rpx;
-  font-size: 28rpx;
-}
-
-/* 未登录容器 - 全屏居中 */
-.unlogin-container {
-  /* 全屏占满 */
-  width: 100vw;
-  height: 100vh;
-  /* 弹性布局实现水平+垂直居中 */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* 背景色和主容器保持一致 */
-  background-color: #f5f5f5;
-  /* 可选：增加内边距，避免内容贴边 */
-  padding: 20rpx;
+  background-color: #f9f9f9;
   box-sizing: border-box;
 }
 
-/* 欢迎文字样式 */
-.welcome {
-  font-size: 32rpx;
-  color: #666;
-  /* 文字和按钮之间的间距 */
-  margin-bottom: 40rpx;
-  /* 可选：文字居中（兜底） */
-  text-align: center;
+/* 统一把底部区域里的 button 都从默认 100% 宽拉回来 */
+.input-area button {
+  display: inline-flex;          /* 内联 flex，更好居中 */
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  margin: 0;                     /* 去掉可能的默认 margin */
 }
 
-/* 登录按钮样式 */
-.btn-login {
-  width: 280rpx;
-  height: 88rpx;
-  line-height: 88rpx;
-  padding: 0;
+/* 发送按钮：固定宽度矩形，排在第二块 */
+.input-area .send-btn {
+  flex: 0 0 140rpx;              /* 固定 140rpx 宽，不参与拉伸 */
+  height: 76rpx;
+
+  padding: 0 12rpx;
   background-color: #07c160;
   color: #fff;
-  border-radius: 44rpx;
-  font-size: 32rpx;
-  /* 去掉按钮默认边框 */
+  border-radius: 20rpx;
+  font-size: 28rpx;
   border: none;
+}
+
+/* 加号按钮：固定正方形，排在第三块 */
+.input-area .more-btn {
+  flex: 0 0 76rpx;               /* 正方形宽高都 76rpx */
+  width: 76rpx;
+  height: 76rpx;
+
+  font-size: 40rpx;
+  background-color: #f3f3f3;
+  color: #333;
+  border-radius: 50%;
+  border: 1px solid #e5e5e5;
+  padding: 0;
 }

@@ -1,6 +1,9 @@
 // pages/service/service.js
 const app = getApp()
 import {HTTPRequest, getUserInfo} from '../../utils/request.js';
+// SERVICE_MAP={
+
+// }
 
 Page({
 
