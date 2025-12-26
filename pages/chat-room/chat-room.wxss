@@ -59,6 +59,12 @@
   flex-direction: column;
   max-width: 70%;
 }
+.msg-time {
+  font-size: 22rpx;
+  color: #999;
+  margin: 5rpx 0;
+  /* text-align: center; */
+}
 
 .msg-time {
   font-size: 22rpx;

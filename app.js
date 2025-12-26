@@ -11,8 +11,9 @@ App({
 
     chatRoomsDetails:[],
     unreadTotal: 0,
-    unreadByChatRoom: {}, // { [Id]: {} }
+    unreadByChatRoom: {}, // { [Id]: number }
     currentChatRoomId:'',
+    listeners:new Set(),
 
     //app统一变量
     isLogin:false,
@@ -114,7 +115,6 @@ App({
   getToken(){
     return this.globalData.userInfo.token
   },
-
   needToRefresh(){
     const expireTime = wx.getStorageSync('expireTime') || null
     console.log('expireTime:',expireTime)
@@ -143,6 +143,7 @@ App({
   
         this.globalData.userInfo.token=info.accessToken
         wx.setStorageSync('token',info.accessToken)
+        console.log("new token:",info.accessToken)
         
         const expireTime = new Date(Date.now() + info.expiresInSeconds * 1000)//有效时间转化为毫秒级别
         wx.setStorageSync('expireTime',expireTime.getTime())
@@ -244,7 +245,7 @@ App({
       if (!id) 
         return
       this.subscribeRoom(id)
-      this.globalData.unreadByChatRoom[id]=[]
+      this.globalData.unreadByChatRoom[id]=0
     })
   
     console.log('已订阅房间数量:', rooms.length)
@@ -331,6 +332,7 @@ App({
 
     // 连接成功
     wx.onSocketMessage((res) => {
+      //如果是MESSAGE 会调用EMITMESSAGE
       this.handleSocketMessage(res)
     })
 
@@ -341,7 +343,7 @@ App({
     })
 
     wx.onSocketClose(() => {
-      console.log("WS 已关闭", res)
+      console.log("WS 已关闭")
       this.globalData.socketStatus = 'DISCONNECTED'
       this.scheduleReconnect()
     })
@@ -406,8 +408,8 @@ App({
 
         // 1) 全局处理（更新未读/room 列表/TabBar）
         this.handleMessageInApp(chatMsg)
-        // 2) 广播给页面（如果你后面加了 emitMessage 机制）
-        // this.emitMessage(chatMsg)
+        // 2) 广播给页面 更新unread
+        this.emitMessage(chatMsg)
 
         return
       }
@@ -418,12 +420,15 @@ App({
     console.log("收到其他 STOMP 帧:", command, headers, bodyPart)
   },
 
-
+  //更新service页面+导航栏角标
   handleMessageInApp(msg) {
     console.log("handleMessageInApp")
 
-    const chatRoomId=msg.id
+    const chatRoomId=msg.roomId
     if(!chatRoomId)
+      return
+    //如果当前页面在对应chatRoom里 不需要更新角标
+    if(chatRoomId==this.globalData.currentChatRoomId)
       return
 
     // 1. 更新 room 的 lastMessage / lastMessageAt（这个跟前面一样）
@@ -444,17 +449,30 @@ App({
     // 如果当前不在这个房间，就把消息记到未读数组里
     if(this.globalData.currentChatRoomId!=chatRoomId)
       if(!this.globalData.unreadByChatRoom[chatRoomId])
-        this.globalData.unreadByChatRoom[chatRoomId]=[]
-      this.globalData.unreadByChatRoom[chatRoomId].push(msg)
+        this.globalData.unreadByChatRoom[chatRoomId]=0
+      this.globalData.unreadByChatRoom[chatRoomId]++
 
-    this.globalData.unreadTotal++;
-  
+    console.log(this.globalData.unreadByChatRoom)
+
+    this.calUnreadTotal()
+
     this.refreshTabBarBadge()
+  },
 
+  calUnreadTotal(){
+    const unreadByChatRoom=this.globalData.unreadByChatRoom
+    let total=0
+    Object.values(unreadByChatRoom).forEach(value=>{
+      console.log('value:',value)
+      total+=value
+    })
+    console.log("total:",total)
+    this.globalData.unreadTotal=total
   },
 
   refreshTabBarBadge(){
     const total = this.globalData.unreadTotal
+    console.log("refreshTabBarBadge total:",total)
     const SERVICE_TAB_INDEX = 1 // 第二个 tab
 
     try {
@@ -464,12 +482,51 @@ App({
           text: total > 99 ? '99+' : String(total)
         })
       } else {
-        wx.removeTabBarBadge({ index: SERVICE_TAB_INDEX })
+        console.log("remove?")
+        wx.removeTabBarBadge({ index: SERVICE_TAB_INDEX,
+          success: () => console.log('removeTabBarBadge success'),
+          fail: (err) => console.error('removeTabBarBadge fail', err),
+          complete: () => console.log('removeTabBarBadge complete') })
       }
     } catch (e) {
       console.warn('更新 TabBar 失败', e)
     }
-  }
+  },
+
+  inChatRoom(chatRoomId){
+    this.globalData.currentChatRoomId=chatRoomId
+    this.globalData.unreadByChatRoom[chatRoomId]=0
+
+    
+    this.calUnreadTotal()
+
+    //更新导航角标
+    this.refreshTabBarBadge()
+
+    //更新房间页面unread
+    this.emitMessage()
+  },
+
+  // 页面调用 app.onChatMessage(listener) 来“订阅消息”
+  onChatMessage(listener){
+    this.globalData.listeners.add(listener)
+    // // 返回一个取消订阅的函数
+    // return ()=>{
+    //   this.globalData.listeners.delete(listener)
+    // }
+  },
+  emitMessage(msg){
+    console.log("emitMessage")
+    console.log("listeners:",this.globalData.listeners)
+    this.globalData.listeners.forEach(fn=>{
+      try{
+        console.log("fn:",fn)
+        fn(msg)
+      }catch(e){
+        console.error("emitMessage 回调报错", e)
+      }
+    })
+  },
 
   
 })

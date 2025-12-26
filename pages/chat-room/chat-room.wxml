@@ -16,19 +16,21 @@
       <view id="msg-{{index}}" class="msg-item">
         <!-- 对方消息（左头像 + 右内容） -->
         <view wx:if="{{msg.senderId!=id}}" class="msg-wrap other-msg-wrap">
-          <image class="msg-avatar" src="{{otherAvatarUrl}}" mode="aspectFill"></image>
+          <image class="msg-avatar" src="{{msg.senderAvatarUrl}}" mode="aspectFill"></image>
           <view class="msg-content-wrap">
-            <text class="msg-time">{{msg.createdAt}}</text>
+            <text class="msg-name">{{msg.senderName}}</text>
+            <!-- <text class="msg-time">{{msg.createdAt}}</text> -->
             <text class="msg-content">{{msg.content}}</text>
           </view>
         </view>
         <!-- 自己消息（右头像 + 左内容） -->
         <view wx:else class="msg-wrap self-msg-wrap">
           <view class="msg-content-wrap">
-            <text class="msg-time">{{msg.createdAt}}</text>
+            <!-- <text class="msg-name">{{msg.senderName}}</text> -->
+            <!-- <text class="msg-time">{{msg.createdAt}}</text> -->
             <text class="msg-content">{{msg.content}}</text>
           </view>
-          <image class="msg-avatar" src="{{otherAvatarUrl}}" mode="aspectFill"></image>
+          <image class="msg-avatar" src="{{msg.senderAvatarUrl}}" mode="aspectFill"></image>
         </view>
       </view>
     </block>
@@ -41,13 +43,11 @@
       placeholder="请输入消息..."
       value="{{inputMsg}}"
       bindinput="onInputChange"
-      disabled="{{!socketOpen}}"
     />
     <!-- 发送按钮 -->
     <button
       class="send-btn"
-      disabled="{{!socketOpen}}"
-      bindtap="handleSendMsg"
+      bindtap="sendMessage"
     >发送</button>
   </view>
 </view>

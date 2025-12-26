@@ -17,7 +17,7 @@ function HTTPRequest(method,router,data,header){
         resolve(res); 
       },
       fail:(err)=>{
-        console.log(`${method}请求失败：${res}`); // 调试用：打印错误信息
+        console.log(`${method}请求失败：${err}`); // 调试用：打印错误信息
         wx.showToast({ title: '请求失败', icon: 'none' }); // 给用户提示失败
         reject(err); // 把错误信息传递给Promise的reject
       },

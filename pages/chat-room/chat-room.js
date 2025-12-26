@@ -14,6 +14,8 @@ Page({
     msgList: [], // 消息列表（展示收发的消息）
     avatarUrl:'',
     nickName:'',
+    chatRoomDetails:{},
+    inputMsg:"",
 
 
     isLogin:false,
@@ -31,10 +33,37 @@ Page({
     console.log("chatRoom id:",chatRoomId)
     this.setData({
       chatRoomId:chatRoomId,
-      id:app.globalData.userInfo.id
+      id:app.globalData.userInfo.id,
     })
+
+    app.onChatMessage((msg)=>{
+      if(!msg)
+        return
+      //只处理当前房间的消息
+      if(msg.roomId!=this.data.chatRoomId)
+        return
+      const memberMap=new Map(this.data.chatRoomDetails.members.map(m=>[String(m.id),m]))
+
+      const sender = memberMap.get(String(msg.senderId)) || null
+      const fullMsg={
+        ...msg,
+        senderName: sender?.name || "未知用户",
+        senderAvatarUrl: sender?.avatarUrl || this.data.otherAvatarUrl
+      }
+
+      this.setData({
+        msgList:this.data.msgList.concat(fullMsg)
+      })
+       
+    })
+
+    this.setData({
+      chatRoomDetails:app.globalData.chatRoomsDetails.find(r=>r.id==chatRoomId)
+    })
+    console.log("chat-room data:",this.data)
     this.getMessage()
   },
+
   async getMessage(){
     if(app.needToRefresh()){
       console.log("getMessage need to refresh")
@@ -50,11 +79,21 @@ Page({
       console.log(res)
   
       if(res.statusCode==200){
-        const msgs = res.data
+        let msgs = res.data
         console.log('获取消息列表成功:',msgs)
-        this.setData({
-          msgList:msgs
+        const memberMap=new Map(this.data.chatRoomDetails.members.map(m=>[String(m.id),m]))
+        const withSenderInfoMsgs=msgs.map(msg=>{
+          const sender = memberMap.get(String(msg.senderId)) || null;
+          return{
+            ...msg,
+            senderName:sender?.name||"未知用户",
+            senderAvatarUrl:sender?.avatarUrl||this.data.otherAvatarUrl
+          }
         })
+        this.setData({
+          msgList:withSenderInfoMsgs
+        })
+        console.log("chat-room msgList:",this.data.msgList)
       }else{
         wx.showToast({
           title:res.data.message || `获取消息失败（code:${res.statusCode}）`,
@@ -67,63 +106,43 @@ Page({
       wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
     }
   },
+
+  sendMessage(){
+    if (!this.data.inputMsg) {
+      wx.showToast({ title: "请输入消息内容", icon: "none" });
+      return;
+    }
+    // // 2. 双重校验连接状态（兜底，避免极端情况）
+    // if (!this.data.socketOpen) {
+    //   wx.showToast({ title: "连接未就绪，无法发送", icon: "none" });
+    //   return;
+    // }
+
+    const bodyObj={
+      content:this.data.inputMsg,
+      contentType:"TEXT"
+    }
+    app.stompSendFrame("SEND", {
+      destination: `/app/rooms/${this.data.chatRoomId}/send`,
+      "content-type": "application/json",
+      "Authorization": "Bearer " + app.getToken()
+    },JSON.stringify(bodyObj));
+
+    this.setData({ inputMsg: '' })
+  },
+
+
   formatTime(date) {
     const hour = date.getHours().toString().padStart(2, "0");
     const minute = date.getMinutes().toString().padStart(2, "0");
     return `${hour}:${minute}`;
   },
+
   onInputChange(e){
     this.setData({
       inputMsg: e.detail.value.trim()
     });
     console.log('input:',this.data.inputMsg)
-  },
-
-  handleSendMsg() {
-    // 1. 校验输入内容
-    if (!this.data.inputMsg) {
-      wx.showToast({ title: "请输入消息内容", icon: "none" });
-      return;
-    }
-
-    // 2. 双重校验连接状态（兜底，避免极端情况）
-    if (!this.data.socketOpen) {
-      wx.showToast({ title: "连接未就绪，无法发送", icon: "none" });
-      return;
-    }
-
-    // 3. 构造消息体（根据后端要求调整格式）
-    const sendMsg = {
-      type: "chat",
-      content: this.data.inputMsg,
-      timestamp: Date.now()
-    };
-
-    // 4. 发送消息
-    wx.sendSocketMessage({
-      data: JSON.stringify(sendMsg),
-      success:(res)=>{
-        console.log("消息发送成功", res);
-        // 5. 将发送的消息添加到消息列表
-        this.setData({
-          msgList: [
-            ...this.data.msgList,
-            {
-              isSelf: true, // 自己发送的消息
-              avatar: this.data.avatarUrl, // 自己的头像
-              content: this.data.inputMsg,
-              time: this.formatTime(new Date())
-            }
-          ],
-          inputMsg: "" // 清空输入框
-        });
-      },
-      fail:(err)=>{
-        console.error("消息发送失败", err);
-        wx.showToast({ title: "发送失败", icon: "none" });
-      }
-    })
-
   },
 
   /**
@@ -143,24 +162,14 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide() {
-
+    app.globalData.currentChatRoomId=''
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
-    // 页面卸载时主动关闭 WebSocket 连接
-    if (this.data.socketOpen) {
-      wx.closeSocket({
-        success: (res) => {
-          console.log("主动关闭 WebSocket 连接成功", res);
-        },
-        fail: (err) => {
-          console.error("主动关闭 WebSocket 连接失败", err);
-        }
-      });
-    }
+    app.globalData.currentChatRoomId=''
   },
 
   /**

@@ -1,8 +1,8 @@
 <!--component/chat-card/chat-card.wxml-->
 <view class="container">
-  <image src="http://cdn.xtuctuy.top/images/chat-staff.png" class="avatar"></image>
+  <image src="{{imgPrefix+chatRoomDetails.avatar}}" class="avatar"></image>
   <text class="chatRoom-name">{{chatRoomDetails.name}}</text>
 
   <!-- 未读红点：需要时显示，不需要时删除或用 wx:if 控制 -->
-  <view  wx:if="{{chatRoomDetails.unread}}" class="unread-dot">{{chatRoomDetails.unread}}</view>
+  <view  wx:if="{{unread}}" class="unread-dot">{{unread}}</view>
 </view>

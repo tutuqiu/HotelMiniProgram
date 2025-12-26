@@ -12,6 +12,7 @@ Page({
     socketStatus:'',
     chatRoomsDetails:[],
     unreadByChatRoom: {},
+    imgPrefix:'',
 
     socketOpen:false,
     socketMsgQueue: [], // 待发送的消息队列（连接未打开时缓存）
@@ -26,18 +27,28 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    // console.log('service onload unreadByChatRoom:',app.globalData.unreadByChatRoom)
     this.setData({
       isLogin:app.globalData.isLogin,
       socketStatus:app.globalData.socketStatus,
+      imgPrefix:app.globalData.imgPrefix,
+      unreadByChatRoom:app.globalData.unreadByChatRoom
     })
-    const unreadByChatRoom=app.globalData.unreadByChatRoom
+    // 订阅全局消息 收到消息时全局会调用这个函数 更新unread ->更新chat-card
+    app.onChatMessage((msg)=>{
+      console.log("update unread!:",app.globalData.unreadByChatRoom)
+      this.setData({
+        unreadByChatRoom:app.globalData.unreadByChatRoom
+      })
+
+      for(const chatRoom of this.data.chatRoomsDetails)
+        this.updateChatCard(chatRoom.id)
+    })
     const chatRoomsDetails=app.globalData.chatRoomsDetails.map(room=>{
-      const unreadMessage=unreadByChatRoom[room.id]
       if(room.type=="PREBOOK")
         room.name="客服"
       return{
         ...room,
-        unread:unreadMessage.length
       }
     })
 
@@ -47,12 +58,24 @@ Page({
     console.log("service data:",this.data)
   },
 
+  updateChatCard(RoomId){
+    const key=`#chatCard-${RoomId}`
+    const chatCard=this.selectComponent(key)
+    if(chatCard)
+      chatCard.updateUnread(app.globalData.unreadByChatRoom)
+  },
+
   goToChatRoom(e){
     const id=e.currentTarget.dataset.id
+    console.log("1111")
+    app.inChatRoom(id)
+    console.log("2222")
+
     wx.navigateTo({
       url: `/pages/chat-room/chat-room?id=${id}`,
     })
   },
+
 
 
 
@@ -216,15 +239,14 @@ Page({
     this.setData({
       isLogin:app.globalData.isLogin,
       socketStatus:app.globalData.socketStatus,
+      imgPrefix:app.globalData.imgPrefix,
+      unreadByChatRoom:app.globalData.unreadByChatRoom
     })
-    const unreadByChatRoom=app.globalData.unreadByChatRoom
     const chatRoomsDetails=app.globalData.chatRoomsDetails.map(room=>{
-      const unreadMessage=unreadByChatRoom[room.id]
       if(room.type=="PREBOOK")
         room.name="客服"
       return{
         ...room,
-        unread:unreadMessage.length
       }
     })
 

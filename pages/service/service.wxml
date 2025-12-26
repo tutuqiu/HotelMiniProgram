@@ -3,8 +3,11 @@
     <chat-card 
       wx:for="{{chatRoomsDetails}}"
       wx:key="id"
+      id="chatCard-{{item.id}}"
       data-id="{{item.id}}"
       chatRoomDetails="{{item}}"
+      imgPrefix="{{imgPrefix}}"
+      unreadByChatRoom="{{unreadByChatRoom}}"
       bindtap="goToChatRoom"
     ></chat-card>
   </view>
