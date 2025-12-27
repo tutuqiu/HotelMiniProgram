@@ -6,6 +6,7 @@ App({
     //websocket:
     wsUrl:"ws://xtuctuy.top:8080/ws",
     socketStatus: "DISCONNECTED", // DISCONNECTED | CONNECTING | CONNECTED
+    stompStatus:"DISCONNECTED",
     reconnectAttempts: 0,
     reconnectTimer: null,
 
@@ -14,6 +15,7 @@ App({
     unreadByChatRoom: {}, // { [Id]: number }
     currentChatRoomId:'',
     listeners:new Set(),
+    prebookRoomId:'',
 
     //app统一变量
     isLogin:false,
@@ -22,9 +24,9 @@ App({
     checkOutDate:'',
     minPrice:'',
     maxPrice:'',
-    headCount:'',
-    bedCount:'',
-    bedroomCount:'',
+    headCount:1,
+    bedCount:1,
+    bedroomCount:1,
     // living_diningCount:'',
     imgPrefix:'',
     
@@ -68,6 +70,7 @@ App({
       
     }
   },
+
   async getChatRoomsDetails(){
     const header={
       'Authorization':'Bearer ' + this.getToken()
@@ -79,9 +82,19 @@ App({
       if(res.statusCode==200){
         const rooms = res.data
         console.log('获取聊天列表成功:',rooms)
+        
+        const prebook = rooms.find(r => r.type === "PREBOOK")
+        this.globalData.prebookRoomId = prebook?.id ?? null
 
-        this.globalData.chatRoomsDetails = rooms
+        const rooms_after = rooms.map(room => ({
+          ...room,
+          name: room.type === "PREBOOK" ? "客服" : room.name
+        }))
+
+        this.globalData.chatRoomsDetails = rooms_after
+
         console.log("chatRoomsDetails:",this.globalData.chatRoomsDetails)
+        console.log("prebookRoomId:",this.globalData.prebookRoomId)
       }else{
         wx.showToast({
           title:res.data.message || `获取聊天列表失败（code:${res.statusCode}）`,
@@ -267,6 +280,16 @@ App({
     this.globalData.userInfo.collectedList=[]
   },
 
+  connectStomp(){
+    // 建立 STOMP 会话：发送 CONNECT 帧
+    console.log("connectStomp...")
+    this.stompSendFrame("CONNECT", {
+      "accept-version": "1.1,1.2",
+      "Authorization": "Bearer " + this.getToken()
+    })
+    this.globalData.stompStatus="CONNECTING"
+  },
+
   ensureSocketConnected() {
     if(!this.globalData.userInfo.token)
       return
@@ -284,8 +307,11 @@ App({
         "content-type": "application/json",
         "Authorization": "Bearer " + this.globalData.userInfo.token,
       },
+      //发起连接请求成功(!=连接成功 所以在这发送stomp错误)
       success: (res) => {
-        console.log('创建连接成功', res);
+        console.log('WS 已连接', res);
+        this.globalData.socketStatus = "CONNECTED";
+        this.globalData.reconnectAttempts = 0;
       },
       fail: (err) => {
         console.error("connectSocket 失败", err)
@@ -296,7 +322,7 @@ App({
     })
   },
 
-  //出错 / 关闭后的重连策略（指数退避）
+  //出错 / 关闭websocket后的重连策略（指数退避）
   scheduleReconnect() {
     if(!this.globalData.userInfo.token)
       return
@@ -318,21 +344,17 @@ App({
     console.log("init SocketListeners")
     // 连接成功
     wx.onSocketOpen(() => {
-      console.log("WS 已连接")
-      this.globalData.socketStatus = "CONNECTED";
-      this.globalData.reconnectAttempts = 0;
-
-      // 1) 建立 STOMP 会话：发送 CONNECT 帧
+      console.log("connectStomp...")
       this.stompSendFrame("CONNECT", {
         "accept-version": "1.1,1.2",
         "Authorization": "Bearer " + this.getToken()
       })
-      // 连接成功后可以做：补发队列 / 发送鉴权消息 / 订阅房间（如果你是STOMP则在这里做）
+      this.globalData.stompStatus="CONNECTING"
     })
 
     // 连接成功
     wx.onSocketMessage((res) => {
-      //如果是MESSAGE 会调用EMITMESSAGE
+      console.log("onSocketMessage")
       this.handleSocketMessage(res)
     })
 
@@ -385,6 +407,7 @@ App({
     // 2. 如果是 STOMP 的 CONNECTED：说明 STOMP 会话建立好了，此时订阅所有房间
     if (command === "CONNECTED") {
       console.log("STOMP 已连接:", headers)
+      this.globalData.stompStatus="CONNECTED"
       // 一次性订阅所有房间
       this.subscribeAllRooms()
       return
@@ -497,14 +520,13 @@ App({
     this.globalData.currentChatRoomId=chatRoomId
     this.globalData.unreadByChatRoom[chatRoomId]=0
 
-    
     this.calUnreadTotal()
 
-    //更新导航角标
-    this.refreshTabBarBadge()
+    // //更新导航角标
+    // this.refreshTabBarBadge()
 
-    //更新房间页面unread
-    this.emitMessage()
+    // //更新房间页面unread
+    // this.emitMessage()
   },
 
   // 页面调用 app.onChatMessage(listener) 来“订阅消息”

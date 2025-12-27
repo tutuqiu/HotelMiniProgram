@@ -4,6 +4,7 @@
   height: 80vh; /* 固定高度（如占屏幕70%），scroll-y必须 */
   width: 100%;
   overflow: hidden; /* 隐藏溢出 */
+  z-index: 200;
 }
 /* 日历容器纵向排列 */
 .calendar {

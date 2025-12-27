@@ -12,7 +12,13 @@ Component({
       type:String
     },
     unreadByChatRoom:{
-      type:Object
+      type:Object,
+      observer(newVal) {
+        this.setData({ 
+          unreadByChatRoom: newVal,
+          unread:newVal[this.properties.chatRoomDetails.id]
+        })
+      }
     }
   },
 
@@ -27,16 +33,17 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    updateUnread(unreadByChatRoom){
-      this.setData({
-        unreadByChatRoom:unreadByChatRoom,
-        unread:unreadByChatRoom[this.properties.chatRoomDetails.id]
-      })
-      console.log("update unread:",this.data.unread)
-    }
+    // updateUnread(unreadByChatRoom){
+    //   this.setData({
+    //     unreadByChatRoom:unreadByChatRoom,
+    //     unread:unreadByChatRoom[this.properties.chatRoomDetails.id]
+    //   })
+    //   console.log("update unread:",this.data.unread)
+    // }
   },
   attached(){
-    console.log(this.properties.unreadByChatRoom)
-    this.updateUnread(this.properties.unreadByChatRoom)
+    this.setData({ 
+      unread:this.properties.unreadByChatRoom[this.properties.chatRoomDetails.id]
+    })
   }
 })

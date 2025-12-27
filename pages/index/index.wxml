@@ -1,42 +1,60 @@
 <!--pages/index/index.wxml-->
-<!-- <text>pages/index/index.wxml</text>
- -->
-<scroll-view class="scrollarea" scroll-y type="list">
-  <view class="dateFilter-container" bindtap="onShowModal">
-    <view class="checkInDateFilter">
-      <text>入住:     </text>
-      <text>{{checkInDate}}</text>
-    </view>
-    <text>共{{dayCount}}晚</text>
-    <view class="checkOutDateFilter">
-      <text>离店:     </text>
-      <text>{{checkOutDate}}</text>
-    </view>
-    <date-selector 
-      wx:if="{{showDateSelector}}" 
-      defaultCheckInDate="{{checkInDate}}" 
-      defaultCheckOutDate="{{checkOutDate}}" 
-      needPrice="{{false}}" 
-      bind:confirm="confirmDate" 
-      bind:hide="onHideModal"></date-selector>
+<view class="page">
+  <view class="imgswiper-container">
+    <swiper 
+      class="imgswiper" 
+      indicator-dots="{{true}}" 
+      indicator-color="#fff" 
+      indicator-active-color="#ff7a45"
+      autoplay="{{true}}"
+      circular="{{true}}"
+    >
+      <!-- 循环渲染所有图片 -->
+      <swiper-item wx:for="{{images}}" wx:key="index">
+        <image 
+          class="swiper-img" 
+          src="{{item}}" 
+          mode="aspectFill"  
+        ></image>
+      </swiper-item>
+    </swiper>
   </view>
 
-  <view class="headCountFilter-container">
-    <text>入住人数</text>
-    <view class="headCount-btns">
-      <button class="btn-minus" disabled="{{headCount <= 1}}" bindtap="onMinus">-</button>
-      <text>{{headCount}}</text>
-      <button class="btn-add" bindtap="onAdd">+</button>
+  <scroll-view class="scrollarea" scroll-y type="list">
+    <view class="dateFilter-container" bindtap="onShowModal">
+      <view class="checkInDateFilter">
+        <text>入住:     </text>
+        <text>{{checkInDate}}</text>
+      </view>
+      <text>共{{dayCount}}晚</text>
+      <view class="checkOutDateFilter">
+        <text>离店:     </text>
+        <text>{{checkOutDate}}</text>
+      </view>
+      <date-selector 
+        wx:if="{{showDateSelector}}" 
+        defaultCheckInDate="{{checkInDate}}" 
+        defaultCheckOutDate="{{checkOutDate}}" 
+        needPrice="{{false}}" 
+        bind:confirm="confirmDate" 
+        bind:hide="onHideModal"></date-selector>
     </view>
-    
-  </view>
-  <view class="priceFilter-container">
-    <text>价格 ${{minPrice}}-{{maxPrice}}</text>
-    <view class="zy-slider">
-      <zy-slider minValue="{{minPrice}}" maxValue="{{maxPrice}}" min="0" max="1500" bind:lowValueChange="lowValueChangeAction"
-                bind:heighValueChange="highValueChangeAction" />
+    <view class="headCountFilter-container">
+      <text>入住人数</text>
+      <view class="headCount-btns">
+        <button class="btn-minus" disabled="{{headCount <= 1}}" bindtap="onMinus">-</button>
+        <text>{{headCount}}</text>
+        <button class="btn-add" bindtap="onAdd">+</button>
+      </view>
     </view>
-  </view>
-  <button bindtap="onSearch">查询</button>
+    <view class="priceFilter-container">
+      <text>价格 ${{minPrice}}-{{maxPrice}}</text>
+      <view class="zy-slider">
+        <zy-slider minValue="{{minPrice}}" maxValue="{{maxPrice}}" min="0" max="1500" bind:lowValueChange="lowValueChangeAction"
+                  bind:heighValueChange="highValueChangeAction" />
+      </view>
+    </view>
+    <button bindtap="onSearch">查询</button>
 
-</scroll-view>
+  </scroll-view>
+</view>

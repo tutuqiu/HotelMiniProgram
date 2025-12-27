@@ -1,29 +1,156 @@
-/* pages/index/index.wxss */
-.zy-slider {
-  margin: 60rpx;
-}
-.headCount-btns{
-  display:flex;
-  direction: row;
-}
-.checkInDateFilter{
-  display:flex;
-  direction: row;
-}
-.checkOutDateFilter{
-  display:flex;
-  direction: row;
-}
-/* 选中状态：绿色背景+白色文字 */
-.room-btn.selected {
-  background-color: #07c160;
-  color: #fff;
-  border: 1px solid #07c160;
+.imgswiper-container {
+  width: 100%;
 }
 
-/* 未选中状态：灰色边框+灰色文字 */
-.room-btn.unselected {
-  background-color: #fff;
-  color: #999;
-  border: 1px solid #eee;
+.imgswiper {
+  width: 100%;
+  /* 你要固定高度就写 height；否则 swiper 默认可能高度不如预期 */
+  height: 400rpx; /* 按需调整 */
 }
+
+swiper-item {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-img {
+  width: 100%;
+  height: 100%;
+  display: block;     /* 去掉 image 默认的 inline 空隙 */
+}
+/* 整体滚动区域 */
+.scrollarea {
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 24rpx;
+  background-color: #f5f5f5;
+  z-index:1;
+}
+
+/* 通用卡片容器 */
+.dateFilter-container,
+.headCountFilter-container,
+.priceFilter-container {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  box-sizing: border-box;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+/* ====== 日期筛选 ====== */
+.dateFilter-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 左右的“入住/离店”块 */
+.checkInDateFilter,
+.checkOutDateFilter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 26rpx;
+  color: #333;
+}
+
+/* “入住:”“离店:”标签与日期之间留点间距 */
+.checkInDateFilter text:first-child,
+.checkOutDateFilter text:first-child {
+  color: #888;
+  margin-right: 8rpx;
+}
+
+/* 中间“共X晚” */
+.dateFilter-container > text {
+  font-size: 24rpx;
+  color: #07c160;
+  margin: 0 16rpx;
+  white-space: nowrap;
+}
+
+/* ====== 入住人数 ====== */
+.headCountFilter-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headCountFilter-container > text {
+  font-size: 28rpx;
+  color: #333;
+}
+
+/* 人数按钮区域 */
+.headCount-btns {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 16rpx;
+}
+
+/* 加减按钮 */
+.headCount-btns button {
+  width: 60rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  padding: 0;
+
+  text-align: center;
+  font-size: 32rpx;
+
+  border-radius: 30rpx;
+  border: 1px solid #e5e5e5;
+  background-color: #f8f8f8;
+}
+
+/* 人数数字 */
+.headCount-btns text {
+  min-width: 40rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: #333;
+}
+
+/* 禁用态减号按钮 */
+.btn-minus[disabled] {
+  color: #ccc;
+  border-color: #eee;
+  background-color: #fafafa;
+}
+
+/* ====== 价格筛选 ====== */
+.priceFilter-container > text {
+  font-size: 28rpx;
+  color: #333;
+}
+
+/* 滑块区域 */
+.zy-slider {
+  margin-top: 32rpx;
+}
+
+/* ====== 查询按钮 ====== */
+button {
+  /* 只作用于本页的 button */
+  margin-top: 8rpx;
+  background-color: #07c160;
+  color: #333;
+}
+
+.scrollarea > button {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  margin-top: 8rpx;
+  padding: 0;
+
+  background-color: #07c160;
+  color: #ffffff;
+  font-size: 30rpx;
+  border-radius: 44rpx;
+  border: none;
+}
+

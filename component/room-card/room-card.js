@@ -4,7 +4,10 @@ import {calDayCount} from '../../utils/util'
 Component({
   properties:{
     roomData:{
-      type:Object
+      type:Object,
+      observer(newVal) {
+        this.setData({ roomData: newVal })
+      }
     },
     imgPrefix:{
       type:String

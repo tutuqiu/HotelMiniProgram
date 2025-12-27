@@ -11,6 +11,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    isLogin:'',
     id:'',
     today:'',
     imgPrefix:'',
@@ -57,10 +58,14 @@ Page({
     })
   },
   async onCollectTap(){
-    const token = wx.getStorageSync('token') || ""
-    if(!token){
+    //未登录
+    if(!app.globalData.isLogin){
       this.showLoginModal()
     }else{
+      //登录但过期 =>重新登录
+      if(app.needToRefresh())
+        await app.refresh()
+
       const id=this.data.roomDetail.id
       await updateCollectedList(id)
       this.setData({
@@ -147,6 +152,18 @@ Page({
       isCollected:status
     })
   },
+
+  onContact(){
+    if(!app.globalData.isLogin){
+      this.showLoginModal()
+    }else{
+      const id=app.globalData.prebookRoomId
+      app.inChatRoom(id)
+      wx.navigateTo({
+        url: `/pages/chat-room/chat-room?id=${id}`,
+      })
+    }
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -170,6 +187,7 @@ Page({
     
     //"OK":正常流程
     this.setData({
+      isLogin:app.globalData.isLogin,
       checkInDate:app.globalData.checkInDate,
       checkOutDate:app.globalData.checkOutDate,
       today:app.globalData.today,

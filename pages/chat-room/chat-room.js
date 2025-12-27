@@ -32,6 +32,8 @@ Page({
   onLoad(options) {
     const chatRoomId=options.id
     console.log("chatRoom id:",chatRoomId)
+    app.inChatRoom(chatRoomId)
+
     this.setData({
       chatRoomId:chatRoomId,
       id:app.globalData.userInfo.id,

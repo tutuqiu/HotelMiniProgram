@@ -1,6 +1,8 @@
 {
   "navigationBarTitleText":"房屋",
   "usingComponents": {
-    "room-card":"/component/room-card/room-card"
+    "room-card":"/component/room-card/room-card",
+    "zy-slider": "../../component/zyslider/zyslider",
+    "date-selector":"/component/date-selector/date-selector"
   }
 }

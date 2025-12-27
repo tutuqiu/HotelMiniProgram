@@ -1,16 +1,94 @@
 <!-- room-result页面：房间列表 -->
-<view class="hotel-result-page">
-  <!-- 循环渲染每个房间卡片 -->
-  <room-card 
-    wx:for="{{roomList}}" 
-    wx:key="id" 
-    id="roomCard-{{item.id}}"
-    roomData="{{item}}"
-    imgPrefix="{{imgPrefix}}"
-    collectedList="{{collectedList}}"
-    checkInDate="{{checkInDate}}"
-    checkOutDate="{{checkOutDate}}"
-    bind:collect="onRoomCollect"
-    bind:cardTap="onCardTap"
-    ></room-card>
+<view class="page">
+  <view class="header">
+    <view class="dateFilter-container" bindtap="onShowDateModal">
+      <view class="checkInDateFilter">
+        <text>入住:     </text>
+        <text>{{checkInDate}}</text>
+      </view>
+      <text>共{{dayCount}}晚</text>
+      <view class="checkOutDateFilter">
+        <text>离店:     </text>
+        <text>{{checkOutDate}}</text>
+      </view>
+      <date-selector 
+        wx:if="{{showDateSelector}}" 
+        defaultCheckInDate="{{checkInDate}}" 
+        defaultCheckOutDate="{{checkOutDate}}" 
+        needPrice="{{false}}" 
+        bind:confirm="confirmDate" 
+        bind:hide="onHideDateModal"></date-selector>
+    </view>
+    <view class="otherFilter">
+      <text bindtap="onToggleOtherFilterModal">其他筛选</text>
+      <view class="otherFilterModalMask" wx:if="{{showOtherFilter}}">
+        <view class="otherFilterModal">
+          <view class="headCountFilter-container">
+            <text>入住人数</text>
+            <view class="headCount-btns">
+              <button 
+                class="btn-minus"
+                data-id="hc-" 
+                disabled="{{headCount <= 1}}" 
+                bindtap="onMinus">-</button>
+              <text>{{headCount}}</text>
+              <button 
+                class="btn-add"
+                data-id="hc+" 
+                bindtap="onAdd">+</button>
+            </view>
+          </view>
+          <view class="bedCountFilter-container">
+            <text>床铺数</text>
+            <view class="bedCount-btns">
+              <button 
+                class="btn-minus" 
+                data-id="bc-"
+                disabled="{{bedCount <= 1}}" 
+                bindtap="onMinus">-</button>
+              <text>{{bedCount}}</text>
+              <button 
+                class="btn-add" 
+                data-id="bc+"
+                bindtap="onAdd">+</button>
+            </view>
+          </view>
+          <view class="bedroomCountFilter-container">
+            <text>居室数</text>
+            <view class="bedroomCount-btns">
+              <button 
+                class="btn-minus" 
+                data-id="brc-"
+                disabled="{{bedroomCount <= 1}}" 
+                bindtap="onMinus">-</button>
+              <text>{{bedroomCount}}</text>
+              <button 
+                class="btn-add"
+                data-id="brc+" 
+                bindtap="onAdd">+</button>
+            </view>
+          </view>
+          <button class="btn-confirm" bindtap="confirmOther">确认</button>
+        </view>
+      </view>
+    </view>
+  </view>
+  <!-- 列表滚动区：顶部留出 header 高度 -->
+
+  <scroll-view class="list-scroll" scroll-y>
+    <view class="roomResult-container">
+      <room-card
+        wx:for="{{roomList}}"
+        wx:key="id"
+        id="roomCard-{{item.id}}"
+        roomData="{{item}}"
+        imgPrefix="{{imgPrefix}}"
+        collectedList="{{collectedList}}"
+        checkInDate="{{checkInDate}}"
+        checkOutDate="{{checkOutDate}}"
+        bind:collect="onRoomCollect"
+        bind:cardTap="onCardTap"
+      ></room-card>
+    </view>
+  </scroll-view>
 </view>

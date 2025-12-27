@@ -1,237 +1,221 @@
-/* pages/room_result/room_result.wxss */
-/* pages/room_detail/room_detail.wxss */
-.detail-container {
-  width: 100%;
-  background: #fff;
-  font-size: 28rpx;
-}
-
-/* 多图滑动区域样式 */
-.swiper-wrap {
-  position: relative;
-  width: 100%;
-}
-.room-swiper {
-  width: 100%;
-  height: 1000rpx; /* 滑动区域高度 */
-}
-.swiper-img {
-  width: 100%;
-  height: 100%;
-}
-
-/* 收藏按钮（悬浮在swiper上，位置不变） */
-.collect-btn {
-  position: absolute;
-  top: 24rpx;
-  right: 24rpx;
-  width: 60rpx;
-  height: 60rpx;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 50%;
+/* ===== 其他筛选入口（像 index 的卡片/按钮风格） ===== */
+.otherFilter{
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 99;
-}
-.collect-btn image {
-  width: 30rpx;
-  height: 30rpx;
-}
 
-/* 图片分类标签（位置不变） */
-.img-tab-wrap {
-  position: absolute;
-  bottom: 20rpx;
-  left: 20rpx;
-  display: flex;
-  gap: 12rpx;
-  z-index: 99;
-}
-.img-tab {
-  padding: 8rpx 16rpx;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 20rpx;
-  font-size: 24rpx;
-}
-.img-tab.active {
-  background: #fff;
-  font-weight: bold;
-}
-
-/* 标题+标签区域（不变） */
-.title-wrap {
-  padding: 20rpx;
-}
-.score-tag {
-  display: inline-block;
-  padding: 4rpx 12rpx;
-  background: #f0f9eb;
-  color: #52c41a;
-  border-radius: 8rpx;
-  font-size: 24rpx;
-  margin-bottom: 12rpx;
-}
-.room-title {
-  font-size: 34rpx;
-  font-weight: bold;
-  margin-bottom: 16rpx;
-}
-.tags-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12rpx;
-}
-.tag-item {
-  padding: 6rpx 16rpx;
-  background: #f5f5f5;
-  border-radius: 8rpx;
-  font-size: 24rpx;
-}
-
-/* 地址区域（不变，新增address字段后样式无需调整） */
-.address-wrap {
-  padding: 0 20rpx 20rpx;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12rpx;
-  border-bottom: 1px solid #f5f5f5;
-}
-.address-text {
-  width: 100%;
-  font-size: 28rpx;
-}
-.distance-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8rpx;
-  color: #999;
-  font-size: 24rpx;
-}
-.map-btn {
-  margin-left: auto;
-  padding: 8rpx 16rpx;
-  background: #f5f5f5;
-  border-radius: 8rpx;
-  font-size: 24rpx;
-}
-
-/* 日期区域（不变） */
-.date-wrap {
-  padding: 20rpx;
-  display: flex;
-  align-items: center;
-  gap: 16rpx;
-  border-bottom: 1px solid #f5f5f5;
-}
-.stay-night {
-  padding: 2rpx 12rpx;
-  background: #f5f5f5;
+  height: 72rpx;
+  padding: 0 22rpx;
   border-radius: 16rpx;
-  font-size: 24rpx;
-}
-.low-price {
-  color: #ff4d4f;
-  font-size: 24rpx;
-  margin-left: 8rpx;
-}
-.calendar-btn {
-  margin-left: auto;
-  background: transparent;
-  font-size: 28rpx;
-  color: #1890ff;
+
+  background-color: #ffffff;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+  border: 1px solid #eee;
+
+  box-sizing: border-box;
 }
 
-/* 房型信息区域（不变） */
-.room-type-wrap {
-  padding: 20rpx;
+.otherFilter text{
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 600;
+}
+
+/* ===== mask（遮罩层） ===== */
+.otherFilterModalMask{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+
+  z-index: 999;
+  background: rgba(0,0,0,0.28);
+}
+
+/* ===== 面板（下拉弹层主体） ===== */
+.otherFilterModal{
+  position: absolute;
+  left: 24rpx;
+  right: 24rpx;
+
+  /* 从 header 下面开始：按你 header 实际高度调整 */
+  top: 200rpx;
+
+  background-color: #f5f5f5; /* 和 index 的滚动区域一致 */
+  border-radius: 16rpx;
+  padding: 24rpx;
+  box-sizing: border-box;
+
+  /* 阴影更接近“浮层” */
+  box-shadow: 0 10rpx 30rpx rgba(0,0,0,0.12);
+
+  /* 内容多时可滚动 */
+  max-height: calc(100vh - 260rpx);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ===== 面板内部每一行：复用 index 的卡片风格 ===== */
+.otherFilterModal .headCountFilter-container,
+.otherFilterModal .bedCountFilter-container,
+.otherFilterModal .bedroomCountFilter-container{
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  box-sizing: border-box;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+
   display: flex;
   align-items: center;
-  gap: 20rpx;
-  border-bottom: 1px solid #f5f5f5;
+  justify-content: space-between;
 }
-.type-img {
-  width: 160rpx;
-  height: 120rpx;
-  border-radius: 8rpx;
+
+.otherFilterModal .bedroomCountFilter-container{
+  margin-bottom: 0;
 }
-.type-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8rpx;
-}
-.type-title {
-  font-weight: bold;
+
+/* 左侧标题 */
+.otherFilterModal .headCountFilter-container > text,
+.otherFilterModal .bedCountFilter-container > text,
+.otherFilterModal .bedroomCountFilter-container > text{
   font-size: 28rpx;
+  color: #333;
 }
-.type-desc {
-  font-size: 24rpx;
-  color: #666;
+
+/* ===== 右侧步进器：三行统一一个风格（和 index 一致） ===== */
+.otherFilterModal .headCount-btns,
+.otherFilterModal .bedCount-btns,
+.otherFilterModal .bedroomCount-btns{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 16rpx;
 }
-.cancel-tip {
-  font-size: 22rpx;
-  color: #999;
-}
-.price-wrap {
-  text-align: right;
-}
-.price-desc {
-  font-size: 24rpx;
-  color: #999;
-}
-.price-night {
-  font-size: 32rpx;
-  color: #ff4d4f;
-  font-weight: bold;
-}
-.discount-tip {
-  font-size: 22rpx;
-  color: #ff4d4f;
-}
-.book-btn {
+
+/* 按钮样式：沿用 index 的圆角灰底按钮 */
+.otherFilterModal .btn-minus,
+.otherFilterModal .btn-add{
   width: 60rpx;
   height: 60rpx;
-  background: #ff7a45;
-  color: #fff;
-  border-radius: 8rpx;
-  font-size: 28rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  line-height: 60rpx;
+  padding: 0;
+
+  text-align: center;
+  font-size: 32rpx;
+
+  border-radius: 30rpx;
+  border: 1px solid #e5e5e5;
+  background-color: #f8f8f8;
+
+  color: #333;
 }
 
-/* 底部预订栏（不变） */
-.bottom-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
+/* 数字 */
+.otherFilterModal .headCount-btns text,
+.otherFilterModal .bedCount-btns text,
+.otherFilterModal .bedroomCount-btns text{
+  min-width: 40rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: #333;
+}
+
+/* 禁用态 */
+.otherFilterModal .btn-minus[disabled]{
+  color: #ccc;
+  border-color: #eee;
+  background-color: #fafafa;
+}
+
+.btn-confirm{
   width: 100%;
-  padding: 16rpx 20rpx;
-  background: #fff;
+  height: 88rpx;
+  line-height: 88rpx;
+  margin-top: 24rpx;
+  padding: 0;
+
+  background-color: #07c160;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 600;
+
+  border-radius: 44rpx;
+  border: none;
+}
+
+.page{
+  position: relative;
+  height: 100vh;
+  background: #f5f5f5;
+}
+.header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+
+  /* display: flex; */
+
+  padding: 18rpx 20rpx 14rpx;
+  background: #ffffff;
+}
+/* 通用卡片容器 */
+.dateFilter-container,
+.headCountFilter-container,
+.priceFilter-container {
+  background-color: #eee;
+  /* border-radius: 16rpx; */
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  box-sizing: border-box;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+/* ====== 日期筛选 ====== */
+.dateFilter-container {
   display: flex;
   align-items: center;
-  gap: 20rpx;
-  box-shadow: 0 -2rpx 10rpx rgba(0,0,0,0.1);
+  justify-content: space-between;
 }
-.stay-date {
+
+/* 左右的“入住/离店”块 */
+.checkInDateFilter,
+.checkOutDateFilter {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  font-size: 26rpx;
+  color: #333;
+}
+
+/* “入住:”“离店:”标签与日期之间留点间距 */
+.checkInDateFilter text:first-child,
+.checkOutDateFilter text:first-child {
+  color: #888;
+  margin-right: 8rpx;
+}
+
+/* 中间“共X晚” */
+.dateFilter-container > text {
   font-size: 24rpx;
-  color: #666;
+  color: #07c160;
+  margin: 0 16rpx;
+  white-space: nowrap;
 }
-.book-btn-large {
-  flex: 1;
-  height: 80rpx;
-  background: #ff7a45;
-  color: #fff;
-  border-radius: 12rpx;
-  font-size: 32rpx;
-  font-weight: bold;
+
+/* 列表滚动区：必须给顶部留出 header 的高度 */
+.list-scroll{
+  height: 100vh;
+  box-sizing: border-box;
+  padding-top: 200rpx;  /* 关键：按你实际 header 高度微调 */
 }
-.total-price {
-  font-size: 24rpx;
-  font-weight: normal;
-  margin-left: 8rpx;
+
+/* 原来的列表容器 */
+.roomResult-container{
+  padding: 0 20rpx 24rpx;
+  box-sizing: border-box;
 }
+

@@ -1,6 +1,8 @@
 // pages/room_result/room_result.js
 import {HTTPRequest} from '../../utils/request.js';
 import {updateCollectedList} from '../../services/collected'
+import {calDayCount} from '../../utils/util'
+
 const app=getApp()
 
 Page({
@@ -11,12 +13,19 @@ Page({
   data: {
     roomList:[],
     collectedList:[],
+
     today:'',
     checkInDate:'',
     checkOutDate:'',
+    dayCount:'',
+    showDateSelector:false,
+
+    showOtherFilter:false,
     minPrice:'',
     maxPrice:'',
     headCount:'',
+    bedCount:1,
+    bedroomCount:1,
     imgPrefix:''
   },
 
@@ -30,12 +39,123 @@ Page({
       minPrice:app.globalData.minPrice,
       maxPrice:app.globalData.maxPrice,
       headCount:app.globalData.headCount,
+      bedCount:app.globalData.bedCount,
+      bedroomCount:app.globalData.bedroomCount,
 
       today:app.globalData.today,
       imgPrefix:app.globalData.imgPrefix,
       collectedList:app.globalData.userInfo.collectedList,
     })
+    this.setDayCount()
     this.onSearch()
+  },
+
+  async confirmDate(e){
+    const {checkInDate,checkOutDate}=e.detail
+    console.log('index checkInDate:',checkInDate)
+    console.log('index checkOutDate:',checkOutDate)
+
+    this.setData({
+      checkInDate:checkInDate,
+      checkOutDate:checkOutDate
+    })
+    app.globalData.checkInDate=checkInDate
+    app.globalData.checkOutDate=checkOutDate
+
+    this.setDayCount()
+
+    this.onHideDateModal()
+
+    this.onSearch()
+  },
+  filterOther(){
+    const roomList=this.data.roomList
+    const newRoomList=roomList.filter(room=>
+      room.capacity>=this.data.headCount&&
+      room.totalBed>=this.data.bedCount&&
+      room.bedroomCount>=this.data.bedroomCount
+    )
+    this.setData({
+      roomList:newRoomList
+    })
+    console.log("筛选后结果：",this.data.roomList)
+  },
+  confirmOther(){
+    this.onToggleOtherFilterModal()
+    this.filterOther()
+  },
+
+  setDayCount(){
+    this.setData({
+      dayCount:calDayCount(this.data.checkInDate,this.data.checkOutDate)
+    })
+    console.log('dayCount:',this.data.dayCount)
+  },
+  
+  onToggleOtherFilterModal(){
+    console.log("toggle")
+    this.setData({
+      showOtherFilter:!this.data.showOtherFilter
+    })
+  },
+  
+  onHideDateModal(){
+    this.setData({
+      showDateSelector:false
+    })
+  },
+  
+  onShowDateModal(){
+    this.setData({
+      showDateSelector:true
+    })
+  },
+
+  onMinus(e){
+    const id = e.currentTarget.dataset.id
+    if(id=="hc-"){
+      console.log("hc-")
+      this.setData({
+        headCount:this.data.headCount-1
+      })
+      app.globalData.headCount=this.data.headCount
+    }
+    else if(id=="bc-"){
+      console.log("bc-")
+      this.setData({
+        bedCount:this.data.bedCount-1
+      })
+      app.globalData.bedCount=this.data.bedCount
+    }else if(id=="brc-"){
+      console.log("brc-")
+      this.setData({
+        bedroomCount:this.data.bedroomCount-1
+      })
+      app.globalData.bedroomCount=this.data.bedroomCount
+    }
+  },
+  onAdd(e){
+    const id = e.currentTarget.dataset.id
+    if(id=="hc+"){
+      console.log("hc+")
+      this.setData({
+        headCount:this.data.headCount+1
+      })
+      app.globalData.headCount=this.data.headCount
+    }
+    else if(id=="bc+"){
+      console.log("bc+")
+      this.setData({
+        bedCount:this.data.bedCount+1
+      })
+      app.globalData.bedCount=this.data.bedCount
+    }else if(id=="brc+"){
+      console.log("brc+")
+      this.setData({
+        bedroomCount:this.data.bedroomCount+1
+      })
+      app.globalData.bedroomCount=this.data.bedroomCount
+    }
   },
 
   async onSearch(){
@@ -55,10 +175,12 @@ Page({
       const res=await HTTPRequest('GET','/rooms/search',data,header)
 
       if(res.statusCode==200){
-        console.log('成功获取房间列表')
+        console.log('成功获取房间列表:',res.data)
         this.setData({
           roomList:res.data
         })
+
+        this.filterOther()
       }else{
         wx.showToast({
           title:res.data.message || `搜索失败（code:${res.statusCode}）`,
@@ -165,8 +287,6 @@ Page({
    */
   // 页面卸载时清理
   onUnload() {
-    const { cacheKey } = this.options;
-    cacheKey && wx.removeStorageSync(cacheKey);
   },
 
   /**

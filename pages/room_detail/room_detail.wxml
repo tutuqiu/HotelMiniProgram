@@ -50,15 +50,6 @@
     </view>
     <!-- <button class="map-btn">地图</button> -->
   </view>
-
-  <!-- 日期选择区域（不变） -->
-  <!-- <view class="date-wrap">
-    <text>12月16日 后天</text>
-    <text class="stay-night">2晚</text>
-    <text>12月18日 周四</text>
-    <button class="calendar-btn">日历</button>
-  </view> -->
-
   <view class="description-container">
     <text>房源介绍</text>
     <text>{{roomDetail.description}}</text>
@@ -76,16 +67,14 @@
       </view>
       <view class="cancel-tip">12月15日14点前可免费取消</view>
     </view>
-    <view class="price-wrap">
-      <view class="price-desc">2晚共¥{{roomDetail.price*2}}</view>
-      <view class="price-night">¥{{roomDetail.price}}/晚</view>
-      <view class="discount-tip">已优惠50</view>
-    </view>
-    <button class="book-btn">订</button>
   </view> -->
 
-  <!-- 底部预订栏（不变） -->
+  <!-- 底部预订栏 -->
   <view class="bottom-bar">
+    <view class="contact-container" bindtap="onContact">
+      <image src="http://cdn.xtuctuy.top/images/chat-prebook.png"></image>
+      <text>联系客服</text>
+    </view>
     <view class="stay-date" bindtap="onShowModal">
       <text>住 {{checkInDate}}</text>
       <text>离 {{checkOutDate}}</text>

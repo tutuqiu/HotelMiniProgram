@@ -13,19 +13,19 @@
   </view>
   <view class="fixedService-container">
     <view class="delivery">
-      <image></image>
+      <image src="http://cdn.xtuctuy.top/images/delivery.png"></image>
       <text>客房送物</text>
     </view>
     <view class="extend_stay">
-      <image></image>
+      <image src="http://cdn.xtuctuy.top/images/extend-stay.png"></image>
       <text>续住</text>
     </view>
     <view class="cleaning">
-      <image></image>
+      <image src="http://cdn.xtuctuy.top/images/cleaning.png"></image>
       <text>客房清洁</text>
     </view>
     <view class="laundry">
-      <image></image>
+      <image src="http://cdn.xtuctuy.top/images/laundry.png"></image>
       <text>洗衣清洁</text>
     </view>
   </view>

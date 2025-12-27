@@ -1,5 +1,7 @@
 // pages/index/index.js
 import {HTTPRequest} from '../../utils/request.js';
+import {calDayCount} from '../../utils/util'
+
 const app=getApp()
 
 Page({
@@ -20,6 +22,8 @@ Page({
     headCount:'',
     minPrice:'',
     maxPrice:'',
+    
+    images:["/images/index-background.png","/images/index-background.png","/images/index-background.png"]
   },
 
   async onSearch(){
@@ -57,22 +61,10 @@ Page({
     })
   },
   setDayCount(){
-    const start=new Date(this.data.checkInDate)
-    const end =new Date(this.data.checkOutDate)
-
-    start.setHours(0,0,0,0)
-    end.setHours(0,0,0,0)
-
-    const msCount=end.getTime()-start.getTime()
-    const dayCount=Math.floor(msCount/(24*60*60*1000))
-
     this.setData({
-      dayCount:dayCount
+      dayCount:calDayCount(this.data.checkInDate,this.data.checkOutDate)
     })
-
     console.log('dayCount:',this.data.dayCount)
-
-    
   },
 
   onHideModal(){
@@ -96,9 +88,6 @@ Page({
       checkInDate:checkInDate,
       checkOutDate:checkOutDate
     })
-    // app.globalData.checkInDate=checkInDate
-    // app.globalData.checkOutDate=checkOutDate
-    
     this.setDayCount()
 
     this.onHideModal()
