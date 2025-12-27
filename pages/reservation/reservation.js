@@ -125,7 +125,7 @@ Page({
       checkOutDate:this.data.checkOutDate
     }
     const header={
-      'Authorization':'Bearer ' + app.globalData.userInfo.token,
+      'Authorization':'Bearer ' + app.getToken(),
       'Idempotency-Key':this.data.idempotencyKey
     }
     try{

@@ -12,21 +12,20 @@
     ></chat-card>
   </view>
   <view class="fixedService-container">
-    <view class="delivery">
-      <image src="http://cdn.xtuctuy.top/images/delivery.png"></image>
-      <text>客房送物</text>
-    </view>
-    <view class="extend_stay">
-      <image src="http://cdn.xtuctuy.top/images/extend-stay.png"></image>
-      <text>续住</text>
-    </view>
-    <view class="cleaning">
-      <image src="http://cdn.xtuctuy.top/images/cleaning.png"></image>
-      <text>客房清洁</text>
-    </view>
-    <view class="laundry">
-      <image src="http://cdn.xtuctuy.top/images/laundry.png"></image>
-      <text>洗衣清洁</text>
+    <view 
+      class="fixedService-item"
+      wx:for="{{fixedServiceList}}"
+      wx:key="type"
+      data-type="{{item.type}}"
+      bindtap="showServiceModal"
+    >
+      <image 
+        class="fixedService-icon"
+        src="{{item.icon}}"
+        ></image>
+      <text
+        class="fixedService-text"
+      >{{item.label}}</text>
     </view>
   </view>
 </view>
@@ -37,4 +36,65 @@
 <view wx:else class="unconnect-container">
   <image src="http://cdn.xtuctuy.top/images/DISCONNECTED.png" class="disconnected-img"></image>
   <text>连接已断开 请尝试重新连接</text>
+</view>
+<view class="serviceModalMask" wx:if="{{isShowServiceModal}}" 
+  bindtap="hideServiceModal">
+  <view class="serviceModal" catchtap="noop">
+    <text>{{serviceName}}</text>
+    <view wx:if="{{serviceType!='EXTEND_STAY'}}">
+      <text>内容</text>
+      <input
+          class="content-input"
+          value="{{content}}"
+          data-type="content"
+          bindinput="onInputChange"
+        />
+      <text>备注</text>
+      <input
+          class="note-input"
+          value="{{note}}"
+          data-type="note"
+          bindinput="onInputChange"
+        />
+    </view>
+    <view wx:else>
+      <view class="extendDay-container">
+        <text class="extend-label">续住天数</text>
+
+        <!-- 步进器一行 -->
+        <view class="extend-stepper">
+          <button 
+            class="extend-btn"
+            bindtap="onMinus"
+            disabled="{{extendDay<=1}}"
+          >-</button>
+
+          <input
+            type="number"
+            class="extendDay-input"
+            value="{{extendDay}}"
+            data-type="extendDay"
+            bindinput="onInputChange"
+          />
+
+          <button 
+            class="extend-btn"
+            bindtap="onAdd"
+          >+</button>
+        </view>
+      </view>
+
+      <text>备注</text>
+      <input
+        class="note-input"
+        value="{{note}}"
+        data-type="note"
+        bindinput="onInputChange"
+      />
+    </view>
+    <button 
+      disabled="{{serviceType!='EXTEND_STAY'&&!content}}"
+      bindtap="sendServiceRequest"
+      >提交</button>
+  </view>
 </view>

@@ -36,7 +36,8 @@ Component({
   methods: {
     noop(){},
     onConsult(){
-
+      console.log("order-card onConsult")
+      this.triggerEvent('contact')
     },
     onCancel(){
       console.log("order-card onCancel")
@@ -48,9 +49,8 @@ Component({
       })
     },
     onReserveAgain(){
-      wx.navigateTo({
-        url:`/pages/room_detail/room_detail?id=${this.properties.orderDetail.roomID}`
-      })
+      console.log("order-card onReserveAgain")
+      this.triggerEvent('reserve')
     },
     updateStatus(status){
       console.log("updateStatus:",status)

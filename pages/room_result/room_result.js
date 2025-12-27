@@ -68,6 +68,7 @@ Page({
 
     this.onSearch()
   },
+
   filterOther(){
     const roomList=this.data.roomList
     const newRoomList=roomList.filter(room=>
@@ -80,6 +81,7 @@ Page({
     })
     console.log("筛选后结果：",this.data.roomList)
   },
+
   confirmOther(){
     this.onToggleOtherFilterModal()
     this.filterOther()
@@ -134,6 +136,7 @@ Page({
       app.globalData.bedroomCount=this.data.bedroomCount
     }
   },
+  
   onAdd(e){
     const id = e.currentTarget.dataset.id
     if(id=="hc+"){

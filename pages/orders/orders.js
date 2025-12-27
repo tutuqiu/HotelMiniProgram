@@ -14,8 +14,21 @@ Page({
     isEmpty:true
   },
 
-  
-  gotoDetail(e){
+  goToRoomDetail(e){
+    const id = e.currentTarget.dataset.id
+    //TODO FIND ORDER
+    const orders=this.data.orderList
+    const orderDetail=orders.filter((order)=>order.id==id)[0]
+    console.log("order:",orderDetail)
+    const roomId=orderDetail.roomId
+    console.log("roomId:",roomId)
+
+    console.log("gotoRoomDetail")
+    wx.navigateTo({
+      url: `/pages/room_detail/room_detail?id=${roomId}`
+    });
+  },
+  goToOrderDetail(e){
     const id = e.currentTarget.dataset.id
     //TODO FIND ORDER
     const orders=this.data.orderList
@@ -24,7 +37,7 @@ Page({
     const orderDetail=orders.filter((order)=>order.id==id)[0]
     console.log("order:",orderDetail)
 
-    console.log("gotoDetail")
+    console.log("gotoOrderDetail")
     wx.navigateTo({
       url: '/pages/order-detail/order-detail',
       success:(res)=>{
@@ -90,7 +103,17 @@ Page({
     })
   },
 
+  onContact(){
+    const id=app.globalData.prebookRoomId
+    wx.navigateTo({
+      url: `/pages/chat-room/chat-room?id=${id}`,
+    })
+  },
+
   async searchOrders(){
+    if(app.needToRefresh())
+      await app.refresh()
+
     const status=this.data.activeTab
     let data={"status": []}
     if(status=="CANCELLED"){

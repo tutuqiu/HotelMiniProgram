@@ -100,6 +100,7 @@ page {
 }
 
 /* 我收藏的模块样式 */
+.guestService-container,
 .collect-container {
   background-color: #fff;
   border-radius: 16rpx;
@@ -110,14 +111,16 @@ page {
   align-items: center; /* 图片和文字垂直居中 */
 }
 
+.guestService-container image,
 .collect-container image {
   width: 48rpx; /* 图标尺寸和订单状态图标一致 */
   height: 48rpx;
   margin-right: 15rpx; /* 图片和文字的间距 */
 }
 
+.guestService-container text,
 .collect-container text {
-  font-size: 26rpx; 
+  font-size: 30rpx; 
   color: #333;
   font-weight: 500;
 }

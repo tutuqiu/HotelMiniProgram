@@ -1,0 +1,131 @@
+/* component/order-card/order-card.wxss */
+/* component/order-card/order-card.wxss */
+.card{
+  background:#fff;
+  border-radius:16rpx;
+  padding:26rpx;
+  margin-bottom:22rpx;
+  box-shadow: 0 8rpx 22rpx rgba(0,0,0,0.06);
+}
+
+/* 顶部：图标 | 状态 | 删除 */
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:14rpx;
+}
+
+.icon{
+  width:44rpx;
+  height:44rpx;
+  border-radius:12rpx;
+  background:#efe9ff;
+}
+
+.status{
+  margin-left:auto;
+  font-size:26rpx;
+  color:#666;
+  line-height:44rpx;
+}
+
+.delete{
+  width:34rpx;
+  height:34rpx;
+  margin-left:16rpx;
+  opacity:0.6;
+}
+
+/* 内容区：标题/时间/倒计时+价格 */
+.content{
+  display:flex;
+  flex-direction:column;
+  gap:10rpx;
+}
+
+.name{
+  font-size:34rpx;
+  font-weight:700;
+  color:#111;
+  line-height:1.25;
+}
+
+.time{
+  font-size:26rpx;
+  color:#666;
+  line-height:1.35;
+}
+
+/* 倒计时与价格一行：左倒计时，右价格 */
+.price-container{
+  margin-top:6rpx;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+/* “剩余支付时间” */
+.waiting-pay{
+  font-size:26rpx;
+  color:#ff5a4e;
+  font-weight:600;
+  line-height:1.35;
+}
+
+/* 价格（更大更醒目） */
+.price{
+  font-size:44rpx;
+  font-weight:800;
+  color:#ff5a4e;
+  line-height:1;
+}
+
+/* 底部按钮区：占满整行，按钮整体靠右，间距固定 */
+.bottom{
+  margin-top:20rpx;
+  width: 100%;               /* 关键：让容器占满整行 */
+  display:flex;
+  justify-content:flex-end;  /* 整体靠右 */
+  align-items:center;
+  gap: 18rpx;                /* 间距固定 */
+  flex-wrap: nowrap;         /* 一行显示 */
+}
+
+/* 按钮固定宽度：几个按钮都一样大，看起来更统一 */
+.bottom button{
+  width: 180rpx;             /* 可调：160/180/200 */
+  height:72rpx;
+  line-height:72rpx;
+  padding:0;
+  border-radius:14rpx;
+  font-size:28rpx;
+  box-sizing:border-box;
+}
+
+/* 去掉小程序默认边框 */
+.bottom button::after{
+  border: none;
+}
+
+/* 灰色线框按钮 */
+.btn-consult,
+.btn-cancel{
+  background:#fff;
+  color:#444;
+  border:2rpx solid #dcdcdc;
+}
+
+/* 红色主按钮 */
+.btn-pay{
+  background:#ff5a4e;
+  color:#fff;
+  border:none;
+}
+
+/* 绿色线框：再次预定 */
+.btn-reserverAgain{
+  background:#fff;
+  color:#20b26b;
+  border:2rpx solid #20b26b;
+}

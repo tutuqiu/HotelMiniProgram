@@ -40,4 +40,8 @@
     <image src="http://cdn.xtuctuy.top/images/collect-b.png"></image>
     <text>我收藏的</text>
   </view>
+  <view class="guestService-container" bindtap="goToGuestServices">
+    <image src="http://cdn.xtuctuy.top/images/guestService.png"></image>
+    <text>客房服务</text>
+  </view>
 </view>

@@ -26,5 +26,19 @@
   </view>
 </scroll-view>
 <view class="bottom">
-  <button class="btn-reserveAgain">再次预定</button>
+  <button 
+    class="btn-cancel" 
+    wx:if="{{orderDetail.status=='HOLD'}}"
+    bindtap="onCancel"
+    >取消订单</button>
+  <button 
+    class="btn-pay" 
+    wx:if="{{orderDetail.status=='HOLD'}}"
+    bindtap="goToPay"
+    >去支付</button>
+  <button 
+    class="btn-reserveAgain" 
+    wx:if="{{orderDetail.status!='HOLD'}}"
+    bindtap="goToRoomDetail"
+    >再次预定</button>
 </view>

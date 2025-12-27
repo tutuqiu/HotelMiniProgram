@@ -7,7 +7,7 @@ App({
     wsUrl:"ws://xtuctuy.top:8080/ws",
     socketStatus: "DISCONNECTED", // DISCONNECTED | CONNECTING | CONNECTED
     stompStatus:"DISCONNECTED",
-    reconnectAttempts: 0,
+    reconnectAttempts: 1,
     reconnectTimer: null,
 
     chatRoomsDetails:[],
@@ -280,8 +280,11 @@ App({
     this.globalData.userInfo.collectedList=[]
   },
 
-  connectStomp(){
+  async connectStomp(){
     // 建立 STOMP 会话：发送 CONNECT 帧
+    if(this.needToRefresh())
+      await this.refresh()
+
     console.log("connectStomp...")
     this.stompSendFrame("CONNECT", {
       "accept-version": "1.1,1.2",
@@ -311,7 +314,6 @@ App({
       success: (res) => {
         console.log('WS 已连接', res);
         this.globalData.socketStatus = "CONNECTED";
-        this.globalData.reconnectAttempts = 0;
       },
       fail: (err) => {
         console.error("connectSocket 失败", err)
@@ -330,7 +332,8 @@ App({
     if (this.globalData.reconnectTimer) 
       return
 
-    const n = ++this.globalData.reconnectAttempts
+    const n = this.globalData.reconnectAttempts++
+    // this.globalData.reconnectAttempts++
     const delay = Math.min(1000 * Math.pow(2, n - 1), 30000) // 1s,2s,4s,...最多30s
     console.log(`准备在 ${delay} ms 后重连，第 ${n} 次`)
     // 更新定时器ID;经过delay ms后 执行ensureSocketConnected() 并清除定时器ID
@@ -344,6 +347,7 @@ App({
     console.log("init SocketListeners")
     // 连接成功
     wx.onSocketOpen(() => {
+      this.globalData.reconnectAttempts = 0;
       console.log("connectStomp...")
       this.stompSendFrame("CONNECT", {
         "accept-version": "1.1,1.2",
@@ -358,7 +362,7 @@ App({
       this.handleSocketMessage(res)
     })
 
-    wx.onSocketError(() => {
+    wx.onSocketError((err) => {
       console.error("WS 出错", err)
       this.globalData.socketStatus = 'DISCONNECTED'
       this.scheduleReconnect()
@@ -521,12 +525,6 @@ App({
     this.globalData.unreadByChatRoom[chatRoomId]=0
 
     this.calUnreadTotal()
-
-    // //更新导航角标
-    // this.refreshTabBarBadge()
-
-    // //更新房间页面unread
-    // this.emitMessage()
   },
 
   // 页面调用 app.onChatMessage(listener) 来“订阅消息”

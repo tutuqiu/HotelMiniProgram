@@ -1,0 +1,18 @@
+<!--component/service-card/service-card.wxml-->
+<view class="card">
+  <view class="header">
+    <image src="{{icon}}" class="icon"></image>
+    <text class="status">{{statusText}} |</text>
+    <image src="http://cdn.xtuctuy.top/images/delete.png" class="delete"></image>
+  </view>
+  <view class="content">
+    <text class="name">{{typeText}}</text>
+    <text class="time">1111</text>
+  </view>
+  <view class="bottom" catchtap="noop">
+    <button 
+      wx:if="{{serviceDetail.status=="PENDING"||serviceDetail.status=="IN_PROGRESS"}}" 
+      class="btn-cancel" 
+      bindtap="onCancel">取消</button>
+  </view>
+</view>

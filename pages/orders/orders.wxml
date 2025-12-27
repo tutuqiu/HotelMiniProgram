@@ -18,8 +18,10 @@
       id="order-{{item.id}}"
       data-id="{{item.id}}"
       orderDetail="{{item}}"
-      bindtap="gotoDetail"
+      bindtap="goToOrderDetail"
       bind:cancel="onCancel"
+      bind:contact="onContact"
+      bind:reserve="goToRoomDetail"
     ></order-card>
     <view wx:if="{{isEmpty}}" class="container-noOrder">
       <image src="http://cdn.xtuctuy.top/images/noOrder.png" class="img-noOrder"></image>

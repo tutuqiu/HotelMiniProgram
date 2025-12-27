@@ -43,7 +43,7 @@ Page({
       })
     }
 
-    //第一种跳转情况：从支付页面跳转 则用id查
+    //第一种跳转情况：从支付页面、续住跳转 则用id查
     if(id){
       console.log('order-detail id:',id)
       await this.searchOrderById(id)
@@ -63,9 +63,12 @@ Page({
   },
 
   async searchOrderById(id){
+    if(app.needToRefresh())
+      await app.refresh()
+
     const data={}
     const header={
-      'Authorization':'Bearer ' + app.globalData.userInfo.token
+      'Authorization':'Bearer ' + app.getToken()
     }
     try{
       const res = await HTTPRequest('GET',`/orders/${id}`,data,header)
@@ -88,6 +91,59 @@ Page({
       console.error('请求订单详情异常:', err);
       wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
     }
+  },
+
+  async onCancel(){
+    wx.showModal({
+      content: '您确定要取消订单吗？',
+      showCancel: true,
+      cancelText: '再想想', // 取消按钮文字
+      cancelColor: '#666', // 取消按钮颜色
+      confirmText: '确定', // 确认按钮文字
+      confirmColor: '#ff4400', // 确认按钮颜色
+      complete:async(res)=>{
+        if(res.confirm){
+          if(app.needToRefresh())
+            await app.refresh()
+
+          const header={
+            'Authorization':'Bearer ' + app.getToken()
+          }
+          try{
+            const res = await HTTPRequest('POST',`/reservations/${this.data.orderDetail.id}/cancel`,{},header)
+
+            console.log("cancel:",res)
+            if(res.statusCode==200){
+              this.setData({
+                orderDetail:{
+                  ...this.data.orderDetail,
+                  status:"CANCELLED"
+                },
+                title:titleMap["CANCELLED"],
+              })
+            }else{
+              wx.showToast({
+                title:res.data.message || `取消订单失败（code:${res.statusCode}）`,
+                icon: 'none',
+                duration: 2000
+              })
+              // wx.navigateBack()
+            }
+          }catch(err){
+            console.error('取消订单异常:', err);
+            wx.showToast({ title: '网络错误，请检查连接', icon: 'none' });
+          }
+              }
+
+            }})
+    
+
+  },
+
+  goToPay(){
+    wx.navigateTo({
+      url:`/pages/pay/pay?totalPrice=${this.data.orderDetail.priceTotal}&id=${this.data.orderDetail.id}`
+    })
   },
 
   /**

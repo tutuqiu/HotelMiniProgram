@@ -57,6 +57,7 @@ Page({
       }
     })
   },
+
   async onCollectTap(){
     //未登录
     if(!app.globalData.isLogin){
@@ -81,7 +82,8 @@ Page({
       if(result.status=="VACANT"){
         console.log('result:',result)
         this.setData({
-          roomDetail:result
+          roomDetail:result,
+          canReserve:true
         })
         return "OK"
       }else{
@@ -167,7 +169,7 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) {
+  async onLoad(options) {
     console.log("room id:",options.id)
     const id = options.id;     // 卡片的ID
     if (!id) {
@@ -178,7 +180,7 @@ Page({
     this.setData({
       id:id
     })
-    const status = this.searchRoom()
+    const status = await this.searchRoom()
     if(status=="NOT VACANT"){
       wx.showToast({ title: "您来晚啦~该时间段已售罄", icon: "none" });
     }else if(status=="ERROR"){
