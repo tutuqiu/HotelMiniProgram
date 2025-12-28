@@ -6,7 +6,7 @@
   </view>
   <view class="content">
     <text class="name">{{typeText}}</text>
-    <text class="time" wx:if="{{serviceDetail.type==='EXTEND_STAY'}}">续住时间：{{serviceDetail.checkInDate}}-{{serviceDetail.extraNights}}晚-{{serviceDetail.checkOutDate}}</text>
+    <text class="time" wx:if="{{serviceDetail.type==='EXTEND_STAY'}}">续住时间：{{serviceDetail.checkinDate}}-{{serviceDetail.extraNights}}晚-{{serviceDetail.checkoutDate}}</text>
     <text class="time" wx:else>内容：{{serviceDetail.content}}</text>
     <text class="time">备注：{{serviceDetail.note}}</text>
   </view>

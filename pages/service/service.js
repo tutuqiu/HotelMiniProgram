@@ -246,6 +246,7 @@ Page({
       unreadByChatRoom:app.globalData.unreadByChatRoom,
       chatRoomsDetails:app.globalData.chatRoomsDetails
     })
+    this.setStayRoomId()
     app.refreshTabBarBadge()
 
     console.log("service data:",this.data)
