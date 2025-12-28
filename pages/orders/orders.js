@@ -63,6 +63,9 @@ Page({
       confirmColor: '#ff4400', // 确认按钮颜色
       complete:async(res)=>{
         if(res.confirm){
+          if(app.needToRefresh())
+            await app.refresh()
+            
           const data ={}
           const header ={
             'content-type': 'application/json',

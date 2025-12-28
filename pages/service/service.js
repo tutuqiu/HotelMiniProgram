@@ -50,8 +50,8 @@ Page({
    */
   onLoad(options) {
     //刷新chatroom
-    
-    app.getChatRoomsDetails()
+    if(app.globalData.isLogin)
+      app.getChatRoomsDetails()
 
     this.setData({
       isLogin:app.globalData.isLogin,
@@ -184,15 +184,6 @@ Page({
     })
   },
 
-
-
-
-  formatTime(date) {
-    const hour = date.getHours().toString().padStart(2, "0");
-    const minute = date.getMinutes().toString().padStart(2, "0");
-    return `${hour}:${minute}`;
-  },
-
   onInputChange(e){
     const type=e.currentTarget.dataset.type
     if(type=="content"){
@@ -244,6 +235,10 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
+    //刷新chatroom
+    if(app.globalData.isLogin)
+      app.getChatRoomsDetails()
+      
     this.setData({
       isLogin:app.globalData.isLogin,
       socketStatus:app.globalData.socketStatus,

@@ -273,12 +273,25 @@ App({
   },
 
   // todo 待更新
-  cleanUserInfo(){
+  cleanLocalInfo(){
+    this.globalData.isLogin=false
+  
+    this.globalData.chatRoomsDetails=[],
+    this.globalData.unreadTotal=0
+    this.globalData.unreadByChatRoom= {}
+    this.globalData.currentChatRoomId=''
+    this.globalData.prebookRoomId=''
+    //todo 退出之后好像不会再+了
+    // this.globalData.listeners=new Set()
+
+    this.globalData.userInfo.id=""
     this.globalData.userInfo.avatarUrl=""
     this.globalData.userInfo.nickName=""
     this.globalData.userInfo.phoneNumber=""
     this.globalData.userInfo.token=""
     this.globalData.userInfo.collectedList=[]
+
+
   },
 
   async connectStomp(){
@@ -292,6 +305,23 @@ App({
       "Authorization": "Bearer " + this.getToken()
     })
     this.globalData.stompStatus="CONNECTING"
+  },
+
+  disconnectStomp() {
+    console.log("disconnectStomp...")
+  
+    // 1) 如果认为当前是已连接/正在连，就发 DISCONNECT 帧
+    if (this.globalData.stompStatus === "CONNECTED" ||
+        this.globalData.stompStatus === "CONNECTING") {
+  
+      // STOMP 规范里 DISCONNECT 不强制带 header
+      // 如需确认收到，可加 receipt: 'xxx'
+      this.stompSendFrame("DISCONNECT", {
+      })
+    }
+  
+    // 2) 本地状态先置为 DISCONNECTED
+    this.globalData.stompStatus = "DISCONNECTED"
   },
 
   ensureSocketConnected() {
@@ -372,7 +402,8 @@ App({
     wx.onSocketClose(() => {
       console.log("WS 已关闭")
       this.globalData.socketStatus = 'DISCONNECTED'
-      this.scheduleReconnect()
+      this.globalData.reconnectAttempts=1
+      this.globalData.reconnectTimer=null
     })
   },
 

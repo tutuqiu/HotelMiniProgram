@@ -33,12 +33,15 @@ Page({
   },
   
   async seachRoomsDetail(){
+    if(app.needToRefresh())
+      await app.refresh()
+
     const res_results=await searchRoomsByIds(this.data.collectedList)
     let collectedRoomsDetail=[]
     for(const res of res_results){
       collectedRoomsDetail.push(res.data)
     }
-    // console.log("collectedRoomsDetail",collectedRoomsDetail)
+
     this.setData({
       collectedRoomsDetail:collectedRoomsDetail
     })

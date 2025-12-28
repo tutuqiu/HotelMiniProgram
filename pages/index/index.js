@@ -26,7 +26,7 @@ Page({
     images:["http://cdn.xtuctuy.top/images/index-background1.jpg","http://cdn.xtuctuy.top/images/index-background2.png","http://cdn.xtuctuy.top/images/index-background3.png","http://cdn.xtuctuy.top/images/index-background4.png","http://cdn.xtuctuy.top/images/index-background5.png","http://cdn.xtuctuy.top/images/index-background6.png"]
   },
 
-  async onSearch(){
+  onSearch(){
     //统一更新app的值 供room_result查询使用
     app.globalData.checkInDate=this.data.checkInDate
     app.globalData.checkOutDate=this.data.checkOutDate
@@ -119,6 +119,8 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
+    console.log("app globalData:",app.globalData)
+
     this.setData({
       checkInDate:app.globalData.checkInDate,
       checkOutDate:app.globalData.checkOutDate,

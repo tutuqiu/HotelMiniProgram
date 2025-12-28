@@ -117,6 +117,9 @@ Page({
   },
 
   async reserveRoom(){
+    if(app.needToRefresh())
+      await app.refresh()
+      
     const data={
       guestName:this.data.guestName,
       phone:this.data.phone,

@@ -14,12 +14,14 @@ Page({
   },
 
   async onPay(){
-    const data={}
+    if(app.needToRefresh())
+      await app.refresh()
+
     const header={
-      'Authorization':'Bearer ' + app.globalData.userInfo.token
+      'Authorization':'Bearer ' + app.getToken()
     }
     try{
-      const res = await HTTPRequest('POST',`/reservations/${this.data.id}/confirm`,data,header)
+      const res = await HTTPRequest('POST',`/reservations/${this.data.id}/confirm`,{},header)
 
       console.log(res)
       if(res.statusCode==200){

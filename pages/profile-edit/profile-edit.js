@@ -91,16 +91,16 @@ Page({
   },
 
   async sendSms(){
-    const phone=this.data.newPhoneNumber
-    const token=app.globalData.userInfo.token
+    if(app.needToRefresh())
+      await app.refresh()
    
     try{
       const data={
-        phone:phone
+        phone:this.data.newPhoneNumber
       }
       const header={
         'content-type': 'application/json',
-        'Authorization':'Bearer ' + token
+        'Authorization':'Bearer ' + app.getToken()
       }
       const res = await HTTPRequest('POST','/public/wx/phone/code',data,header)
 
@@ -148,7 +148,8 @@ Page({
       return;
     }
     
-    const token=app.globalData.userInfo.token
+    if(app.needToRefresh())
+      await app.refresh()
 
     try{
       const data={
@@ -157,7 +158,7 @@ Page({
       }
       const header={
         'content-type': 'application/json',
-        'Authorization':'Bearer ' + token
+        'Authorization':'Bearer ' + app.getToken()
       }
       const res = await HTTPRequest('POST','/public/wx/phone',data,header)
       console.log(res)
@@ -186,13 +187,16 @@ Page({
   },
 
   async onSave(){
+    if(app.needToRefresh())
+      await app.refresh()
+
     const data ={
       nickname:this.data.nickName,
       avatarUrl:this.data.avatarUrl
     }
     const header ={
       'content-type': 'application/json',
-      'Authorization':'Bearer ' + app.globalData.userInfo.token
+      'Authorization':'Bearer ' + app.getToken()
     }
     try{
       const res = await HTTPRequest('POST','/public/wx/profile',data,header)
@@ -235,6 +239,7 @@ Page({
           // logout
           // 保存需要使失效的refreshTokenId
           const refreshTokenId = wx.getStorageSync('refreshTokenId')
+
           wx.removeStorageSync('refreshTokenId')
           wx.removeStorageSync('token')
           wx.removeStorageSync('expireTime')
@@ -254,8 +259,20 @@ Page({
               console.log('已退出登录')
               wx.showToast({ title: '已退出登录' })
 
-              app.globalData.isLogin=false
-              app.cleanUserInfo()
+
+              //关闭stomp
+              app.disconnectStomp()
+              //关闭websocket连接
+              wx.closeSocket({
+                success() {
+                  console.log("WebSocket closed successfully");
+                },
+                fail(err) {
+                  console.log("WebSocket close failed:", err);
+                }
+              })
+
+              app.cleanLocalInfo()
 
               wx.navigateBack()
             }else{

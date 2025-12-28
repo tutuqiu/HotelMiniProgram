@@ -2,12 +2,11 @@ import {HTTPRequest} from '../utils/request.js'
 const app=getApp();
 
 export async function updateCollectedList(id){
-  const data ={}
   const header={
-    'Authorization':'Bearer ' + app.globalData.userInfo.token
+    'Authorization':'Bearer ' + app.getToken()
   }
   try{
-    const res = await HTTPRequest('POST',`/rooms/${id}/favorite`,data,header)
+    const res = await HTTPRequest('POST',`/rooms/${id}/favorite`,{},header)
     console.log('update collected res:',res)
 
     if(res.statusCode==200){
