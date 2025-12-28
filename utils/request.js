@@ -1,4 +1,4 @@
-const baseUrl="http://47.114.86.161:8080/api";
+const baseUrl="https://api.xtuctuy.top/api";
 
 const app=getApp();
 

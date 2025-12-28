@@ -4,7 +4,7 @@ const req = require('/utils/request.js')
 App({
   globalData: {
     //websocket:
-    wsUrl:"ws://xtuctuy.top:8080/ws",
+    wsUrl:"wss://api.xtuctuy.top/ws",
     socketStatus: "DISCONNECTED", // DISCONNECTED | CONNECTING | CONNECTED
     stompStatus:"DISCONNECTED",
     reconnectAttempts: 1,
@@ -275,7 +275,9 @@ App({
   // todo 待更新
   cleanLocalInfo(){
     this.globalData.isLogin=false
-  
+    this.globalData.reconnectAttempts=1
+    this.globalData.reconnectTimer=null
+
     this.globalData.chatRoomsDetails=[],
     this.globalData.unreadTotal=0
     this.globalData.unreadByChatRoom= {}
@@ -402,8 +404,6 @@ App({
     wx.onSocketClose(() => {
       console.log("WS 已关闭")
       this.globalData.socketStatus = 'DISCONNECTED'
-      this.globalData.reconnectAttempts=1
-      this.globalData.reconnectTimer=null
     })
   },
 
