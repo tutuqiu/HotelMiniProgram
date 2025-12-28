@@ -1,1 +1,83 @@
-/* pages/guest-services/guest-services.wxss */
+/* pages/orders/orders.wxss */
+.page{
+  height: 100vh;
+  background:#f6f6f6;
+  display:flex;
+  flex-direction:column;
+}
+
+/* 顶部 Tab */
+.tabs{
+  background:#fff;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-around;
+  padding: 0 24rpx;
+  height: 96rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.tab{
+  position:relative;
+  padding: 0 8rpx 22rpx;
+  font-size:30rpx;
+  color:#666;
+  font-weight:600;
+}
+
+/* 选中态：黑字 + 下划线 */
+.tab.active{
+  color:#111;
+}
+
+.tab.active::after{
+  content:"";
+  position:absolute;
+  left: 10%;
+  right: 10%;
+  bottom: 10rpx;
+  height: 6rpx;
+  border-radius: 6rpx;
+  background:#111;
+}
+
+/* 可滚动列表容器 */
+.list{
+  flex:1;              /* 占满剩余高度 */
+  padding: 22rpx 24rpx;
+  box-sizing:border-box;
+}
+
+/* 占位（可删） */
+.placeholder{
+  padding: 40rpx 0;
+  text-align:center;
+}
+
+.placeholder-text{
+  font-size:26rpx;
+  color:#999;
+}
+
+/* ---- noOrder 空状态 ---- */
+.container-noOrder{
+  margin-top: 80rpx;
+  padding: 40rpx 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-noOrder{
+  width: 260rpx;
+  height: 260rpx;
+  opacity: 0.9;
+}
+
+.text-noOrder{
+  margin-top: 22rpx;
+  font-size: 28rpx;
+  color: #999;
+  font-weight: 600;
+}

@@ -1,2 +1,26 @@
 <!--pages/guest-services/guest-services.wxml-->
-<text>pages/guest-services/guest-services.wxml</text>
+<view class="page">
+  <!-- 顶部 Tab 导航 -->
+  <view class="tabs">
+    <view class="tab {{activeTab==='ALL' ? 'active' : ''}}" bindtap="onTab" data-status="ALL">全部</view>
+    <view class="tab {{activeTab==='PENDING' ? 'active' : ''}}" bindtap="onTab" data-status="PENDING">等待处理</view>
+    <view class="tab {{activeTab==='IN_PROGRESS' ? 'active' : ''}}" bindtap="onTab" data-status="IN_PROGRESS">处理中</view>
+    <view class="tab {{activeTab==='COMPLETED' ? 'active' : ''}}" bindtap="onTab" data-status="COMPLETED">已完成</view>
+    <view class="tab {{activeTab==='CANCELLED' ? 'active' : ''}}" bindtap="onTab" data-status="CANCELLED">已取消</view>
+  </view>
+
+  <!-- 可滚动容器：你把 order-card 放这里 -->
+  <scroll-view class="list" scroll-y="true" enable-back-to-top="true">
+    <service-card
+      wx:for="{{serviceList}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      serviceDetail="{{item}}"
+      bind:cancel="onCancel"
+    ></service-card>
+    <view wx:if="{{isEmpty}}" class="container-noOrder">
+      <image src="http://cdn.xtuctuy.top/images/noOrder.png" class="img-noOrder"></image>
+      <text class="text-noOrder">暂无客房服务信息</text>
+    </view>
+  </scroll-view>
+</view>

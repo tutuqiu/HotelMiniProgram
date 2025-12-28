@@ -72,6 +72,7 @@ App({
   },
 
   async getChatRoomsDetails(){
+    console.log("getChatRoomsDetails")
     const header={
       'Authorization':'Bearer ' + this.getToken()
     }

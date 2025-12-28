@@ -49,6 +49,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    //刷新chatroom
+    
+    app.getChatRoomsDetails()
+
     this.setData({
       isLogin:app.globalData.isLogin,
       socketStatus:app.globalData.socketStatus,
@@ -56,7 +60,8 @@ Page({
       unreadByChatRoom:app.globalData.unreadByChatRoom,
       chatRoomsDetails:app.globalData.chatRoomsDetails
     })
-    this.setStayRoomId()
+    if(this.data.isLogin)
+      this.setStayRoomId()
 
     // 订阅全局消息 收到消息时全局会调用这个函数 更新unread ->chat-card自动更新(observer)
     app.onChatMessage((msg)=>{
@@ -89,15 +94,15 @@ Page({
   },
 
   showServiceModal(e){
-    //检查是否入住
-    // if(!this.data.stayRoomId){
-    //   wx.showToast({
-    //     title: '您还未入住哦~',
-    //     icon: 'none',
-    //     duration: 1500
-    //   })
-    //   return
-    // }
+    // 检查是否入住
+    if(!this.data.stayRoomId){
+      wx.showToast({
+        title: '您还未入住哦~',
+        icon: 'none',
+        duration: 1500
+      })
+      return
+    }
 
     const type=e.currentTarget.dataset.type
     const service=this.data.fixedServiceList.find(service=>service.type==type)
@@ -132,14 +137,14 @@ Page({
       'Authorization':'Bearer ' + app.getToken()
     }
     try{
-      const res = await req.HTTPRequest('POST','/guest-services',data,header)
+      const res = await HTTPRequest('POST','/guest-services',data,header)
       console.log("guestService res:",res)
   
       if(res.statusCode==201){
         console.log('提交客房服务请求成功:',res.data)
         if(type!="EXTEND_STAY")
           wx.showToast({
-            title:'提交客房服务请求成功:',
+            title:'提交客房服务请求成功',
             icon: 'none',
             duration: 2000
           })
@@ -149,6 +154,7 @@ Page({
             url:`/pages/order-detail/order-detail?id=${res.data.reservationId}`
           })
         }
+        this.hideServiceModal()
         
       }else{
         wx.showToast({
@@ -173,6 +179,8 @@ Page({
       serviceName:'',
       serviceType:'',
       extendDay:1,
+      content:'',
+      note:''
     })
   },
 

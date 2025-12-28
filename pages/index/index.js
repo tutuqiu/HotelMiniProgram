@@ -23,7 +23,7 @@ Page({
     minPrice:'',
     maxPrice:'',
     
-    images:["/images/index-background.png","/images/index-background.png","/images/index-background.png"]
+    images:["http://cdn.xtuctuy.top/images/index-background1.jpg","http://cdn.xtuctuy.top/images/index-background2.png","http://cdn.xtuctuy.top/images/index-background3.png","http://cdn.xtuctuy.top/images/index-background4.png","http://cdn.xtuctuy.top/images/index-background5.png","http://cdn.xtuctuy.top/images/index-background6.png"]
   },
 
   async onSearch(){

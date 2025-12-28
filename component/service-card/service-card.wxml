@@ -1,4 +1,3 @@
-<!--component/service-card/service-card.wxml-->
 <view class="card">
   <view class="header">
     <image src="{{icon}}" class="icon"></image>
@@ -7,11 +6,13 @@
   </view>
   <view class="content">
     <text class="name">{{typeText}}</text>
-    <text class="time">1111</text>
+    <text class="time" wx:if="{{serviceDetail.type==='EXTEND_STAY'}}">续住时间：{{serviceDetail.checkInDate}}-{{serviceDetail.extraNights}}晚-{{serviceDetail.checkOutDate}}</text>
+    <text class="time" wx:else>内容：{{serviceDetail.content}}</text>
+    <text class="time">备注：{{serviceDetail.note}}</text>
   </view>
   <view class="bottom" catchtap="noop">
     <button 
-      wx:if="{{serviceDetail.status=="PENDING"||serviceDetail.status=="IN_PROGRESS"}}" 
+      wx:if="{{serviceDetail.type!='EXTEND_STAY'&&(serviceDetail.status=='PENDING'||serviceDetail.status=='IN_PROGRESS')}}" 
       class="btn-cancel" 
       bindtap="onCancel">取消</button>
   </view>

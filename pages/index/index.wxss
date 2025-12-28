@@ -136,7 +136,7 @@ swiper-item {
 button {
   /* 只作用于本页的 button */
   margin-top: 8rpx;
-  background-color: #07c160;
+  background-color: rgb(101, 202, 141);
   color: #333;
 }
 

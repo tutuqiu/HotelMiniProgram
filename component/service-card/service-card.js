@@ -34,6 +34,7 @@ Component({
       type:Object,
       observer(newVal){
         this.setData({serviceDetail:newVal})
+        this.update()
       }
     }
   },
@@ -42,8 +43,8 @@ Component({
    * 组件的初始数据
    */
   data: {
-    icon='',
-    typeText='',
+    icon:'',
+    typeText:'',
     statusText:''
   },
 
@@ -51,13 +52,18 @@ Component({
    * 组件的方法列表
    */
   methods: {
-
+    update(){
+      this.setData({
+        icon:typeMap[this.properties.serviceDetail.type].icon,
+        typeText:typeMap[this.properties.serviceDetail.type].label,
+        statusText:statusMap[this.properties.serviceDetail.status]
+      })
+    },
+    onCancel(){
+      this.triggerEvent('cancel')
+    }
   },
   attached(){
-    this.setData({
-      icon:typeMap[this.properties.serviceDetail.type].icon,
-      typeText:typeMap[this.properties.serviceDetail.type].label,
-      statusText:statusMap[this.properties.serviceDetail.status]
-    })
+    this.update()
   }
 })

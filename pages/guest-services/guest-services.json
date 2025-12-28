@@ -1,3 +1,5 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "service-card":"/component/service-card/service-card"
+  }
 }
