@@ -50,6 +50,9 @@ Page({
               app.globalData.userInfo.token=token
               //chat
               await app.getChatRoomsDetails()
+              
+              app.globalData.manualDisconnect=false
+
               await app.ensureSocketConnected()
               
               wx.navigateBack()

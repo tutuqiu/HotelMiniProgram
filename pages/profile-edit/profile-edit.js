@@ -263,6 +263,7 @@ Page({
               //关闭stomp
               app.disconnectStomp()
               //关闭websocket连接
+              app.globalData.manualDisconnect=true
               wx.closeSocket({
                 success() {
                   console.log("WebSocket closed successfully");

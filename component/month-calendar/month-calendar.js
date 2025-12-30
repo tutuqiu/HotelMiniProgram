@@ -151,6 +151,7 @@ Component({
       const month=this.data.month
       console.log(`calendar ${{year}}-${{month}}:In ${{checkIn}} Out${{checkOut}}`)
     },
+    
     callUpdate(){
       console.log('callupdate start')
       this.triggerEvent('update',{

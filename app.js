@@ -9,6 +9,7 @@ App({
     stompStatus:"DISCONNECTED",
     reconnectAttempts: 1,
     reconnectTimer: null,
+    manualDisconnect:false,
 
     chatRoomsDetails:[],
     unreadTotal: 0,
@@ -404,6 +405,12 @@ App({
     wx.onSocketClose(() => {
       console.log("WS 已关闭")
       this.globalData.socketStatus = 'DISCONNECTED'
+
+      // 区分是“手动断开”还是“意外断开”
+      if (!this.globalData.manualDisconnect) {
+        console.log("WS非手动断开 尝试重连")
+        this.scheduleReconnect()
+      }
     })
   },
 
@@ -567,6 +574,7 @@ App({
     //   this.globalData.listeners.delete(listener)
     // }
   },
+
   emitMessage(msg){
     console.log("emitMessage")
     console.log("listeners:",this.globalData.listeners)
@@ -579,6 +587,4 @@ App({
       }
     })
   },
-
-  
 })
